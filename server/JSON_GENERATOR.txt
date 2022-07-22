@@ -1,0 +1,29 @@
+//USERS
+[
+  '{{repeat(1, 50)}}',
+  {
+    id: '{{index()}}',
+    name: '{{firstName()}}',
+    lastName: '{{surname()}}',
+    email: '{{email()}}',
+    nickName: function (tags, index) { return this.name + this.id; },
+    password: function (tags, index) { return this.nickName; },
+    idCompany: '{{integer(1, 20)}}',
+    status: true
+  }
+]
+//2da VERSION
+[
+  '{{repeat(1, 80)}}',
+  {
+    id: '{{objectId()}}',
+    photo: null,
+    name: '{{firstName()}}',
+    lastName: '{{surname()}}',
+    nickName: function (tags, index) { return this.name + this.lastName; },
+    email: '{{email()}}',
+    password: function (tags, index) { return this.name; },
+  }
+]
+
+//COMPANY

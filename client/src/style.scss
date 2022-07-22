@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@300;400&display=swap');
+
+body {
+    font-family: 'Tomorrow', sans-serif !important;
+    color: white !important;
+    background-color: black !important;
+
+    .user-image {
+        width: 250px;
+        border-radius: 50%;
+    }
+
+    .project-image {
+        width: 150px;
+        border-radius: 50%;
+    }
+
+    .icon-image-big {
+        width: 300px;
+        border-radius: 50%;
+    }
+
+    .number-score {
+        font-size: 60px;
+    }
+}
