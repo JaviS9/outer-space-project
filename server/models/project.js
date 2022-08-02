@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Project.hasMany(models.Update, {as: 'update'})
-      Project.hasMany(models.UserRole, {as: 'participants'})
+      Project.belongsToMany(models.User, {
+        through: 'Participation',
+        as: 'participants',
+        foreignKey: 'idProject'
+      })
       Project.belongsToMany(models.User, {
         through: 'Subscription',
         as: 'usersSubscribed',
@@ -36,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: {
         allowNull: false,
+        unique: true,
         type: DataTypes.STRING
     },
     description: DataTypes.STRING,

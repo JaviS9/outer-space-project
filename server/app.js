@@ -1,22 +1,31 @@
 'use strict'
 const express = require('express');
 const cors = require('cors')
-// const router = require("./routes");
-// const AppError = require("./utils/appError");
-// const errorHandler = require("./utils/errorHandler");
-
 const bodyParser = require('body-parser');
-const Sequelize = require('sequelize');
-// const validator = require('express-validator');
 // const { check, validationResult } = require('express-validator');
 
-//Controllers
+// //Controllers
 var userController = require('./controllers/user');
 var projectController = require('./controllers/project');
 
+// //Models
+var models = require('./models');
+
 var app = express();
 app.use(bodyParser.json());
-// app.use(validator);
+app.use(cors());
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  
+  // Pass to next layer of middleware
+  next();
+});
+
 //Para validar (authentication)
 // express.Router().post('/register',
 //   [
@@ -37,34 +46,9 @@ app.use(bodyParser.json());
 //   }
 // });
 
-
-//Import the Sequelize models -> index.js
-var models = require('./models');
-
-//Import the Routes -> index.js
-//var routes = require('./routes');
-require('./routes')(app);
-app.get('/', function(req, res, next){
-	res.send('Home Route - nothing to see here yet');
-});
-
 //--------------------------------------------------------------------------------------
 // Catch 404 errors and forward to error handler.
 // This is called if no match is found in the preceding route functions.
-app.use(cors())
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Headers, *, Access-Control-Allow-Origin', 'Origin, X-Requested-with, Content_Type,Accept,Authorization','http://localhost:4200');
-  if(req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Methods','PUT,POST,PATCH,DELETE,GET');
-      return res.status(200).json({});
-  }
-  else {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  }
-});
-
 // error handler
 // called as the last middleware. Expects an error object as the first argument,
 // which we pass in manually as part of the next() function from within the other routes.
@@ -75,6 +59,13 @@ app.use(function(err, req, res, next) {
   errorResponse.status = err.status;
   errorResponse.message = err.message;
   res.json(errorResponse);
+});
+
+//Import the Routes -> index.js
+//var routes = require('./routes');
+require('./routes')(app);
+app.get('/', function(req, res, next){
+	res.send('Home Route - nothing to see here yet');
 });
 
 // listen on port 5000

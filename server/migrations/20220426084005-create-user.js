@@ -20,17 +20,13 @@ module.exports = {
       },
       nickName: {
         allowNull: false,
+        type: Sequelize.STRING,
+        unique: true
+      },
+      biography: {
         type: Sequelize.STRING
       },
-      // idCompany: {
-      //   allowNull: true,
-      //   type: Sequelize.STRING,
-      //   references: {
-      //     model: 'Company',
-      //     key: 'id'
-      //   }
-      // },
-      status: {
+      user_status: {
         allowNull: false,
         defaultValue: true,
         type: Sequelize.BOOLEAN

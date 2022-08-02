@@ -12,7 +12,7 @@ module.exports = {
         onDelete: "cascade",
         onUpdate: "cascade",
       },
-      update: {
+      update_date: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW

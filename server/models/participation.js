@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Update extends Model {
+  class Participation extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,33 +11,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Update.belongsTo(models.Project, {foreignKey: 'idProject'})
+      Participation.belongsTo(models.User, {foreignKey: 'idUser'})
+      Participation.belongsTo(models.Project, {foreignKey: 'idProject'})
     }
   }
-  Update.init({
+  Participation.init({
+    idUser: {
+      allowNull: false,
+      primaryKey: true,
+      onDelete: "cascade",
+      onUpdate: "cascade",
+      type: DataTypes.UUID
+    },
     idProject: {
       allowNull: false,
       primaryKey: true,
-      type: DataTypes.UUID,
       onDelete: "cascade",
       onUpdate: "cascade",
+      type: DataTypes.UUID
     },
-    update_date: {
+    startDate: {
       allowNull: false,
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    description: {
-      allowNull: false,
-      type: DataTypes.STRING
-    }
+    endDate: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'Update',
+    modelName: 'Participation',
     timestamps: false,
     freezeTableName: true,
-    tableName: 'Update',
+    tableName: 'PArticipation',
     classMethods: {}
   });
-  return Update;
+  return Participation;
 };

@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       UserRole.belongsTo(models.User, {foreignKey: 'idUser'})
       UserRole.belongsTo(models.Role, {foreignKey: 'idRole'})
-      UserRole.belongsTo(models.Project, {foreignKey: 'participant'})
     }
   }
   UserRole.init({
@@ -31,12 +30,6 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: "cascade",
       type: DataTypes.INTEGER
     },
-    participateOn: {
-      allowNull: false,
-      onDelete: "cascade",
-      onUpdate: "cascade",
-      type: DataTypes.UUID
-    }
   }, {
     sequelize,
     modelName: 'UserRole',

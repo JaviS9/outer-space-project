@@ -31,7 +31,7 @@ const routes = [
       component: () => import('../views/private/user/ViewUser.vue')
   },
   {
-      path: '/users/add/',
+      path: '/users/add',
       name: 'AddUser',
       component: () => import('../views/private/user/AddUser.vue')
   },
@@ -52,7 +52,7 @@ const routes = [
       component: () => import('../views/private/project/ViewProject.vue')
   },
   {
-      path: '/projects/add/:title',
+      path: '/projects/add',
       name: 'AddProject',
       component: () => import('../views/private/project/AddProject.vue')
   },
