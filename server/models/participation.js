@@ -11,23 +11,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Participation.belongsTo(models.User, {foreignKey: 'idUser'})
-      Participation.belongsTo(models.Project, {foreignKey: 'idProject'})
+      Participation.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
+      Participation.belongsTo(models.Project, {foreignKey: 'idProject', targetKey: 'id'})
     }
   }
   Participation.init({
     idUser: {
       allowNull: false,
       primaryKey: true,
-      onDelete: "cascade",
-      onUpdate: "cascade",
+      // onDelete: "CASCADE",
+      // onUpdate: "CASCADE",
       type: DataTypes.UUID
     },
     idProject: {
       allowNull: false,
       primaryKey: true,
-      onDelete: "cascade",
-      onUpdate: "cascade",
+      // onDelete: "CASCADE",
+      // onUpdate: "CASCADE",
       type: DataTypes.UUID
     },
     startDate: {

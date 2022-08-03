@@ -11,25 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UserRole.belongsTo(models.User, {foreignKey: 'idUser'})
-      UserRole.belongsTo(models.Role, {foreignKey: 'idRole'})
+      UserRole.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
+      UserRole.belongsTo(models.Role, {foreignKey: 'idRole', targetKey: 'id'})
     }
   }
   UserRole.init({
-    idUser: {
-      allowNull: false,
-      primaryKey: true,
-      onDelete: "cascade",
-      onUpdate: "cascade",
-      type: DataTypes.UUID
-    },
-    idRole: {
-      allowNull: false,
-      primaryKey: true,
-      onDelete: "cascade",
-      onUpdate: "cascade",
-      type: DataTypes.INTEGER
-    },
+    // idUser: {
+    //   allowNull: false,
+    //   primaryKey: true,
+    //   onDelete: "CASCADE",
+    //   onUpdate: "CASCADE",
+    //   type: DataTypes.UUID
+    // },
+    // idRole: {
+    //   allowNull: false,
+    //   primaryKey: true,
+    //   onDelete: "CASCADE",
+    //   onUpdate: "CASCADE",
+    //   type: DataTypes.INTEGER
+    // },
   }, {
     sequelize,
     modelName: 'UserRole',

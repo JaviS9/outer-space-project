@@ -9,14 +9,14 @@ module.exports = {
       },
       projectFounder: {
         allowNull: false,
-        primaryKey: true,
         type: Sequelize.UUID,
         references: {
           model: 'User',
-          key: 'id'
+          key: 'id',
+          as: 'projectFounder'
         },
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       title: {
         allowNull: false,

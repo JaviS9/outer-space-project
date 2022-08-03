@@ -6,22 +6,24 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         references: {
           model: 'User',
-          key: 'id'
+          key: 'id',
+          as: 'idUser'
         }
       },
       idRole: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         references: {
           model: 'Role',
-          key: 'id'
+          key: 'id',
+          as: 'idRole'
         }
       }
     });

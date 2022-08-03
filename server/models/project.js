@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Project.hasMany(models.Update, {as: 'update'})
+      Project.hasMany(models.Update, {foreignKey: {
+                                      name: 'idProject',
+                                      onDelete: 'CASCADE',
+                                      onUpdate: 'CASCADE'
+                                    }});
       Project.belongsToMany(models.User, {
         through: 'Participation',
         as: 'participants',
@@ -22,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'usersSubscribed',
         foreignKey: 'idProject'
       })
-      Project.belongsTo(models.User, {foreignKey: 'projectFounder'})
+      Project.belongsTo(models.User, {foreignKey: 'projectFounder', targetKey: 'id'})
     }
   }
   Project.init({
@@ -30,13 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID
-    },
-    projectFounder: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      onDelete: "cascade",
-      onUpdate: "cascade",
     },
     title: {
         allowNull: false,

@@ -3,16 +3,18 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Update', {
       idProject: {
+        primaryKey: true,
         allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: 'Project',
           key: 'id'
         },
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       update_date: {
+        primaryKey: true,
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW

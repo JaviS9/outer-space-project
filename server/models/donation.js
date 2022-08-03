@@ -11,20 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Donation.belongsTo(models.Subscription, {foreignKey: 'compositeFK'})
+      Donation.belongsTo(models.Subscription, {foreignKey: 'idUser', targetKey: 'idUser'})
+      Donation.belongsTo(models.Subscription, {foreignKey: 'idProject', targetKey: 'idProject'})
     }
   }
   Donation.init({
     idUser: {
       allowNull: false,
       primaryKey: true,
-      unique: 'compositeFK',
       type: DataTypes.UUID,
     },
     idProject: {
       allowNull: false,
       primaryKey: true,
-      unique: 'compositeFK',
       type: DataTypes.UUID,
     },
     date: {

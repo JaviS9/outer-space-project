@@ -8,8 +8,11 @@ module.exports = {
         type: Sequelize.UUID,
         references: {
           model: 'Subscription',
-          key: 'idUser'
-        }
+          key: 'idUser',
+          as: 'idUser'
+        },
+        onDelete: "NO ACTION",
+        onUpdate: "CASCADE",
       },
       idProject: {
         allowNull: false,
@@ -17,8 +20,11 @@ module.exports = {
         type: Sequelize.UUID,
         references: {
           model: 'Subscription',
-          key: 'idProject'
-        }
+          key: 'idProject',
+          as: 'idProject'
+        },
+        onDelete: "NO ACTION",
+        onUpdate: "CASCADE",
       },
       date: {
         allowNull: false,

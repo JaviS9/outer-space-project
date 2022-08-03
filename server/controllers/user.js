@@ -116,9 +116,12 @@ module.exports = {
         }
     },
 
+    // SEARCH
     async searchUser (req, res) {
         try{
-            const user = await sequelize.query("SELECT * from `user` WHERE nickName LIKE '%" + req.body.search + "%';");
+            console.log(req.params.nickName)
+            const user = await models.User.findAll(
+                { where: { nickName: { [Op.like]: '%' + req.params.nickName + '%'}}});
             res.status(200).send(user)
         } catch (err) {
             res.status(400).send({

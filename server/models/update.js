@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Update.belongsTo(models.Project, {foreignKey: 'idProject'})
+      Update.belongsTo(models.Project, {foreignKey: 'idProject', targetKey: 'id'})
     }
   }
   Update.init({
@@ -19,11 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      onDelete: "cascade",
-      onUpdate: "cascade",
     },
     update_date: {
       allowNull: false,
+      primaryKey: true,
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },

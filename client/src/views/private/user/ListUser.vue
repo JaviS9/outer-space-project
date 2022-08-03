@@ -51,7 +51,8 @@
                 <span class="fw-bold">{{ user.nickName }}</span>
               </li>
               <li v-if="user.name === '' && user.lastName === '' " class="list-group-item bg-black text-white">
-                  <p> *** </p>
+                  <!-- <p> --- </p> -->
+                  <br>
               </li>
               <li v-else class="list-group-item bg-black text-white">
                   <p>{{ user.name }} {{ user.lastName }}</p>
@@ -139,7 +140,7 @@ export default {
     async getUsers() {
       try {
         const response = await axios.get("http://localhost:5000/user/list");
-        this.users = response.data;
+        this.users = response.data.reverse();
         console.log(this.users)
       } catch (err) {
         console.log(err);

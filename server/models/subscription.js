@@ -11,24 +11,33 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Subscription.belongsTo(models.User, {foreignKey: 'idUser'})
-      Subscription.belongsTo(models.Role, {foreignKey: 'idProject'})
-      Subscription.hasMany(models.Donation, {as: 'donations'})
+      Subscription.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
+      Subscription.belongsTo(models.Project, {foreignKey: 'idProject', targetKey: 'id'})
+      Subscription.hasMany(models.Donation, {foreignKey: {
+                                              name: 'idUser',
+                                              onDelete: 'NO ACTION',
+                                              onUpdate: 'CASCADE'
+                                            }});
+      Subscription.hasMany(models.Donation, {foreignKey: {
+                                              name: 'idProject',
+                                              onDelete: 'NO ACTION',
+                                              onUpdate: 'CASCADE'
+                                            }});
     }
   }
   Subscription.init({
     idUser: {
       allowNull: false,
       primaryKey: true,
-      onDelete: "cascade",
-      onUpdate: "cascade",
+      // onDelete: "CASCADE",
+      // onUpdate: "CASCADE",
       type: DataTypes.UUID
     },
     idProject: {
       allowNull: false,
       primaryKey: true,
-      onDelete: "cascade",
-      onUpdate: "cascade",
+      // onDelete: "CASCADE",
+      // onUpdate: "CASCADE",
       type: DataTypes.UUID
     },
     createdAt: {

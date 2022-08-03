@@ -13,7 +13,7 @@ module.exports = (app) => {
    app.delete('/user/search/:nickName', userController.searchUser);
 
    //PROJECT
-   app.get('/project/list/', projectController.listProject);
+   app.get('/project/list', projectController.listProject);
    app.get('/project/find/:title', projectController.findProject);
    app.post('/project/add', projectController.addProject);
    app.put('/project/update/:title', projectController.updateProject);

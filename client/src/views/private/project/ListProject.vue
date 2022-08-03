@@ -30,13 +30,13 @@
   <div class="container mt-5">
     <div class="col-md-12 d-flex flex-column align-items-center justify-content-center"
       v-if="projects.length === 0"
-      >
+    >
       <p class="h5 text-danger">No se han encontrado proyectos</p>
     </div>
     <div class="row"
       v-for="project in projects" :key="project.id"
     >
-        <div class="col card border-light bg-black align-self-center mx-2">
+        <div class="col card border-light bg-black align-self-center mx-2 mb-3">
             <div class="card-body p-0 bg-black">
                 <div class="row align-items-center">
                     <div class="col-sm-3 d-flex justify-content-center">
@@ -47,7 +47,7 @@
                         <li class="list-group">
                           <ul class="list-group-item text-white bg-black"><p><span class="h4 fw-bold">{{project.title}}</span></p></ul>
                           <ul class="list-group-item text-white bg-black"><p>{{project.description}}</p></ul>
-                          <ul class="list-group-item text-white bg-black border-top"><p>Desde <span class="fw-bold">{{project.startDate}}</span></p></ul>
+                          <ul class="list-group-item text-white bg-black border-top"><p>Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p></ul>
                         </li>
                       </div>
                     </div>
@@ -60,7 +60,9 @@
                           type="button" class="btn btn-outline-primary my-2">
                           <i class="fa fa-pen"></i>
                         </router-link>
-                        <button class="btn btn-outline-danger my-2">
+                        <button 
+                          @click="deleteProject(project.title)"
+                          class="btn btn-outline-danger my-2">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>
@@ -116,7 +118,7 @@ export default {
     async getProjects() {
       try {
         const response = await axios.get("http://localhost:5000/project/list");
-        this.projects = response.data;
+        this.projects = response.data.reverse();
         console.log(this.projects)
       } catch (err) {
         console.log(err);
