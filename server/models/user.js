@@ -19,19 +19,30 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Project, {
         through: 'Participation',
         as: 'participation',
-        foreignKey: 'idUser'
+        foreignKey: {
+          name: 'idUser',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       });
       User.belongsToMany(models.Role, {
         through: 'UserRole',
         as: 'roles',
-        foreignKey: 'idUser'
+        foreignKey: {
+          name: 'idUser',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       });
       User.belongsToMany(models.Project, {
         through: 'Subscription',
         as: 'projectsSubscribed',
-        foreignKey: 'idUser'
+        foreignKey: {
+          name: 'idUser',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       });
-      // User.belongsTo(models.Company, {foreignKey: 'idCompany'})
     }
   }
   User.init({

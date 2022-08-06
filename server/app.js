@@ -62,7 +62,7 @@ app.use(function(err, req, res, next) {
 });
 
 //Import the Routes -> index.js
-//var routes = require('./routes');
+var routes = require('./routes');
 require('./routes')(app);
 app.get('/', function(req, res, next){
 	res.send('Home Route - nothing to see here yet');

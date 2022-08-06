@@ -19,12 +19,20 @@ module.exports = (sequelize, DataTypes) => {
       Project.belongsToMany(models.User, {
         through: 'Participation',
         as: 'participants',
-        foreignKey: 'idProject'
+        foreignKey: {
+          name: 'idProject',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       })
       Project.belongsToMany(models.User, {
         through: 'Subscription',
         as: 'usersSubscribed',
-        foreignKey: 'idProject'
+        foreignKey: {
+          name: 'idProject',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       })
       Project.belongsTo(models.User, {foreignKey: 'projectFounder', targetKey: 'id'})
     }

@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
         onUpdate: "CASCADE",
         references: {
           model: 'User',
@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
         onUpdate: "CASCADE",
         references: {
           model: 'Project',

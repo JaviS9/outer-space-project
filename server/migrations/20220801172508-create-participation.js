@@ -10,7 +10,8 @@ module.exports = {
         onUpdate: "CASCADE",
         references: {
           model: 'User',
-          key: 'id'
+          key: 'id',
+          as: 'idProject'
         }
       },
       idProject: {
@@ -21,7 +22,8 @@ module.exports = {
         onUpdate: "CASCADE",
         references: {
           model: 'Project',
-          key: 'id'
+          key: 'id',
+          as: 'idProject'
         }
       },
       startDate: {

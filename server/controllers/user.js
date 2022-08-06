@@ -2,7 +2,7 @@ var models = require('../models');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../models');
 var Buffer = require('buffer/').Buffer
-
+const { Op } = require("sequelize");
 
 module.exports = {
     //CREATE
@@ -18,14 +18,33 @@ module.exports = {
                 nickName: req.body.nickName,
                 biography: req.body.biography,
                 password: req.body.password,
-                // idCompany: req.body.idCompany,
-                // createdAt: new Date(),
-                // updatedAt: new Date(),
             });
             res.status(200).send(user)
         } catch (err) {
             res.status(400).send({
                 error: 'ERROR: User not created -- ' + err
+            });
+        }
+    },
+
+    async addSubscription(req, res) {        
+        try{
+            const subscriptions = await models.Subscription.bulkCreate(req.body.subscriptions);
+            res.status(200).send(subscriptions)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Subscriptions not created -- ' + err
+            });
+        }
+    },
+
+    async addParticipation(req, res) {        
+        try{
+            const participations = await models.Participation.bulkCreate(req.body.participations);
+            res.status(200).send(participations)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participations not created -- ' + err
             });
         }
     },
@@ -50,7 +69,59 @@ module.exports = {
             res.status(200).send(user)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: User not found -- ' + err
+                error: 'ERROR: findUser not found -- ' + err
+            });
+        }
+    },
+
+    async findUserId(req, res) {
+        try{
+            const user = await models.User.findAll(
+                { where: { id: req.params.id }});
+            res.status(200).send(user)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: findUserId not found -- ' + err
+            });
+        }
+    },
+
+    async findUserSubscriptions (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM subscription JOIN project ON project.id = subscription.idProject WHERE subscription.idUser = :id",
+                { replacements: { id: req.params.id } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Subscriptions not found -- ' + err
+            });
+        }
+    },
+
+    async findUserFundedProjects (req, res) {
+        try{
+            const user = await models.Project.findAll(
+                { where: { projectFounder: req.params.id }});
+            res.status(200).send(user)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Projectsfunded not found -- ' + err
+            });
+        }
+    },
+
+    async findUserParticipations (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM participation JOIN project ON project.id = participation.idProject WHERE participation.idUser = :id",
+                { replacements: { id: req.params.id } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participations not found -- ' + err
             });
         }
     },
@@ -58,10 +129,6 @@ module.exports = {
     //UPDATE
     async updateUser (req, res) {
         try {
-            const user_id = await models.User.findAll(
-                { raw: true },
-                { attributes: ['id'] },
-                { where: { nickName: req.params.nickName } });
             const user = await models.User.update({
                 email: req.body.email,
                 photo: req.body.photo,
@@ -72,7 +139,7 @@ module.exports = {
                 password: req.body.password,
                 updatedAt: new Date(),
             }, {
-                where: { id: user_id[0]["id"] }
+                where: { id: req.params.id }
             });
             res.status(200).send(user)
         } catch (err) {
@@ -89,7 +156,7 @@ module.exports = {
                 user_status: req.body.status,
                 updatedAt: new Date(),
             }, {
-                where: { nickName: req.params.nickName }
+                where: { id: req.params.id }
             });
             res.status(200).send(user)
         } catch (err) {
@@ -102,12 +169,8 @@ module.exports = {
     // DELETE
     async deleteUser (req, res) {
         try {
-            const user_id = await models.User.findAll(
-                { raw: true },
-                { attributes: ['id'] },
-                { where: { nickName: req.params.nickName } });
             const user = await models.User.destroy(
-                {  where: { id: user_id[0]["id"] } });
+                { where: { id: req.params.id } });
             res.status(200).send("SUCCESS: User deleted")
         } catch (err) {
             res.status(400).send({
@@ -116,16 +179,51 @@ module.exports = {
         }
     },
 
+    async deleteSubscription (req, res) {
+        try {
+            const subscription = await models.Subscription.destroy(
+                { where: {
+                    [Op.and] : [
+                        { idProject: req.params.idProject },
+                        { idUser: req.params.idUser }
+                    ]
+                }} );
+            res.status(200).send("SUCCESS: Subscription deleted")
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Subscription not deleted -- ' + err
+            });
+        }
+    },
+
+    async deleteParticipation (req, res) {
+        try {
+            const participation = await models.Participation.destroy(
+                { where: {
+                    [Op.and] : [
+                        { idProject: req.params.idProject },
+                        { idUser: req.params.idUser }
+                    ]
+                }} );
+            res.status(200).send("SUCCESS: Participation deleted")
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participation not deleted -- ' + err
+            });
+        }
+    },
+
     // SEARCH
     async searchUser (req, res) {
         try{
-            console.log(req.params.nickName)
-            const user = await models.User.findAll(
-                { where: { nickName: { [Op.like]: '%' + req.params.nickName + '%'}}});
-            res.status(200).send(user)
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM user WHERE user.nickName LIKE :nickName",
+                { replacements: { nickName: '%' + req.params.nickName + '%'} }
+              );
+            res.status(200).send(results)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: User not found -- ' + err
+                error: 'ERROR: UserSearch not found -- ' + err
             });
         }
     }

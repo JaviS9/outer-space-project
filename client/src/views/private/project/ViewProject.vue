@@ -3,7 +3,8 @@
   <div class="container mt-3">
     <div class="row">
       <div class="col text-center mt-5">
-        <p class="h2 fw-bold">Title</p>
+        <p v-if="project === null" class="h2 fw-bold">No hay datos</p> 
+        <p v-else class="h2 fw-bold">{{project.title}}</p> 
       </div>
     </div>
   </div>
@@ -27,13 +28,19 @@
                 <p class="number-score mt-0">00</p>
               </div>
             </div>
-            <div class="col-md-12 flex-column justify-content-center align-items-center">
-              <div class="card-body p-0 bg-black border-top">
-                <li class="list-group">
-                  <ul class="list-group-item text-white bg-black"><p class="font-italic">Description of the project</p></ul>
-                  <ul class="list-group-item text-white bg-black"><p><span class="fw-bold"> Fundadores: </span></p></ul>
-                  <ul class="list-group-item text-white bg-black border-bottom"><p><span class="fw-bold"> Participantes: </span></p></ul>
-                  <ul class="list-group-item text-white bg-black"><p>Desde <span class="fw-bold">Start Date</span></p></ul>
+            <div class="col flex-column justify-content-center align-items-center mt-3">
+              <div class="card-body p-0 bg-black">
+                <li class="list-group" v-if="project === null">
+                  <ul class="list-group-item bg-black text-center mt-4"><p class="text-danger">No hay datos</p></ul>
+                </li>
+                <li class="list-group" v-else>
+                  <ul class="list-group-item text-white border bg-black mb-2 pb-0 pt-3">
+                    <p class="mb-5">{{project.description}}</p>
+                    <p v-if="founder === null"><span class="fw-bold"> Fundador: </span>No hay datos</p>
+                    <p v-else><span class="fw-bold"> Fundador: </span>{{founder.nickName}}</p>
+                    <p><span class="fw-bold"> Repositorio: </span>{{project.repository}}</p>
+                  </ul>
+                  <ul class="list-group-item text-white bg-black m-0 pb-0 border"><p>Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p></ul>
                 </li>
               </div>
             </div>
@@ -51,9 +58,8 @@
   <div class="container mb-5">
     <div class="row">
         <div class="col">
-          <AddUpdate :openCloseForm="openCloseForm" :showForm="showForm"/>
-          <UpdateForm :showForm="showForm" :reloadUpdates="reloadUpdates" :openCloseForm="openCloseForm"/>
-          <!-- <ListUpdate :showForm="showForm" :reloadUpdates="reloadUpdates" :openCloseForm="openCloseForm"/> -->
+          <!-- Actualizaciones,  participantes y suscripciones-->
+          
         </div>
     </div>
   </div>
@@ -61,32 +67,47 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import AddUpdate from "../../../components/AddUpdate.vue"
-import UpdateForm from "../../../components/UpdateForm.vue";
-import useFormUpdate from "../../../hooks/useFormUpdate";
-// import ListUpdate from "../../../components/ListUpdate.vue";
-import { getUpdatesApi } from "../../../api/update";
+import axios from 'axios';
 
 export default {
   name: 'ViewProject',
-  components: {
-    AddUpdate,
-    UpdateForm,
-    // ListUpdate,
-},
-  setup() {
-    let updates = ref(getUpdatesApi().reverse());
-
-    const reloadUpdates = () => {
-      updates.value = getUpdatesApi().reverse();
-    }
-
+  data() {
     return {
-      ...useFormUpdate(),
-      updates,
-      reloadUpdates,
+      founder: null,
+      project: null,
     };
+  },
+ 
+  created() {
+    this.getProject();
+  },
+
+  methods: {
+    //FIND ONE
+    async getProject() {
+      try {
+        const response = await axios.get(`http://localhost:5000/project/find/${this.$route.params.title}`);
+        this.project = response.data[0];
+        this.getFounder();
+
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async getFounder() {
+      try {
+        const response = await axios.get(`http://localhost:5000/user/find/id/${this.project.projectFounder}`);
+        this.founder = response.data[0];
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    // ----------------------------------------------
+    // HELPERS
+
+
   },
 };
 </script>
