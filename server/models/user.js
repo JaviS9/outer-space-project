@@ -25,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
           onUpdate: 'CASCADE'
         }
       });
-      User.belongsToMany(models.Role, {
-        through: 'UserRole',
+      User.belongsToMany(models.Tech, {
+        through: 'UserTech',
         as: 'roles',
         foreignKey: {
           name: 'idUser',

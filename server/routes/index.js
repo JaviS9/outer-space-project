@@ -1,5 +1,6 @@
 const userController = require('../controllers/user');
 const projectController = require('../controllers/project');
+const adminController = require('../controllers/admin');
 const app = require('../app');
 
 module.exports = (app) => {
@@ -33,19 +34,43 @@ module.exports = (app) => {
    // GET
    app.get('/project/list', projectController.listProject);
    app.get('/project/find/:title', projectController.findProject);
+   app.get('/project/find/updates/:id', projectController.findProjectUpdates)
+   app.get('/project/find/subscriptions/:id', projectController.findProjectSubscriptions)
+   app.get('/project/find/participations/:id', projectController.findProjectParticipations)
 
    // POST
    app.post('/project/add', projectController.addProject);
-   app.post('/project/add/participants', projectController.addParticipants)
+   app.post('/project/add/update', projectController.addUpdate);
 
    // PUT
    app.put('/project/update/:id', projectController.updateProject);
 
    // DELETE
    app.delete('/project/delete/:id', projectController.deleteProject);
+   app.delete('/project/:id/delete/update/:date', projectController.deleteUpdate)
 
-   //ROLE
-   //ADMIN
+   // SEARCH
+   // app.delete('/project/search/:title', projectController.searchProject);
+
+   // *** ADMIN ***
+   // GET
+   app.get('/admin/list', adminController.listAdmin); 
+   app.get('/admin/find/id/:id', adminController.findAdminId);
+
+   // POST
+   app.post('/admin/add', adminController.addAdmin);
+
+   // PUT
+   app.put('/admin/update/:id', adminController.updateAdmin);
+
+   // DELETE
+   app.delete('/admin/delete/:id', adminController.deleteAdmin);
+
+   // SEARCH
+   app.delete('/admin/search/:search', adminController.searchAdmin);
+
+
+   // TECH
+   // SUBSCRIPTION/DONATION
    
-   //UPDATE
 };

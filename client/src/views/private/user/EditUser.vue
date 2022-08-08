@@ -78,7 +78,7 @@
       </div>
       <div class="col-md-3 d-flex flex-column justify-content-top align-items-center">
         <!-- FOTO -->
-        <img class="card-img-top user-image" src="../../../../public/img/user-1.png" alt="alien-1">
+        <img class="card-img-top user-image" src="../../../../public/img/user/user-1.png" alt="alien-1">
         <!-- <img class="user-image" :src="previewImage" alt="preview_image"> -->
         <!-- <div class="imagePreview" :style="{ 'background-image': `url(${previewImage})` }" @click="selectImage"></div> -->
       </div>

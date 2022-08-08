@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class UserRole extends Model {
+  class UserTech extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UserRole.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
-      UserRole.belongsTo(models.Role, {foreignKey: 'idRole', targetKey: 'id'})
+      UserTech.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
+      UserTech.belongsTo(models.Tech, {foreignKey: 'idTech', targetKey: 'id'})
     }
   }
-  UserRole.init({
+  UserTech.init({
     // idUser: {
     //   allowNull: false,
     //   primaryKey: true,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     //   onUpdate: "CASCADE",
     //   type: DataTypes.UUID
     // },
-    // idRole: {
+    // idTech: {
     //   allowNull: false,
     //   primaryKey: true,
     //   onDelete: "CASCADE",
@@ -32,11 +32,11 @@ module.exports = (sequelize, DataTypes) => {
     // },
   }, {
     sequelize,
-    modelName: 'UserRole',
+    modelName: 'UserTech',
     timestamps: false,
     freezeTableName: true,
-    tableName: 'UserRole',
+    tableName: 'UserTech',
     classMethods: {}
   });
-  return UserRole;
+  return UserTech;
 };

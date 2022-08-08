@@ -42,8 +42,8 @@
             <ul class="list-group">
               <li class="list-group-item bg-black">
                 <!--  -->
-                <img class="user-image" src="../../../../public/img/user-1.png" alt="alien-1">
-                <!-- <img v-if="user.photo === null" class="user-image" src="../../../../public/img/user-1.png" alt="alien-1"> -->
+                <img class="user-image" src="../../../../public/img/user/user-1.png" alt="alien-1">
+                <!-- <img v-if="user.photo === null" class="user-image" src="../../../../public/img/user/user-1.png" alt="alien-1"> -->
                 <!-- <img v-else class="user-image" :src="getImage(user.photo)" alt="user_image"> -->
                 <!-- <div v-else class="imagePreview" :style="{ 'background-image': `url()` }" @click="selectImage"></div> -->
              </li>

@@ -51,7 +51,7 @@
       </div>
       <div class="col-md-4 ml-5">
         <!-- <div class="imagePreview" :style="{ 'background-image': `url(${previewImage})` }" @click="selectImage"></div> -->
-        <img class="user-image" src="../../../../public/img/user-1.png">
+        <img class="user-image" src="../../../../public/img/user/user-1.png">
       </div>
     </div>
   </div>

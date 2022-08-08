@@ -1,47 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@300;400&display=swap');
 
-body {
-    font-family: 'Tomorrow', sans-serif !important;
-    color: white !important;
-    background-color: black !important;
+html {
+    height: 100% !important;
 
-    .user-image {
-        width: 250px;
-        border-radius: 50%;
-    }
+    body {
+        font-family: 'Tomorrow', sans-serif !important;
+        color: white !important;
+        background-color: black !important;
+        margin: 0 !important;
+        min-height: 100% !important;
+        
+        .app {
+            margin: 0 auto;
+            min-height: 100%;
+            display: grid;
+        }
 
-    .project-image {
-        width: 150px;
-        border-radius: 50%;
-    }
+        .user-image {
+            width: 250px;
+            border-radius: 50%;
+        }
 
-    .mini-image {
-        width: 40px;
-        border-radius: 50%;
-    }
+        .project-image {
+            width: 150px;
+            border-radius: 50%;
+        }
 
-    .icon-image-big {
-        width: 300px;
-        border-radius: 50%;
-    }
+        .mini-image {
+            width: 40px;
+            border-radius: 50%;
+        }
 
-    .number-score {
-        font-size: 60px;
-    }
+        .icon-image-big {
+            width: 300px;
+            border-radius: 50%;
+        }
 
-    .imagePreview {
-        width: 250px;
-        height: 250px;
-        border-radius: 50%;
-        display: block;
-        cursor: pointer;
-        margin: 0 auto 30px;
-        background-size: cover;
-        background-position: center center;
-    }
+        .number-score {
+            font-size: 60px;
+        }
 
-    p {
-        letter-spacing: 0.03em;
-        word-spacing: 0.15em;
+        .imagePreview {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            display: block;
+            cursor: pointer;
+            margin: 0 auto 30px;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        p {
+            letter-spacing: 0.03em;
+            word-spacing: 0.15em;
+        }
+
+        // .navbar {
+        //     width: 100%;
+        //     position: sticky;
+        //     top:0;
+        //     z-index: 1;
+        // }
+
+        footer {
+            height: 100px;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        .update {
+            button {
+                width: 30px;
+                height: 30px;
+                position: absolute;
+                right: 13px;
+                top: 10px;
+            }
+
+            span {
+                position: absolute;
+                right: 10px;
+                bottom: -5px;
+                font-size: 15px;
+                padding: 0 2px;
+            }
+        }
     }
 }

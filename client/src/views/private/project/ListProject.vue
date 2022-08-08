@@ -40,12 +40,12 @@
             <div class="card-body p-0 bg-black">
                 <div class="row-flex d-flex justify-content-center align-items-center">
                     <div class="col-sm-2 d-flex justify-content-center">
-                        <img class="card-img-top project-image" src="../../../../public/img/project-1.png" alt="planet-1">
+                        <img class="card-img-top project-image" src="../../../../public/img/project/project-1.png" alt="planet-1">
                     </div>
                     <div class="col-sm-9 d-flex flex-column justify-content-center p-2">
                       <div class="card-body p-0 bg-black">
                         <li class="list-group">
-                          <ul class="list-group-item text-white bg-black border mb-2">
+                          <ul class="list-group-item text-white bg-black border border-bottom-0 mb-0">
                             <p><span class="h4 fw-bold">{{project.title}}</span></p>
                             <p class="my-3">{{project.description}}</p>
                           </ul>

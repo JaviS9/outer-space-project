@@ -126,7 +126,7 @@
                       searchable="Busca aqui"
                       v-model="selected_user"
                     >
-                      <option value="" disabled selected>Elige los usuarios a suscribir</option>
+                      <option value="" disabled selected>Elige los proyectos a suscribir</option>
                       <option
                           v-for="user in users" :key="user.id"
                           :value="user">{{user.nickName}}

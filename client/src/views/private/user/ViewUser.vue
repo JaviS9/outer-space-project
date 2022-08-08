@@ -10,7 +10,7 @@
   <div class="container border-bottom mt-3">
     <div class="row">
       <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <img class="card-img-top icon-image-big" src="../../../../public/img/user-1.png" alt="alien-1">
+        <img class="card-img-top icon-image-big" src="../../../../public/img/user/user-1.png" alt="alien-1">
       </div>
       <div class="col-md-6 mx-3 flex-column justify-content-center">
         <div class="card border-light bg-black py-1">
@@ -60,7 +60,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <img class="mini-image" src="../../../../public/img/project-1.png" alt="project-1">
+                  <img class="mini-image" src="../../../../public/img/project/project-1.png" alt="project-1">
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -153,7 +153,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <img class="mini-image" src="../../../../public/img/project-1.png" alt="project-1">
+                  <img class="mini-image" src="../../../../public/img/project/project-1.png" alt="project-1">
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -253,7 +253,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <img class="mini-image" src="../../../../public/img/project-1.png" alt="project-1">
+                  <img class="mini-image" src="../../../../public/img/project/project-1.png" alt="project-1">
                 </div>
                 <div class="col-sm-7 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>

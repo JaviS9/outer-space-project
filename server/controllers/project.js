@@ -1,7 +1,8 @@
 var models = require('../models');
 const { v4: uuidv4 } = require('uuid');
-// var Buffer = require('buffer/').Buffer
-
+const { sequelize } = require('../models');
+var Buffer = require('buffer/').Buffer
+const { Op } = require("sequelize");
 
 module.exports = {
     //CREATE
@@ -25,15 +26,18 @@ module.exports = {
         }
     },
     
-    // ADD PARTICIPANTS 
-    async addParticipants(req, res) {
+    // // ADD PARTICIPANTS 
+    async addUpdate(req, res) {
         try {
-            let participants = req.body.participants
-            const participant = await models.Participation.bulkCreate(participants);
-            res.status(200).send(participant)
+            const update = await models.Update.create({
+                idProject: req.body.idProject,
+                update_date: new Date(),
+                description: req.body.description
+            });
+            res.status(200).send(update)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Project not created -- ' + err
+                error: 'ERROR: Update not created -- ' + err
             });
         }
     },
@@ -59,6 +63,46 @@ module.exports = {
         } catch (err) {
             res.status(400).send({
                 error: 'ERROR: Project not found -- ' + err
+            });
+        }
+    },
+
+    async findProjectUpdates (req, res) {
+        try{
+            const updates = await models.Update.findAll(
+                { where: { idProject: req.params.id }});
+            res.status(200).send(updates)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Updates not found -- ' + err
+            });
+        }
+    },
+
+    async findProjectSubscriptions (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM subscription JOIN user ON user.id = subscription.idUser WHERE subscription.idProject = :id",
+                { replacements: { id: req.params.id } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Subscriptions not found -- ' + err
+            });
+        }
+    },
+
+    async findProjectParticipations (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM participation JOIN user ON user.id = participation.idUser WHERE participation.idProject = :id",
+                { replacements: { id: req.params.id } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participations not found -- ' + err
             });
         }
     },
@@ -93,6 +137,38 @@ module.exports = {
         } catch (err) {
             res.status(400).send({
                 error: 'ERROR: Project not deleted -- ' + err
+            });
+        }
+    },
+
+    async deleteUpdate (req, res) {
+        try {
+            const update = await models.Update.destroy(
+                { where: {
+                    [Op.and] : [
+                        { idProject: req.params.id},
+                        { update_date: req.params.date }
+                    ]
+                }} );
+            res.status(200).send("SUCCESS: Update deleted")
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participation not deleted -- ' + err
+            });
+        }
+    },
+
+    // SEARCH
+    async searchProject (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM project WHERE project.title LIKE :title",
+                { replacements: { title: '%' + req.params.title + '%'} }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: ProjectSearch not found -- ' + err
             });
         }
     }

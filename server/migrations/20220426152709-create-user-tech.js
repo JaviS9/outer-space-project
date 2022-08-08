@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserRole', {
+    await queryInterface.createTable('UserTech', {
       idUser: {
         allowNull: false,
         primaryKey: true,
@@ -14,21 +14,21 @@ module.exports = {
           as: 'idUser'
         }
       },
-      idRole: {
+      idTech: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
         references: {
-          model: 'Role',
+          model: 'Tech',
           key: 'id',
-          as: 'idRole'
+          as: 'idTech'
         }
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('UserRole');
+    await queryInterface.dropTable('UserTech');
   }
 };

@@ -86,6 +86,18 @@ module.exports = {
         }
     },
 
+    async findUserFundedProjects (req, res) {
+        try{
+            const user = await models.Project.findAll(
+                { where: { projectFounder: req.params.id }});
+            res.status(200).send(user)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Projectsfunded not found -- ' + err
+            });
+        }
+    },
+    
     async findUserSubscriptions (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
@@ -96,18 +108,6 @@ module.exports = {
         } catch (err) {
             res.status(400).send({
                 error: 'ERROR: Subscriptions not found -- ' + err
-            });
-        }
-    },
-
-    async findUserFundedProjects (req, res) {
-        try{
-            const user = await models.Project.findAll(
-                { where: { projectFounder: req.params.id }});
-            res.status(200).send(user)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: Projectsfunded not found -- ' + err
             });
         }
     },

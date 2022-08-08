@@ -75,7 +75,7 @@
       </div>
       <div class="col-md-3 d-flex flex-column justify-content-top align-items-center">
         <!-- FOTO -->
-        <img class="card-img-top user-image" src="../../../../public/img/project-1.png" alt="planet-1">
+        <img class="card-img-top user-image" src="../../../../public/img/project/project-1.png" alt="planet-1">
       </div>
     </div>
   </div>
