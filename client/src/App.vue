@@ -3,7 +3,8 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-2">
     <div class="container">
       <router-link to="/" class="navbar-brand me-5">
-          <i class="fa fa-rocket"></i> OUTER SPACE PROJECT
+          <img class="logo-icon" src="./assets/logo.png" alt="logo">
+          OUTER SPACE PROJECT
           <span class="fw-bold text-warning">Manager</span>
       </router-link>
       <div class="collapse navbar-collapse">

@@ -1,9 +1,9 @@
 <template>
-<div class="editProject">
+<div class="editTech">
   <div class="container mt-3">
     <div class="row">
       <div class="col">
-        <p class="h3 fw-bold">Actualizar datos del proyecto</p>
+        <p class="h3 fw-bold">Actualizar datos de la tecnología</p>
       </div>
     </div>
   </div>
@@ -11,13 +11,13 @@
     <div class="row">
       <div class="col-md-6">
         <form>
-          <p>Rellena el formulario para actualizar los datos del proyecto.</p>
+          <p>Rellena el formulario para actualizar los datos de la tecnología.</p>
           <div class="row mb-2">
             <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
-              <label>Titulo:</label>
+              <label>Nombre:</label>
             </div>
             <div class="col-sm-9">
-              <input type="text" class="form-control" :placeholder="project.title" v-model="project.title">
+              <input type="text" class="form-control" :placeholder="tech.name" v-model="tech.name">
             </div>
           </div>
           <div class="row mb-2">
@@ -25,63 +25,19 @@
               <label>Descripción:</label>
             </div>
             <div class="col-sm-9">
-              <textarea class="form-control" rows="3" :placeholder="project.description" v-model="project.description"></textarea>
-            </div>
-          </div>
-          <div class="row mb-2">
-            <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
-              <label>Repositorio:</label>
-            </div>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" :placeholder="project.repository" v-model="project.repository">
+              <textarea class="form-control" rows="3" :placeholder="tech.description" v-model="tech.description"></textarea>
             </div>
           </div>
           <hr>
-          <div class="my-2">
-            <div class="d-flex flex-row mb-3">
-                <p class="me-3">Añade al fundador del proyecto: </p>
-                <p v-if="founder === null" class="text-danger">No seleccionado</p>
-                <button v-else 
-                  type="button"
-                  class="btn btn-danger btn-md rounded-pill p-2"
-                  v-on:click="deleteFounder"
-                >
-                  {{ founder.nickName }} <i class="fa-solid fa-circle-xmark"></i>
-                </button>
-            </div>
-            <div class="row">
-              <div class="col-md-10 d-flex flex-column justify-content-center">
-                <!-- SELECT FOUNDER -->
-                <select class="mdb-select md-form form-control"
-                  searchable="Busca aqui"
-                  v-model="selected_founder"
-                >
-                  <option value="" disabled selected>Elige al fundador</option>
-                  <option v-for="user in users" :key="user.id"
-                    :value="user">{{user.nickName}}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-1 ms-4 d-flex justify-content-center">
-                <button
-                  type="button"
-                  class="btn btn-md btn-outline-success rounded-circle"
-                  v-on:click="saveFounder"
-                >
-                  <i class="fa fa-plus"></i>
-                </button>
-              </div>
-            </div>
-          </div>
           <!--  -->
           <div class="mb-2 mt-3">
-            <input type="submit" class="btn btn-outline-primary btn-md" value="Actualizar" @click="updateProject">
+            <input type="submit" class="btn btn-outline-primary btn-md" value="Actualizar" @click="updateTech">
           </div>
         </form>
       </div>
       <div class="col-md-3 d-flex flex-column justify-content-top align-items-center">
         <!-- FOTO -->
-        <img class="card-img-top user-image" src="../../../../public/img/project/project-1.png" alt="planet-1">
+        <img class="card-img-top user-image" src="../../../../public/img/tech/tech-1.png" alt="tech_photo">
       </div>
     </div>
   </div>
@@ -93,20 +49,16 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 
 export default {
-  name: "EditProject",
+  name: "EditTech",
   data() {
     return {
-      project: {},
-      users: [],
-      selected_founder: "",
-      founder: null,
+      tech: {},
       previewImage: null
     }
   },
 
   created() {
-    this.getProject();
-    this.getUsers();
+    this.getTech();
   },
 
   methods: {
@@ -142,7 +94,7 @@ export default {
 
     getImage() {
       try {
-        let img = this.project.photo
+        let img = this.tech.photo
         if(img != null) {
           let buffer = Buffer.from(img.data)
           // let blob = new Blob([img], { type: "image/jpeg" });
@@ -158,44 +110,16 @@ export default {
     },
     // ********************************************************
     // GET USER
-    async getProject() {
+    async getTech() {
       try {
-        const response = await axios.get(`http://localhost:5000/project/find/${this.$route.params.title}`);
-        this.project = response.data[0];
-        this.getFounder();
+        const response = await axios.get(`http://localhost:5000/tech/find/${this.$route.params.tech_name}`);
+        this.tech = response.data[0];
       } catch (err) {
         console.log(err);
       }
     },
 
-    async getFounder() {
-      try {
-        const response = await axios.get(`http://localhost:5000/user/find/id/${this.project.projectFounder}`);
-        this.founder = response.data[0];
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getUsers() {
-      try {
-        const response = await axios.get("http://localhost:5000/user/list");
-        this.users = response.data.reverse();
-        console.log(this.users)
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    saveFounder() {
-      this.founder = this.selected_founder
-    },
-
-    deleteFounder() {
-      this.founder = null
-    },
-
-    async updateProject(e) {
+    async updateTech(e) {
       try {
         e.preventDefault();
         // let img = this.$refs.photo.files[0]
@@ -206,18 +130,16 @@ export default {
         // console.log("buffer -- " + buffer)
         // this.photo = base64
         
-        let response = await axios.put(`http://localhost:5000/project/update/${this.project.id}`,
+        let response = await axios.put(`http://localhost:5000/tech/update/${this.tech.id}`,
         {
-          title: this.project.title,
-          description: this.project.description,
-          repository: this.project.repository,
-          founder: this.founder,
-          photo: null,
+          name: this.tech.name,
+          description: this.tech.description,
+          // photo: null,
         },
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
         console.log(response.data);
-        this.$router.push("/projects");
+        this.$router.push("/techs");
       } catch (err) {
         console.log(err);
       }

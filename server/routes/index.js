@@ -1,6 +1,7 @@
 const userController = require('../controllers/user');
 const projectController = require('../controllers/project');
 const adminController = require('../controllers/admin');
+const techController = require('../controllers/tech')
 const app = require('../app');
 
 module.exports = (app) => {
@@ -71,6 +72,23 @@ module.exports = (app) => {
 
 
    // TECH
+   // GET
+   app.get('/tech/list', techController.listTech);
+   app.get('/tech/find/:name', techController.findTech);
+   app.get('/tech/find/id/:id', techController.findTechId);
+
+   // POST
+   app.post('/tech/add', techController.addTech);
+
+   // PUT
+   app.put('/tech/update/:id', techController.updateTech);
+
+   // DELETE
+   app.delete('/tech/delete/:id', techController.deleteTech);
+
+   // SEARCH
+   app.delete('/tech/search/:search', techController.searchTech);
+
    // SUBSCRIPTION/DONATION
    
 };

@@ -38,15 +38,15 @@
       </div>
     </div>
   </div>
-  <div class="container mt-4 p-0">
+  <div class="container mt-4 p-2">
     <div class="row-flex d-flex justify-content-center align-items-top">
-      <div class="col-md-4 mx-2 d-flex flex-column card bg-black">
+      <div class="col-md-4 mx-1 d-flex flex-column card bg-black">
         <div class="card-body p-0 bg-black">
           <li class="list-group">
-            <ul class="list-group-item text-warning text-center border-warning bg-black mb-2 p-2">
+            <ul class="list-group-item text-black text-center border-info bg-info mb-2 p-2">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-1 flex-column d-flex justify-content-center align-items-start">
-                  <i class="fa-solid fa-star border rounded-circle border-warning p-2"></i>
+                  <i class="fa fa-rocket rounded-circle border border-info p-2"></i>
                 </div>
                 <div class="col-sm-11 flex-column d-flex justify-content-center align-items-start">
                   <span class="fw-bold ms-2">Proyectos fundados</span>
@@ -76,20 +76,20 @@
           </li>
         </div>
       </div>
-      <div class="col-md-4 mx-2 d-flex flex-column card bg-black">
+      <div class="col-md-4 mx-1 d-flex flex-column card bg-black">
         <div class="card-body p-0 bg-black">
           <li class="list-group">
-            <ul class="list-group-item text-info text-center border-info bg-black mb-2 p-2">
+            <ul class="list-group-item text-black text-center border-warning bg-warning mb-2 p-2">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-1 flex-column d-flex justify-content-center align-items-start">
-                  <i class="fa-solid fa-atom border rounded-circle border-info p-2"></i>
+                  <i class="fa-solid fa-star border rounded-circle border-warning p-2"></i>
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span class="fw-bold ms-2">Suscripciones</span>
                 </div>
                 <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
                   <!-- BUTTON MODAL -->
-                  <button type="button" class="ms-2 btn btn-outline-info btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
+                  <button type="button" class="ms-2 btn btn-success text-white border border-2 btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>
@@ -97,9 +97,9 @@
               <!-- MODAL SUBSCRIPTIONS -->
               <div class="modal fade modal modal-lg" id="ModalSubscriptions" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                  <div class="modal-content bg-black border-info p-3">
+                  <div class="modal-content bg-black border-warning p-3">
                     <div class="row-flex d-flex align-items-start my-2">
-                      <p class="modal-title text-info" id="exampleModalLabel">Suscripciones</p>
+                      <p class="modal-title text-warning" id="exampleModalLabel">Suscripciones</p>
                       <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="row-flex d-flex align-items-center my-2">
@@ -140,7 +140,7 @@
                     <!--  -->
                     <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
                       <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                      <button type="button" class="btn btn-outline-info btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
+                      <button type="button" class="btn btn-outline-warning btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
                     </div>
                   </div>
                 </div>
@@ -176,10 +176,10 @@
           </li>
         </div>
       </div>
-      <div class="col-md-4 mx-2 d-flex flex-column card bg-black">
+      <div class="col-md-4 mx-1 d-flex flex-column card bg-black">
         <div class="card-body p-0 bg-black">
           <li class="list-group">
-            <ul class="list-group-item text-primary text-center border-primary bg-black mb-2">
+            <ul class="list-group-item text-black text-center border-primary bg-primary mb-2">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-1 flex-column d-flex justify-content-center align-items-start">
                   <i class="fa-solid fa-globe border rounded-circle border-primary p-2"></i>
@@ -189,7 +189,7 @@
                 </div>
                 <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
                   <!-- BUTTON MODAL -->
-                  <button type="button" class="btn btn-outline-primary btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalParticipation">
+                  <button type="button" class="btn btn-success text-white border border-light border-2 btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalParticipation">
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>

@@ -91,16 +91,16 @@ const routes = [
     component: () => import('../views/private/tech/AddTech.vue')
   },
   {
-    path: '/techs/edit/:id',
+    path: '/techs/edit/:tech_name',
     name: 'EditTech',
     component: () => import('../views/private/tech/EditTech.vue')
   },
   // *** SUBSCRIPTION ***
-  {
-    path: '/subscription/user/:nickName/project/:title',
-    name: 'EditTech',
-    component: () => import('../views/private/subscription/ViewSubscription.vue')
-  },
+  // {
+  //   path: '/subscription/user/:nickName/project/:title',
+  //   name: 'EditTech',
+  //   component: () => import('../views/private/subscription/ViewSubscription.vue')
+  // },
 ]
 
 const router = createRouter({

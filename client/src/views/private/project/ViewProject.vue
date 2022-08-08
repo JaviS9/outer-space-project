@@ -108,17 +108,17 @@
       <div class="col-md-6 flex-column justify-content-center align-items-center p-0">
         <div class="card bg-black border border-2 rounded me-1">
           <div class="row-flex d-flex p-3">
-            <span class="fw-bold ms-2 text-info">Suscripciones</span>
+            <span class="fw-bold ms-2 text-warning">Suscripciones</span>
             <!-- BUTTON MODAL -->
-            <button type="button" class="ms-2 btn btn-outline-info btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
+            <button type="button" class="ms-2 btn btn-outline-warning btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
               <i class="fa fa-plus"></i>
             </button>
             <!-- MODAL SUBSCRIPTIONS -->
             <div class="modal fade modal modal-lg" id="ModalSubscriptions" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
-                <div class="modal-content bg-black border-info p-3">
+                <div class="modal-content bg-black border-warning p-3">
                   <div class="row-flex d-flex align-items-start my-2">
-                    <p class="modal-title text-info" id="exampleModalLabel">Suscripciones</p>
+                    <p class="modal-title text-warning" id="exampleModalLabel">Suscripciones</p>
                   </div>
                   <div class="row-flex d-flex align-items-center my-2">
                     <select 
@@ -158,7 +158,7 @@
                   <!--  -->
                   <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
                     <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                    <button type="button" class="btn btn-outline-info btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
+                    <button type="button" class="btn btn-outline-warning btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
                   </div>
                 </div>
               </div>

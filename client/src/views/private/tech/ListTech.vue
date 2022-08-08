@@ -27,45 +27,48 @@
       </div>
     </div>
   </div>
-  <div class="container mt-5">
-    <div class="col-md-12 d-flex flex-column align-items-center justify-content-center"
-      v-if="techs.length === 0"
-    >
-      <p class="h5 text-danger">No se han encontrado tecnologías</p>
-    </div>
-    <div class="row"
-      v-for="tech in techs" :key="tech.id"
-    >
-        <div class="col card border-light bg-black align-self-center mx-2 mb-3">
-            <div class="card-body p-0 bg-black">
-                <div class="row-flex d-flex justify-content-center align-items-center">
-                    <div class="col-sm-2 d-flex justify-content-center">
-                        <img class="card-img-top tech-image" :src="getImage(tech.name)" :alt="tech.name">
-                    </div>
-                    <div class="col-sm-9 d-flex flex-column justify-content-center p-2">
-                      <div class="card-body p-0 bg-black">
-                        <li class="list-group">
-                          <ul class="list-group-item text-white bg-black border mb-2">
-                            <p><span class="h4 fw-bold">{{tech.name}}</span></p>
-                            <p class="my-3">{{tech.description}}</p>
+  <div class="container mt-5 p-2">
+    <div class="row-flex d-flex justify-content-top align-items-start">
+      <div class="col-md-12 d-flex flex-column align-items-center justify-content-center"
+        v-if="techs.length === 0"
+      >
+        <p class="h5 text-danger">No se han encontrado tecnologías</p>
+      </div>
+      <div class="col-md-12"
+        v-for="tech in techs" :key="tech.id"
+      >
+          <div class="col card border-light bg-black align-self-center m-2 p-1">
+              <div class="card-body p-0 bg-black">
+                  <div class="row-flex d-flex justify-content-center align-items-center">
+                      <div class="col-md-3 flex-column d-flex justify-content-center align-items-center">
+                          <!-- <img class="card-img-top tech-image" :src="getImage(tech.name)" :alt="tech.name"> -->
+                          <img class="tech-logo" src="../../../../public/img/tech/tech-1.png" alt="tech_photo">
+                      </div>
+                      <div class="col-md-8 d-flex flex-column justify-content-center align-items-top p-2">
+                        <li class="list-group justify-content-top align-items-top m-0">
+                          <ul class="list-group-item bg-black border text-white p-3 m-0">
+                            <span class="h5 fw-bold m-0 p-0">{{tech.name}}</span>
+                          </ul>
+                          <ul class="list-group-item bg-black border border-top-0 text-white p-3 m-0">
+                            <p class="p-0">{{tech.description}}</p>                        
                           </ul>
                         </li>
                       </div>
-                    </div>
-                    <div class="col-sm-1 ml-1 d-flex flex-column justify-content-center align-items-center">
-                        <router-link :to="{ name: 'EditTech', params: {name: tech.name}}"
-                          type="button" class="btn btn-outline-primary my-2">
-                          <i class="fa fa-pen"></i>
-                        </router-link>
-                        <button 
-                          @click="deleteTech(tech.id)"
-                          class="btn btn-outline-danger my-2">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                      <div class="col-md-1 d-flex flex-column justify-content-center align-items-center px-1">
+                          <router-link :to="{ name: 'EditTech', params: {tech_name: tech.name}}"
+                            type="button" class="btn btn-outline-primary my-2">
+                            <i class="fa fa-pen"></i>
+                          </router-link>
+                          <button 
+                            @click="deleteTech(tech.id)"
+                            class="btn btn-outline-danger my-2">
+                              <i class="fa fa-trash"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     </div>
   </div>
 </div>
