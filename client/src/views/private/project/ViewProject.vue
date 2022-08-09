@@ -11,7 +11,7 @@
   <div class="container mt-5 border-bottom border-1">
     <div class="row">
       <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <img class="card-img-top icon-image-big" src="../../../../public/img/project/project-1.png" alt="alien-1">
+        <div class="imagePreview__icon-image-big" :style="{ 'background-image': `url(${project.photo})` }"></div>
       </div>
       <div class="col-md-8 align-items-center justify-content-center">
         <div class="row">
@@ -174,7 +174,7 @@
                   class="list-group-item text-white border-light border bg-black mb-2 p-3">
                   <div class="row-flex d-flex justify-content-center align-items-center p-0">
                     <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                      <img class="mini-image" src="../../../../public/img/user/user-1.png" alt="alien-1">
+                      <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
                     </div>
                     <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                       <span>{{user.nickName}}</span>
@@ -269,7 +269,7 @@
                   class="list-group-item text-white border-light border bg-black mb-2 p-3">
                   <div class="row-flex d-flex justify-content-center align-items-center p-0">
                     <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                      <img class="mini-image" src="../../../../public/img/user/user-1.png" alt="alien-1">
+                      <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
                     </div>
                     <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                       <span>{{user.nickName}}</span>

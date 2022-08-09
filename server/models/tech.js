@@ -13,8 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Tech.belongsToMany(models.User, {
         through: 'UserTech',
-        as: 'techs',
-        foreignKey: 'idTech'
+        as: 'users',
+        foreignKey: {
+          name: 'idTech',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       });
     }
   }
@@ -25,13 +29,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    photo: DataTypes.STRING,
     name: {
         allowNull: false,
-        type: DataTypes.UUID
+        type: DataTypes.STRING
     },
-    description: {
+    type: {
         allowNull: false,
-        type: DataTypes.UUID
+        type: DataTypes.STRING
     }
   }, {
     sequelize,

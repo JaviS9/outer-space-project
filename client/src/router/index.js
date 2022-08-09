@@ -53,6 +53,11 @@ const routes = [
       name: 'AddProject',
       component: () => import('../views/private/project/AddProject.vue')
   },
+  // {
+  //   path: '/projects/add/:founder',
+  //   name: 'AddProject',
+  //   component: () => import('../views/private/project/AddProject.vue')
+  // },
   {
       path: '/projects/edit/:title',
       name: 'EditProject',
@@ -96,11 +101,12 @@ const routes = [
     component: () => import('../views/private/tech/EditTech.vue')
   },
   // *** SUBSCRIPTION ***
-  // {
-  //   path: '/subscription/user/:nickName/project/:title',
-  //   name: 'EditTech',
-  //   component: () => import('../views/private/subscription/ViewSubscription.vue')
-  // },
+  {
+    path: '/subscription/user/:nickName/project/:title',
+    name: 'ViewSubscription',
+    component: () => import('../views/private/subscription/ViewSubscription.vue')
+  }
+  
 ]
 
 const router = createRouter({

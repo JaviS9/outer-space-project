@@ -15,11 +15,23 @@
           <div class="mb-2">
             <input type="text" class="form-control" placeholder="Titulo" v-model="title">
           </div>
+          <div v-if="errors.title == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe un titulo de proyecto.</p>
+          </div>
           <div class="mb-2">
             <textarea class="form-control" rows="3" placeholder="Descripción" v-model="description"></textarea>
           </div>
           <div class="mb-2">
             <input type="text" class="form-control" placeholder="URL del repositorio" v-model="repository">
+          </div>
+          <div class="mb-2">
+            <!-- <input 
+              ref="photo"
+              class="form-control"
+              type="file" accept="image/*"
+              @input="pickFile"
+            > -->
+            <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="photo" @input="getImage">
           </div>
           <hr>
           <div class="my-2">
@@ -57,6 +69,9 @@
                 </button>
               </div>
             </div>
+            <div v-if="errors.founder == true">
+              <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, selecciona un fundador.</p>
+            </div>
           </div>
           <!--  -->
           <div class="mb-2">
@@ -75,7 +90,8 @@
       </div>
       <div class="col-md-3 d-flex flex-column justify-content-top align-items-center">
         <!-- FOTO -->
-        <img class="card-img-top user-image" src="../../../../public/img/project/project-1.png" alt="planet-1">
+        <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
+        <!-- <img class="card-img-top user-image" src="../../../../public/img/project/project-1.png" alt="planet-1"> -->
       </div>
     </div>
   </div>
@@ -92,19 +108,41 @@ export default {
       title: "",
       description: "",
       repository: "",
+      photo: "",
       founder: null,
       participants: [],
       users: [],
       selected_founder: "",
-      selected_participant: ""
+      selected_participant: "",
+      previewImage: "",
+      planets: [
+        "https://cdn-icons.flaticon.com/png/512/2211/premium/2211735.png?token=exp=1660038331~hmac=9c7beccaade45dbfe960a67c5f2b14d0",
+        "https://cdn-icons.flaticon.com/png/512/5551/premium/5551395.png?token=exp=1660038103~hmac=3b4d63d8d925bbd141e6f267632096f4",
+        "https://cdn-icons.flaticon.com/png/512/2211/premium/2211738.png?token=exp=1660038409~hmac=a71d2bd88cfcc74a1948c90d85909793"
+      ],
+      errors: {
+          title: false,
+          founder: false,
+      }
     };
   },
  
   created() {
     this.getUsers();
+    this.getPlanet();
+
   },
 
   methods: {
+
+    getImage() {
+      this.previewImage = this.photo
+    },
+
+    getPlanet() {
+      this.previewImage = this.planets[Math.floor(Math.random() * 3)]
+    },
+
     saveFounder() {
       this.founder = this.selected_founder
       let found = false
@@ -157,26 +195,35 @@ export default {
         // console.log("buffer -- " + buffer)
         // let base64 = Buffer.from(blob).toString('base64')
         // this.photo = base64
+        // VALID TITLE
+        if(!this.title) {
+          this.errors.title = true;
+        } else { this.errors.title = false; }
+        // VALID FOUNDER
+        if(!this.founder) {
+          this.errors.founder = true;
+        } else { this.errors.founder = false; }
 
-        let response = await axios.post("http://localhost:5000/project/add",
-        {
-          title: this.title,
-          description: this.description,
-          repository: this.repository,
-          founder: this.founder,
-          photo: null,
-          // participants: this.participants,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-        this.title = "",
-        this.description = "",
-        this.repository = "",
-        this.founder = "",
-        this.photo = null,
-        // this.participants = [],
-        console.log(response.data);
-        this.$router.push("/projects");
+        if(Object.values(this.errors).every(value => value === false)) {
+          let response = await axios.post("http://localhost:5000/project/add",
+          {
+            title: this.title,
+            description: this.description,
+            repository: this.repository,
+            founder: this.founder,
+            photo: this.previewImage,
+          },
+          { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+          );
+          this.title = "",
+          this.description = "",
+          this.repository = "",
+          this.founder = "",
+          this.photo = null,
+          // this.participants = [],
+          console.log(response.data);
+          this.$router.push("/projects");
+        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
       } catch (err) {
         console.log(err);
       }

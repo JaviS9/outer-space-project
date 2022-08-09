@@ -14,6 +14,13 @@
           <p>Rellena el formulario para registrar un nuevo usuario.</p>
           <div class="mb-2">
             <input type="email" class="form-control" placeholder="Email" v-model="email">
+            <!-- ERROR -->
+            <div v-if="errors.email == true">
+              <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe un email.</p>
+            </div>
+            <div v-if="errors.valid_email == true">
+              <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe un email valido.</p>
+            </div>
           </div>
           <div class="mb-2">
             <input type="text" class="form-control" placeholder="Nombre" v-model="name">
@@ -22,36 +29,62 @@
             <input type="text" class="form-control" placeholder="Apellidos" v-model="lastName">
           </div>
           <div class="mb-2">
-            <input type="text" class="form-control" placeholder="Nickname" v-model="nickName">
+            <div class="input-group">
+              <span class="input-group-text">@</span>
+              <input type="text" class="form-control" placeholder="Nickname" v-model="nickName">
+            </div>
+            <!-- ERROR -->
+            <div v-if="errors.nickName == true">
+              <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe un nombre de usuario.</p>
+            </div>
           </div>
           <div class="mb-2">
             <textarea class="form-control" rows="3" placeholder="Biografía" v-model="biography"></textarea>
           </div>
           <!-- INSERTAR FOTOS -->
-          <!-- <div class="mb-2">
-              <input ref="photo" class="form-control" type="file" accept="image/*"
-              @change="updatePhoto($event.target.files)"
-              @input="pickFile">
-          </div> -->
-          <!-- <div class="mb-2">
-            <input type="text" class="form-control" placeholder="Empresa">
-          </div> -->
-          <hr>
-          <p>Introduce una contraseña.</p>
           <div class="mb-2">
+            <!-- <input 
+              ref="photo"
+              class="form-control"
+              type="file" accept="image/*"
+              @input="pickFile"
+            > -->
+            <input type="text" class="form-control" placeholder="Foto de usuario" v-model="photo" @input="getImage">
+          </div>
+          <hr>
+          <p>Introduce una contraseña.
+            <i v-if="errors.length_pass == true"
+              class="fa-solid fa-info m-0 border border-2 px-2 py-1 rounded-circle bg-danger"
+              data-bs-toggle="tooltip bs-tooltip-right" data-bs-placement="right"
+              title="La contraseña debe tener almenos 6 caracteres.">
+            </i>
+          </p>
+          <div class="row-flex d-flex align-items-center mb-2">
             <input name="password" autocomplete="on" type="password" class="form-control" placeholder="Contraseña" v-model="pass">
+          </div>
+          <!-- ERROR -->
+          <div v-if="errors.pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe una contraseña.</p>
           </div>
           <div class="mb-2">
             <input name="repeat_password" autocomplete="on" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
           </div>
+          <!-- ERROR -->
+          <div v-if="errors.rep_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe de nuevo la contraseña.</p>
+          </div>
+          <div v-if="errors.equal_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
+          </div>
+
           <div class="mb-2 mt-3">
             <input type="submit" class="btn btn-outline-success btn-md" value="Registrar" @click="saveUser">
           </div>
         </form>
       </div>
       <div class="col-md-4 ml-5">
-        <!-- <div class="imagePreview" :style="{ 'background-image': `url(${previewImage})` }" @click="selectImage"></div> -->
-        <img class="user-image" src="../../../../public/img/user/user-1.png">
+        <!-- <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }" @click="selectImage"></div> -->
+        <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
       </div>
     </div>
   </div>
@@ -60,7 +93,7 @@
 
 <script>
 import axios from 'axios';
-import { Buffer } from 'buffer';
+// import { Buffer } from 'buffer';
 
 export default {
   name: "AddUser",
@@ -79,46 +112,57 @@ export default {
           "https://cdn-icons-png.flaticon.com/512/6695/6695211.png",
           "https://cdn-icons-png.flaticon.com/512/6695/6695160.png",
           "https://cdn-icons-png.flaticon.com/512/6695/6695137.png" 
-        ]
+        ],
+        errors: {
+          email: false,
+          valid_email: false,
+          nickName: false,
+          pass: false,
+          rep_pass: false,
+          equal_pass: false,
+          length_pass: false,
+        }
     };
   },
 
   created() {
-    // this.getAlien()
+    this.getAlien()
   },
 
   methods: {
-    selectImage () {
-        this.$refs.photo.click()
-    },
 
-    updatePhoto(files) {
-      if (!files.length) {
-        // Store the file data
-        let buffer = Buffer.from(this.$refs.photo.data)
-        let base64 = Buffer.from(buffer).toString('base64')
-        this.photo = base64
-      }
+    // updatePhoto(files) {
+    //   if (!files.length) {
+    //     // Store the file data
+    //     let buffer = Buffer.from(this.$refs.photo.data)
+    //     let base64 = Buffer.from(buffer).toString('base64')
+    //     this.photo = base64
+    //   }
+    // },
+
+    // async getImage(image) {
+    //   try {
+    //     let response = await axios.get(image, {
+    //       responseType: "arraybuffer"
+    //     })
+    //     // let response = await axios.get(this.previewImage)
+    //     let base64 = Buffer.from(response.data).toString('base64')
+    //     this.photo = base64
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+
+    getImage() {
+      this.previewImage = this.photo
     },
 
     getAlien() {
-      // return "https://cdn-icons-png.flaticon.com/512/6695/6695211.png"
-      let alien = this.aliens[Math.floor(Math.random() * 3)]
-      this.getImage(alien)
-      return alien
+      this.previewImage = this.aliens[Math.floor(Math.random() * 3)]
     },
 
-    async getImage(image) {
-      try {
-        let response = await axios.get(image, {
-          responseType: "arraybuffer"
-        })
-        // let response = await axios.get(this.previewImage)
-        let base64 = Buffer.from(response.data).toString('base64')
-        this.photo = base64
-      } catch (err) {
-        console.log(err);
-      }
+    selectImage () {
+        this.$refs.photo.click()
     },
 
     pickFile () {
@@ -132,6 +176,7 @@ export default {
             this.previewImage = e.target.result
           }
           reader.readAsDataURL(file[0])
+          console.log(file[0])
           this.$emit('input', file[0])
         }
       } catch (e) {
@@ -151,27 +196,60 @@ export default {
         // let base64 = Buffer.from(blob).toString('base64')
         // this.photo = base64
 
-        let response = await axios.post("http://localhost:5000/user/add",
-        {
-          email: this.email,
-          photo: this.photo,
-          name: this.name,
-          lastName: this.lastName,
-          nickName: this.nickName,
-          biography: this.biography,
-          password: this.pass,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-        this.email = "";
-        this.name = "";
-        this.lastName = "";
-        this.pass = "";
-        this.nickName = "",
-        this.photo = null,
-        this.repeat_pass = "";
-        console.log(response.data);
-        this.$router.push("/users");
+        // VALID EMAIL
+        if(!this.email) {
+          this.errors.email = true;
+        } else {
+          this.errors.email = false;
+          if(!this.email.includes('@') || !this.email.includes('.')){
+            this.errors.valid_email = true;
+          } else { this.errors.valid_email = false; }
+        }
+        if(!this.nickName) {
+          this.errors.nickName = true;
+        } else { this.errors.nickName = false; }
+        // VALID PASSWORD
+        if(!this.pass) {
+          this.errors.pass = true;
+        } else {
+          this.errors.pass = false;
+          if(this.pass.length <= 5) {
+            this.errors.length_pass = true;
+          } else { this.errors.length_pass = false;}
+        }
+        if(!this.repeat_pass) {
+          this.errors.rep_pass = true;
+        } else {
+          this.errors.rep_pass = false;
+          if(this.pass != this.repeat_pass) {
+            this.errors.equal_pass = true;
+          } else { this.errors.equal_pass = false; }
+        }
+
+        
+        if(Object.values(this.errors).every(value => value === false)) {
+          let response = await axios.post("http://localhost:5000/user/add",
+          {
+            email: this.email,
+            photo: this.previewImage,
+            name: this.name,
+            lastName: this.lastName,
+            nickName: this.nickName,
+            biography: this.biography,
+            password: this.pass,
+          },
+          { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+          );
+          this.email = "";
+          this.name = "";
+          this.lastName = "";
+          this.pass = "";
+          this.nickName = "",
+          this.photo = null,
+          this.repeat_pass = "";
+          console.log(response.data);
+          this.$router.push("/users");
+        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
       } catch (err) {
         console.log(err);
       }

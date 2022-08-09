@@ -23,6 +23,7 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
+      photo: Sequelize.STRING,
       description: Sequelize.STRING,
       repository: Sequelize.STRING,
       startDate: {

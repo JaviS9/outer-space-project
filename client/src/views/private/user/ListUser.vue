@@ -42,10 +42,7 @@
             <ul class="list-group">
               <li class="list-group-item bg-black">
                 <!--  -->
-                <img class="user-image" src="../../../../public/img/user/user-1.png" alt="alien-1">
-                <!-- <img v-if="user.photo === null" class="user-image" src="../../../../public/img/user/user-1.png" alt="alien-1"> -->
-                <!-- <img v-else class="user-image" :src="getImage(user.photo)" alt="user_image"> -->
-                <!-- <div v-else class="imagePreview" :style="{ 'background-image': `url()` }" @click="selectImage"></div> -->
+                <div class="imagePreview__user-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
              </li>
               <li class="list-group-item bg-black text-white mb-0">
                 <span class="fw-bold">{{ user.nickName }}</span>
@@ -97,7 +94,6 @@
 
 <script>
 import axios from "axios";
-import { Buffer } from 'buffer';
 
 export default {
   name: "ListUser",
@@ -113,29 +109,7 @@ export default {
   },
 
   methods: {
-    getImage(photo) {
-      // var base64 = Buffer.from(photo, "binary").toString("base64")
-      // let url = "data:image/jpeg;base64," + photo;
-      try {
-        // var blob = new Blob([photo.data], { type: "image/png" });
-        // var imageUrl = URL.createObjectURL(blob);
-        // console.log("URL -- " + imageUrl)
-        // return imageUrl;
-        let buffer = Buffer.from(photo.data)
-        let base64 = Buffer.from(buffer, "binary").toString("base64")
-        let img = 'data:image/png;base64,'+ base64
-        // console.log(img)
-        return img
-        // let reader = new FileReader
-        // reader.readAsDataURL(photo)
-        // console.log("URL -- " + photo)
-        // return photo
-      } catch (e) {
-        console.log(e)
-      }
-    },
 
-    // **************************************************
     //LIST ALL
     async getUsers() {
       try {

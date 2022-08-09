@@ -16,20 +16,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserTech.init({
-    // idUser: {
-    //   allowNull: false,
-    //   primaryKey: true,
-    //   onDelete: "CASCADE",
-    //   onUpdate: "CASCADE",
-    //   type: DataTypes.UUID
-    // },
-    // idTech: {
-    //   allowNull: false,
-    //   primaryKey: true,
-    //   onDelete: "CASCADE",
-    //   onUpdate: "CASCADE",
-    //   type: DataTypes.INTEGER
-    // },
+    idUser: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.UUID
+    },
+    idTech: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
   }, {
     sequelize,
     modelName: 'UserTech',

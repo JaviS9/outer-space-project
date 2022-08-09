@@ -36,6 +36,14 @@
               <input type="text" class="form-control" :placeholder="project.repository" v-model="project.repository">
             </div>
           </div>
+          <div class="row mb-2">
+            <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
+              <label>Foto:</label>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="photo" @input="getImage">
+            </div>
+          </div>
           <hr>
           <div class="my-2">
             <div class="d-flex flex-row mb-3">
@@ -81,7 +89,7 @@
       </div>
       <div class="col-md-3 d-flex flex-column justify-content-top align-items-center">
         <!-- FOTO -->
-        <img class="card-img-top user-image" src="../../../../public/img/project/project-1.png" alt="planet-1">
+        <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
       </div>
     </div>
   </div>
@@ -90,7 +98,6 @@
 
 <script>
 import axios from 'axios';
-import { Buffer } from 'buffer';
 
 export default {
   name: "EditProject",
@@ -100,7 +107,8 @@ export default {
       users: [],
       selected_founder: "",
       founder: null,
-      previewImage: null
+      previewImage: null,
+      photo: "",
     }
   },
 
@@ -111,57 +119,17 @@ export default {
 
   methods: {
 
-    selectImage () {
-        this.$refs.photo.click()
-    },
-
-    updatePhoto(files) {
-      if (!files.length) {
-        let reader = new FileReader
-        this.photo = reader.readAsArrayBuffer(this.previewImage)
-      }
-    },
-
-    pickFile () {
-      try {
-        let input = this.$refs.photo
-        let file = input.files
-        let reader = new FileReader
-        if (file && file[0]) {
-          this.photo = file[0]
-          reader.onload = e => {
-            this.previewImage = e.target.result
-          }
-          reader.readAsDataURL(file[0])
-          this.$emit('input', file[0])
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    },
-
     getImage() {
-      try {
-        let img = this.project.photo
-        if(img != null) {
-          let buffer = Buffer.from(img.data)
-          // let blob = new Blob([img], { type: "image/jpeg" });
-          // let url =  URL.createObjectURL(blob)
-          let base64 = Buffer.from(buffer).toString('base64')
-          let url = "data:image/png;base64," + base64
-          // let url = 'data:image/jpeg;base64,' + blob
-          this.previewImage = url
-        }
-      } catch (e) {
-        console.log(e)
-      }
+      this.previewImage = this.photo
     },
+
     // ********************************************************
     // GET USER
     async getProject() {
       try {
         const response = await axios.get(`http://localhost:5000/project/find/${this.$route.params.title}`);
         this.project = response.data[0];
+        this.previewImage = this.project.photo
         this.getFounder();
       } catch (err) {
         console.log(err);
@@ -205,14 +173,14 @@ export default {
         // let base64 = Buffer.from(buffer).toString('base64')
         // console.log("buffer -- " + buffer)
         // this.photo = base64
-        
+        this.photo = this.previewImage
         let response = await axios.put(`http://localhost:5000/project/update/${this.project.id}`,
         {
           title: this.project.title,
           description: this.project.description,
           repository: this.project.repository,
           founder: this.founder,
-          photo: null,
+          photo: this.photo,
         },
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );

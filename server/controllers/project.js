@@ -15,7 +15,7 @@ module.exports = {
                 title : req.body.title,
                 description : req.body.description,
                 repository : req.body.repository,
-                photo : null,
+                photo : req.body.photo,
                 projectFounder : req.body.founder.id,
             });
             res.status(200).send(project)
@@ -114,7 +114,7 @@ module.exports = {
                 title : req.body.title,
                 description : req.body.description,
                 repository : req.body.repository,
-                photo : null,
+                photo : req.body.photo,
                 projectFounder : req.body.founder.id,
                 updatedAt: new Date(),
             }, {

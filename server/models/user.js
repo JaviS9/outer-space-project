@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.belongsToMany(models.Tech, {
         through: 'UserTech',
-        as: 'roles',
+        as: 'techs',
         foreignKey: {
           name: 'idUser',
           onDelete: 'CASCADE',
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       type: DataTypes.STRING
     },
-    photo: DataTypes.BLOB,
+    photo: DataTypes.STRING,
     name: DataTypes.STRING,
     lastName: DataTypes.STRING,
     nickName: {

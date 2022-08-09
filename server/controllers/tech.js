@@ -8,7 +8,8 @@ module.exports = {
         try{
             const tech = await models.Tech.create({
                 name: req.body.name,
-                description: req.body.description,
+                photo: req.body.photo,
+                type: req.body.type,
             });
             res.status(200).send(tech)
         } catch (err) {
@@ -60,7 +61,8 @@ module.exports = {
         try {
             const tech = await models.Tech.update({
                 name: req.body.name,
-                description: req.body.description,
+                photo: req.body.photo,
+                type: req.body.type,
             }, {
                 where: { id: req.params.id }
             });

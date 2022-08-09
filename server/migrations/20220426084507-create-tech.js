@@ -8,13 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      photo: Sequelize.STRING,
       name: {
         allowNull: false,
-        type: Sequelize.UUID
+        type: Sequelize.STRING
       },
-      description: {
+      type: {
         allowNull: false,
-        type: Sequelize.UUID
+        type: Sequelize.STRING
       }
     });
   },

@@ -10,7 +10,11 @@
   <div class="container border-bottom mt-3">
     <div class="row">
       <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <img class="card-img-top icon-image-big" src="../../../../public/img/user/user-1.png" alt="alien-1">
+        <div v-if="user.photo === null" class="bg-black border border-2 m-2 rounded-circle pt-5" style="width: 250px; height: 250px;">
+          <p class="text-center mt-5 text-danger text-photo">Foto no encontrada</p>
+        </div>
+        <div v-else class="imagePreview__user-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
+        <!-- <img class="card-img-top icon-image-big" src="../../../../public/img/user/user-1.png" alt="alien-1"> -->
       </div>
       <div class="col-md-6 mx-3 flex-column justify-content-center">
         <div class="card border-light bg-black py-1">
@@ -48,8 +52,14 @@
                 <div class="col-sm-1 flex-column d-flex justify-content-center align-items-start">
                   <i class="fa fa-rocket rounded-circle border border-info p-2"></i>
                 </div>
-                <div class="col-sm-11 flex-column d-flex justify-content-center align-items-start">
+                <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span class="fw-bold ms-2">Proyectos fundados</span>
+                </div>
+                <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
+                  <router-link :to="{name: 'AddProject'}"
+                    type="button" class="ms-2 btn btn-success text-white border border-2 btn-sm rounded-circle">
+                    <i class="fa fa-plus"></i>
+                  </router-link>
                 </div>
               </div>
             </ul>
@@ -60,7 +70,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <img class="mini-image" src="../../../../public/img/project/project-1.png" alt="project-1">
+                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -153,7 +163,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <img class="mini-image" src="../../../../public/img/project/project-1.png" alt="project-1">
+                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -253,7 +263,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <img class="mini-image" src="../../../../public/img/project/project-1.png" alt="project-1">
+                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
                 </div>
                 <div class="col-sm-7 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -290,6 +300,7 @@ export default {
     return {
       user: null,
       selected_project: null,
+      imagePreview: null,
       projects: [],
       selected_projects: [],
       subscriptions: [],
@@ -309,6 +320,7 @@ export default {
       try {
         const response = await axios.get(`http://localhost:5000/user/find/${this.$route.params.nickName}`);
         this.user = response.data[0];
+        this.imagePreview = this.user.photo
         this.getSubscriptions(this.user.id);
         this.getFundedProjects(this.user.id);
         this.getParticipations(this.user.id);
