@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import techApi from '@/services/techApi';
 
 export default {
   name: "EditTech",
@@ -108,7 +108,7 @@ export default {
     // GET USER
     async getTech() {
       try {
-        const response = await axios.get(`http://localhost:5000/tech/find/${this.$route.params.tech_name}`);
+        const response = await techApi.getTech(this.$route.params.tech_name);
         this.tech = response.data[0];
         this.previewImage = this.tech.photo;
       } catch (err) {
@@ -119,24 +119,16 @@ export default {
     async updateTech(e) {
       try {
         e.preventDefault();
-        // let img = this.$refs.photo.files[0]
-        // console.log(img)
-        // let blob = new Blob([img], { type: "image/*" });
-        // let buffer = await blob.arrayBuffer()
-        // let base64 = Buffer.from(buffer).toString('base64')
-        // console.log("buffer -- " + buffer)
-        // this.photo = base64
-        this.tech.photo = this.previewImage
-        let response = await axios.put(`http://localhost:5000/tech/update/${this.tech.id}`,
-        {
+        
+        let response = await techApi.updateTech(this.tech.id, {
           name: this.tech.name,
           type: this.tech.type,
-          photo: this.tech.photo,
+          photo: this.previewImage,
         },
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
         console.log(response.data);
-        this.$router.push("/techs");
+        this.$router.push("/manager/techs");
       } catch (err) {
         console.log(err);
       }

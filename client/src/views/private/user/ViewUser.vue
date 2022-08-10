@@ -10,10 +10,10 @@
   <div class="container border-bottom mt-3">
     <div class="row">
       <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <div v-if="user.photo === null" class="bg-black border border-2 m-2 rounded-circle pt-5" style="width: 250px; height: 250px;">
+        <div v-if="previewImage === null" class="bg-black border border-2 m-2 rounded-circle pt-5" style="width: 250px; height: 250px;">
           <p class="text-center mt-5 text-danger text-photo">Foto no encontrada</p>
         </div>
-        <div v-else class="imagePreview__user-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
+        <div v-else class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
         <!-- <img class="card-img-top icon-image-big" src="../../../../public/img/user/user-1.png" alt="alien-1"> -->
       </div>
       <div class="col-md-6 mx-3 flex-column justify-content-center">
@@ -36,7 +36,7 @@
     </div>
     <div class="row mb-3">
       <div class="col">
-        <router-link to="/users" type="button" class="btn btn-outline-light">
+        <router-link to="/manager/users" type="button" class="btn btn-outline-light">
           <i class="fa-solid fa-arrow-alt-circle-left"></i>  Atrás
         </router-link>
       </div>
@@ -70,7 +70,8 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
+                  <!-- <div v-if="pro.photo === null" class="border-light rounded-circle" style="width: 30px; height: 30px"></div> -->
+                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -116,6 +117,7 @@
                       <select 
                         class="mdb-select md-form form-control"
                         searchable="Busca aqui"
+                        aria-placeholder="Elige los proyectos a suscribir"
                         v-model="selected_project"
                       >
                         <option value="" disabled selected>Elige los proyectos a suscribir</option>
@@ -163,7 +165,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
+                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -216,6 +218,7 @@
                       <select 
                         class="mdb-select md-form form-control"
                         searchable="Busca aqui"
+                        aria-placeholder="Elige los proyectos a participar"
                         v-model="selected_project"
                       >
                         <option value="" disabled selected>Elige los proyectos a participar</option>
@@ -263,7 +266,7 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
+                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
                 </div>
                 <div class="col-sm-7 flex-column d-flex justify-content-center align-items-start">
                   <span>{{pro.title}}</span>
@@ -292,7 +295,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import userApi from '@/services/userApi';
+import projectApi from '@/services/projectApi';
 
 export default {
   name: "ViewUser",
@@ -300,7 +304,7 @@ export default {
     return {
       user: null,
       selected_project: null,
-      imagePreview: null,
+      previewImage: null,
       projects: [],
       selected_projects: [],
       subscriptions: [],
@@ -318,9 +322,9 @@ export default {
     //FIND ONE
     async getProfile() {
       try {
-        const response = await axios.get(`http://localhost:5000/user/find/${this.$route.params.nickName}`);
+        const response = await userApi.getUser(this.$route.params.nickName);
         this.user = response.data[0];
-        this.imagePreview = this.user.photo
+        this.previewImage = this.user.photo
         this.getSubscriptions(this.user.id);
         this.getFundedProjects(this.user.id);
         this.getParticipations(this.user.id);
@@ -331,8 +335,8 @@ export default {
 
     async getProjects() {
       try {
-        const response = await axios.get("http://localhost:5000/project/list");
-        this.projects = response.data.reverse();
+        const projects = await projectApi.getProjects();
+        this.projects = projects.data.reverse();
       } catch (err) {
         console.log(err);
       }
@@ -340,8 +344,9 @@ export default {
 
     async getFundedProjects (id) {
       try {
-        const response = await axios.get(`http://localhost:5000/user/find/projects/${id}`);
+        const response = await userApi.getFundedProjects(id);
         this.projectsFunded = response.data;
+        console.log("PROJECTS FUNDED: " + response.data)
       } catch (err) {
         console.log(err);
       }
@@ -349,7 +354,7 @@ export default {
 
     async getSubscriptions (id) {
       try {
-        const response = await axios.get(`http://localhost:5000/user/find/subscriptions/${id}`);
+        const response = await userApi.getSubscriptions(id);
         this.subscriptions = response.data;
         console.log("SUBSCRIPTIONS: " + response.data)
       } catch (err) {
@@ -359,7 +364,7 @@ export default {
 
     async getParticipations (id) {
       try {
-        const response = await axios.get(`http://localhost:5000/user/find/participations/${id}`);
+        const response = await userApi.getParticipations(id);
         this.participations = response.data;
         console.log("PARTICIPATIONS: " + response.data)
       } catch (err) {
@@ -373,12 +378,12 @@ export default {
         for(let i = 0; i < this.selected_projects.length; i++){
           this.subscriptions[i] = {idUser: this.user.id, idProject: this.selected_projects[i].id}
         }
-        let response = await axios.post("http://localhost:5000/user/add/subscription",
-        {
+        let response = await userApi.saveSubscription({
           subscriptions: this.subscriptions,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+        }, {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
+
         console.log(response.data)
         this.selected_projects = [];
         window.location.reload();
@@ -393,12 +398,13 @@ export default {
         for(let i = 0; i < this.selected_projects.length; i++){
           this.participations[i] = {idUser: this.user.id, idProject: this.selected_projects[i].id}
         }
-        let response = await axios.post("http://localhost:5000/user/add/participation",
-        {
+
+        let response = await userApi.saveParticipation({
           participations: this.participations,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+        }, {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
+
         console.log(response.data)
         this.selected_projects = [];
         window.location.reload();
@@ -409,7 +415,7 @@ export default {
 
     async deleteSubscription(idProject) {
       try {
-        const response = await axios.delete(`http://localhost:5000/user/${this.user.id}/delete/subscription/${idProject}`);
+        const response = await userApi.deleteSubscription(this.user.id, idProject);
         console.log(response.data)
         this.getSubscriptions(this.user.id)
       } catch (err) {
@@ -419,7 +425,7 @@ export default {
 
     async deleteParticipation(idProject) {
       try {
-        const response = await axios.delete(`http://localhost:5000/user/${this.user.id}/delete/participation/${idProject}`);
+        const response = await userApi.deleteParticipation(this.user.id, idProject);
         console.log(response.data)
         this.getParticipations(this.user.id);
       } catch (err) {

@@ -31,15 +31,19 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-12 d-flex flex-column align-items-center justify-content-center" v-if="users.length === 0">
-        <p class="h5 text-danger">No se han encontrado usuarios</p>
+        <p class="h5 text-danger mt-5">No se han encontrado usuarios</p>
       </div>
       <div 
       class="col-md-4 p-4 d-flex flex-column align-items-center justify-content-center"
+      v-else
       v-for="user in users" :key="user.id"
       >
         <div class="card mx-4 border-light bg-black" style="width: 350px;">
           <div class="card-body p-0 text-center">
-            <ul class="list-group">
+            <div v-if="user === null">
+              <p class="text-center text-danger">No hay datos del usuario</p>
+            </div>
+            <ul v-else class="list-group">
               <li class="list-group-item bg-black">
                 <!--  -->
                 <div class="imagePreview__user-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
@@ -93,7 +97,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import userApi from "@/services/userApi";
 
 export default {
   name: "ListUser",
@@ -109,23 +113,20 @@ export default {
   },
 
   methods: {
-
-    //LIST ALL
     async getUsers() {
-      try {
-        const response = await axios.get("http://localhost:5000/user/list");
-        this.users = response.data.reverse();
+      try{
+        const users = await userApi.getUsers()
+        this.users = users.data.reverse()
         console.log(this.users)
       } catch (err) {
         console.log(err);
       }
     },
  
-    //DELETE
     async deleteUser(id) {
-      try {
-        const response = await axios.delete(`http://localhost:5000/user/delete/${id}`);
-        console.log(response.data)
+      try{
+        const response = await userApi.deleteUser(id)
+        console.log(response)
         this.getUsers()
       } catch (err) {
         console.log(err);
@@ -134,8 +135,8 @@ export default {
 
     async searchUser() {
       try {
-        const response = await axios.get(`http://localhost:5000/user/search/${this.user_search}`);
-        this.users = response.data;
+        const users = await userApi.searchUser(this.user_search)
+        this.users = users.data.reverse();
         console.log(this.users)
       } catch (err) {
         console.log(err);

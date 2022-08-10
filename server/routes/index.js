@@ -5,6 +5,9 @@ const techController = require('../controllers/tech')
 const app = require('../app');
 
 module.exports = (app) => {
+   // REGISTER AND LOGIN
+   app.post('/register', userController.addUser)
+
    // *** USER ***
    // GET
    app.get('/user/list', userController.listUser); 
@@ -71,7 +74,7 @@ module.exports = (app) => {
    app.delete('/admin/search/:search', adminController.searchAdmin);
 
 
-   // TECH
+   // *** TECH *** 
    // GET
    app.get('/tech/list', techController.listTech);
    app.get('/tech/find/:name', techController.findTech);

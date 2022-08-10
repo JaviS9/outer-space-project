@@ -11,7 +11,7 @@
   <div class="container mt-5 border-bottom border-1">
     <div class="row">
       <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <div class="imagePreview__icon-image-big" :style="{ 'background-image': `url(${project.photo})` }"></div>
+        <div class="imagePreview__icon-image-big" :style="{ 'background-image': `url(${previewImage})` }"></div>
       </div>
       <div class="col-md-8 align-items-center justify-content-center">
         <div class="row">
@@ -49,7 +49,7 @@
       </div>
       <div class="row mb-3">
         <div class="col">
-          <router-link to="/projects" type="button" class="btn btn-outline-light">
+          <router-link to="/manager/projects" type="button" class="btn btn-outline-light">
             <i class="fa-solid fa-arrow-alt-circle-left"></i>  Atrás
           </router-link>
         </div>
@@ -123,7 +123,7 @@
                   <div class="row-flex d-flex align-items-center my-2">
                     <select 
                       class="mdb-select md-form form-control"
-                      searchable="Busca aqui"
+                      aria-placeholder="Elige los usuarios a suscribir"
                       v-model="selected_user"
                     >
                       <option value="" disabled selected>Elige los usuarios a suscribir</option>
@@ -219,6 +219,7 @@
                     <select 
                       class="mdb-select md-form form-control"
                       searchable="Busca aqui"
+                      aria-placeholder="Elige los proyectos a suscribir"
                       v-model="selected_user"
                     >
                       <option value="" disabled selected>Elige los proyectos a suscribir</option>
@@ -302,7 +303,8 @@
 <script>
 import moment from "moment";
 import "moment/locale/es";
-import axios from 'axios';
+import projectApi from "@/services/projectApi";
+import userApi from "@/services/userApi";
 
 export default {
   name: 'ViewProject',
@@ -311,6 +313,7 @@ export default {
       founder: null,
       project: null,
       selected_user: null,
+      previewImage: null,
       selected_users: [],
       users: [],
       subscriptions: [],
@@ -331,8 +334,9 @@ export default {
     //FIND ONE
     async getProject() {
       try {
-        const response = await axios.get(`http://localhost:5000/project/find/${this.$route.params.title}`);
+        const response = await projectApi.getProject(this.$route.params.title);
         this.project = response.data[0];
+        this.previewImage = this.project.photo;
         this.getFounder();
         this.getSubscriptions(this.project.id);
         this.getUpdates(this.project.id);
@@ -344,7 +348,7 @@ export default {
 
     async getUsers() {
       try {
-        const response = await axios.get("http://localhost:5000/user/list");
+        const response = await userApi.getUsers();
         this.users = response.data.reverse();
       } catch (err) {
         console.log(err);
@@ -352,17 +356,17 @@ export default {
     },
 
     async getUpdates(id) {
-      try {
-        const response = await axios.get(`http://localhost:5000/project/find/updates/${id}`);
-        this.updates = response.data.reverse();
-      } catch (err) {
-        console.log(err);
-      }
-    },
+        try {
+          const response = await projectApi.getUpdates(id);
+          this.updates = response.data.reverse();
+        } catch (err) {
+          console.log(err);
+        }
+      },
 
     async getSubscriptions (id) {
       try {
-        const response = await axios.get(`http://localhost:5000/project/find/subscriptions/${id}`);
+        const response = await projectApi.getSubscriptions(id);
         this.subscriptions = response.data;
         this.num_subscriptions = this.subscriptions.length
         console.log("SUBSCRIPTIONS: " + response.data)
@@ -373,7 +377,7 @@ export default {
 
     async getParticipations (id) {
       try {
-        const response = await axios.get(`http://localhost:5000/project/find/participations/${id}`);
+        const response = await projectApi.getParticipations(id);
         this.participations = response.data;
         console.log("PARTICIPATIONS: " + response.data)
       } catch (err) {
@@ -383,7 +387,7 @@ export default {
 
     async getFounder() {
       try {
-        const response = await axios.get(`http://localhost:5000/user/find/id/${this.project.projectFounder}`);
+        const response = await userApi.getUserId(this.project.projectFounder);
         this.founder = response.data[0];
       } catch (err) {
         console.log(err);
@@ -396,12 +400,13 @@ export default {
         for(let i = 0; i < this.selected_users.length; i++){
           this.subscriptions[i] = {idUser: this.selected_users[i].id, idProject: this.project.id}
         }
-        let response = await axios.post("http://localhost:5000/user/add/subscription",
-        {
+
+        const response = await userApi.saveSubscription({
           subscriptions: this.subscriptions,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+        }, {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
+
         console.log(response.data)
         this.selected_projects = [];
         window.location.reload();
@@ -416,12 +421,13 @@ export default {
         for(let i = 0; i < this.selected_users.length; i++){
           this.participations[i] = {idUser: this.selected_users[i].id, idProject: this.project.id }
         }
-        let response = await axios.post("http://localhost:5000/user/add/participation",
-        {
+
+        const response = await userApi.saveParticipation({
           participations: this.participations,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+        }, {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
+
         console.log(response.data)
         this.selected_projects = [];
         window.location.reload();
@@ -433,13 +439,13 @@ export default {
     async saveUpdate (e) {
       try {
         e.preventDefault();
-        let response = await axios.post("http://localhost:5000/project/add/update",
-        {
+        const response = await projectApi.saveUpdate({
           idProject: this.project.id,
           description: this.description
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+        }, {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
+
         console.log(response.data)
         this.description = "";
         window.location.reload();
@@ -450,7 +456,7 @@ export default {
 
     async deleteSubscription(idUser) {
       try {
-        const response = await axios.delete(`http://localhost:5000/user/${idUser}/delete/subscription/${this.project.id}`);
+        const response = await userApi.deleteSubscription(idUser, this.project.id);
         console.log(response.data)
         this.getSubscriptions(this.project.id)
       } catch (err) {
@@ -460,7 +466,7 @@ export default {
 
     async deleteParticipation(idUser) {
       try {
-        const response = await axios.delete(`http://localhost:5000/user/${idUser}/delete/participation/${this.project.id}`);
+        const response = await userApi.deleteParticipation(idUser, this.project.id);
         console.log(response.data)
         this.getParticipations(this.project.id);
       } catch (err) {
@@ -470,7 +476,7 @@ export default {
 
     async deleteUpdate(date) {
       try {
-        const response = await axios.delete(`http://localhost:5000/project/${this.project.id}/delete/update/${date}`);
+        const response = await projectApi.deleteUpdate(this.project.id, date);
         console.log(response.data)
         this.getUpdates(this.project.id);
       } catch (err) {
@@ -478,10 +484,9 @@ export default {
       }
     },
 
-    // ----------------------------------------------
     // HELPERS
     formatDate(date) {
-            return moment(date).fromNow();
+      return moment(date).fromNow();
     },
     
     cancel() {

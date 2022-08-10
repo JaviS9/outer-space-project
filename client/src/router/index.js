@@ -1,55 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
+  // *** PRIVATE ROUTES ***
   {
-    path: '/',
-    name: 'HomeView',
-    component: () => import('../views/HomeView.vue')
-  },
-  {
-    path: '/about',
-    name: 'AboutView',
-    component: () => import('../views/AboutView.vue')
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'PageNotfound',
-    component: () => import('../views/PageNotFound.vue')
+    path: '/manager',
+    name: 'HomeAdmin',
+    component: () => import('../views/private/HomeAdmin.vue')
   },
   // *** USER ROUTES ***
   {
-      path: '/users',
+      path: '/manager/users',
       name: 'ListUser',
       component: () => import('../views/private/user/ListUser.vue')
   },
   {
-      path: '/users/profile/:nickName',
+      path: '/manager/users/profile/:nickName',
       name: 'ViewUser',
       component: () => import('../views/private/user/ViewUser.vue')
   },
   {
-      path: '/users/add',
+      path: '/manager/users/add',
       name: 'AddUser',
       component: () => import('../views/private/user/AddUser.vue')
   },
   {
-      path: '/users/edit/:nickName',
+      path: '/manager/users/edit/:nickName',
       name: 'EditUser',
       component: () => import('../views/private/user/EditUser.vue')
   },
   // *** PROJECT ROUTES ***
   {
-      path: '/projects',
+      path: '/manager/projects',
       name: 'ListProject',
       component: () => import('../views/private/project/ListProject.vue')
   },
   {
-      path: '/projects/view/:title',
+      path: '/manager/projects/view/:title',
       name: 'ViewProject',
       component: () => import('../views/private/project/ViewProject.vue')
   },
   {
-      path: '/projects/add',
+      path: '/manager/projects/add',
       name: 'AddProject',
       component: () => import('../views/private/project/AddProject.vue')
   },
@@ -59,53 +50,80 @@ const routes = [
   //   component: () => import('../views/private/project/AddProject.vue')
   // },
   {
-      path: '/projects/edit/:title',
+      path: '/manager/projects/edit/:title',
       name: 'EditProject',
       component: () => import('../views/private/project/EditProject.vue')
   },
   // *** ADMIN ROUTES ***
   {
-    path: '/admins',
+    path: '/manager/admins',
     name: 'ListAdmin',
     component: () => import('../views/private/admin/ListAdmin.vue')
   },
   {
-    path: '/admins/profile/:id',
+    path: '/manager/admins/profile/:id',
     name: 'ViewAdmin',
     component: () => import('../views/private/admin/ViewAdmin.vue')
   },
   {
-    path: '/admins/add',
+    path: '/manager/admins/add',
     name: 'AddAdmin',
     component: () => import('../views/private/admin/AddAdmin.vue')
   },
   {
-    path: '/admins/edit/:id',
+    path: '/manager/admins/edit/:id',
     name: 'EditAdmin',
     component: () => import('../views/private/admin/EditAdmin.vue')
   },
   // *** TECH ROUTES ***
   {
-    path: '/techs',
+    path: '/manager/techs',
     name: 'ListTech',
     component: () => import('../views/private/tech/ListTech.vue')
   },
   {
-    path: '/techs/add',
+    path: '/manager/techs/add',
     name: 'AddTech',
     component: () => import('../views/private/tech/AddTech.vue')
   },
   {
-    path: '/techs/edit/:tech_name',
+    path: '/manager/techs/edit/:tech_name',
     name: 'EditTech',
     component: () => import('../views/private/tech/EditTech.vue')
   },
   // *** SUBSCRIPTION ***
   {
-    path: '/subscription/user/:nickName/project/:title',
+    path: '/manager/subscription/user/:nickName/project/:title',
     name: 'ViewSubscription',
     component: () => import('../views/private/subscription/ViewSubscription.vue')
-  }
+  },
+  // *** PUBLIC ROUTES ***
+  {
+    path: '/',
+    name: 'HomeView',
+    component: () => import('../views/public/HomeView.vue')
+  },
+  {
+    path: '/login',
+    name: 'LoginUser',
+    component: () => import('../views/public/LoginUser.vue')
+  },
+  {
+    path: '/register',
+    name: 'RegisterUser',
+    component: () => import('../views/public/RegisterUser.vue')
+  },
+  {
+    path: '/about',
+    name: 'AboutView',
+    component: () => import('../views/public/AboutView.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'PageNotfound',
+    component: () => import('../views/public/PageNotFound.vue')
+  },
+
   
 ]
 

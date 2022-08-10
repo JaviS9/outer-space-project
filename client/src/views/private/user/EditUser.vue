@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import userApi from '@/services/userApi';
 
 export default {
   name: "EditUser",
@@ -108,48 +108,35 @@ export default {
   methods: {
 
     getImage() {
-      this.previewImage = this.photo
+      this.previewImage = this.user.photo
     },
     
-    // ********************************************************
     // GET USER
     async getUser() {
       try {
-        const response = await axios.get(`http://localhost:5000/user/find/${this.$route.params.nickName}`);
+        const response = await userApi.getUser(this.$route.params.nickName);
         this.user = response.data[0];
         this.repeat_pass = this.user.password
         this.previewImage = this.user.photo
-        // this.getImage()
       } catch (err) {
         console.log(err);
       }
     },
-
     async updateUser(e) {
+
       try {
         e.preventDefault();
-        // let img = this.$refs.photo.files[0]
-        // console.log(img)
-        // let blob = new Blob([img], { type: "image/*" });
-        // let buffer = await blob.arrayBuffer()
-        // let base64 = Buffer.from(buffer).toString('base64')
-        // console.log("buffer -- " + buffer)
-        // this.photo = base64
-        this.photo = this.previewImage
-        let response = await axios.put(`http://localhost:5000/user/update/${this.user.id}`,
-        {
+        const response = await userApi.updateUser(this.user.id, {
           email: this.user.email,
-          photo: this.photo,
+          photo: this.previewImage,
           name: this.user.name,
           lastName: this.user.lastName,
           nickName: this.user.nickName,
           biography: this.user.biography,
-          password: this.pass,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-        console.log(response.data);
-        this.$router.push("/users");
+          password: this.user.password,
+        })
+        console.log(response.data)
+        this.$router.push("/manager/users");
       } catch (err) {
         console.log(err);
       }

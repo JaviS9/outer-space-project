@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import adminApi from '@/services/adminApi';
 
 export default {
   name: "AddAdmin",
@@ -54,18 +54,13 @@ export default {
     };
   },
 
-  created() {
-    // this.getAlien()
-  },
-
   methods: {
 
     async saveUser(e) {
       try {
         e.preventDefault();
 
-        let response = await axios.post("http://localhost:5000/admin/add",
-        {
+        let response = await adminApi.saveAdmin({
           email: this.email,
           name: this.name,
           lastName: this.lastName,
@@ -79,7 +74,7 @@ export default {
         this.pass = "";
         this.repeat_pass = "";
         console.log(response.data);
-        this.$router.push("/admins");
+        this.$router.push("/manager/admins");
       } catch (err) {
         console.log(err);
       }

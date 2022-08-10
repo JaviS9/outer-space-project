@@ -99,7 +99,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import projectApi from '@/services/projectApi';
+import userApi from '@/services/userApi';
 
 export default {
     name: "AddProject",
@@ -110,10 +111,8 @@ export default {
       repository: "",
       photo: "",
       founder: null,
-      participants: [],
       users: [],
       selected_founder: "",
-      selected_participant: "",
       previewImage: "",
       planets: [
         "https://cdn-icons.flaticon.com/png/512/2211/premium/2211735.png?token=exp=1660038331~hmac=9c7beccaade45dbfe960a67c5f2b14d0",
@@ -145,38 +144,16 @@ export default {
 
     saveFounder() {
       this.founder = this.selected_founder
-      let found = false
-      for(let i = 0; i < this.participants.length && found == false; i++){
-        if(this.selected_founder.nickName == this.participants[i].nickName){
-          found = true
-        }
-      }
-      if (found == false && this.selected_founder != {}) {
-        this.participants.push(this.selected_founder)
-        console.log(this.participants)
-      }
-      else { console.log("ERROR: participante ya añadido") }
     },
 
     deleteFounder() {
-      let found = -1
-      for(let i = 0; i < this.participants.length && found == -1; i++){
-        if(this.founder.nickName == this.participants[i].nickName){
-          found = i
-        }
-      }
-      if (found != -1) {
-        this.participants.splice(found, 1)
-        this.founder = {}
-        console.log(this.participants)
-      }
+      this.founder = null
     },
 
-    // --------------------------------------------------------------------
     //LIST ALL USERS
     async getUsers() {
       try {
-        const response = await axios.get("http://localhost:5000/user/list");
+        const response = await userApi.getUsers();
         this.users = response.data.reverse();
         console.log(this.users)
       } catch (err) {
@@ -187,14 +164,7 @@ export default {
     async saveProject(e) {
       try {
         e.preventDefault();
-        // let img = this.$refs.photo.files[0]
-        // console.log(img)
-        // let blob = new Blob([img], { type: "image/*" });
-        // let buffer = await blob.arrayBuffer()
-        // let base64 = Buffer.from(buffer).toString('base64')
-        // console.log("buffer -- " + buffer)
-        // let base64 = Buffer.from(blob).toString('base64')
-        // this.photo = base64
+        
         // VALID TITLE
         if(!this.title) {
           this.errors.title = true;
@@ -205,8 +175,7 @@ export default {
         } else { this.errors.founder = false; }
 
         if(Object.values(this.errors).every(value => value === false)) {
-          let response = await axios.post("http://localhost:5000/project/add",
-          {
+          let response = await projectApi.saveProject({
             title: this.title,
             description: this.description,
             repository: this.repository,
@@ -215,14 +184,15 @@ export default {
           },
           { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
+
           this.title = "",
           this.description = "",
           this.repository = "",
           this.founder = "",
           this.photo = null,
-          // this.participants = [],
+
           console.log(response.data);
-          this.$router.push("/projects");
+          this.$router.push("/manager/projects");
         } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
       } catch (err) {
         console.log(err);

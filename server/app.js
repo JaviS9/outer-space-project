@@ -1,17 +1,11 @@
 'use strict'
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const bodyParser = require('body-parser');
-// const { check, validationResult } = require('express-validator');
+const morgan = require('morgan');
 
-// //Controllers
-var userController = require('./controllers/user');
-var projectController = require('./controllers/project');
-
-// //Models
-var models = require('./models');
-
-var app = express();
+const app = express();
+app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(function (req, res, next) {
@@ -21,30 +15,9 @@ app.use(function (req, res, next) {
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
   res.setHeader('Access-Control-Allow-Credentials', true);
-  
   // Pass to next layer of middleware
   next();
 });
-
-//Para validar (authentication)
-// express.Router().post('/register',
-//   [
-//     check('email', 'Email is not valid').isEmail(),
-//     check('username', 'Username field is required').not().isEmpty(),
-//     check('password', 'Password field is required').not().isEmpty()
-//   ], 
-//   function(req, res, next) {
-//   // Check Errors
-//   const errors = validationResult(req);
-//   if (errors) {
-//     console.log(errors);
-//     res.render('register', { errors: errors.array() });
-//   }
-//   else {
-//     console.log('No Errors');
-//     res.render('dashboard', { message: 'Successful Registration.' });
-//   }
-// });
 
 //--------------------------------------------------------------------------------------
 // Catch 404 errors and forward to error handler.
@@ -62,10 +35,9 @@ app.use(function(err, req, res, next) {
 });
 
 //Import the Routes -> index.js
-var routes = require('./routes');
 require('./routes')(app);
 app.get('/', function(req, res, next){
-	res.send('Home Route - nothing to see here yet');
+	res.send('Server is listening');
 });
 
 // listen on port 5000

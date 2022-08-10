@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import adminApi from '@/services/adminApi';
 
 export default {
   name: "EditAdmin",
@@ -75,10 +75,9 @@ export default {
     // GET USER
     async getAdmin() {
       try {
-        const response = await axios.get(`http://localhost:5000/admin/find/id/${this.$route.params.id}`);
+        const response = await adminApi.getAdminId(this.$route.params.id);
         this.admin = response.data[0];
         this.repeat_pass = this.admin.password
-        // this.getImage()
       } catch (err) {
         console.log(err);
       }
@@ -88,8 +87,7 @@ export default {
       try {
         e.preventDefault();
         
-        let response = await axios.put(`http://localhost:5000/admin/update/${this.admin.id}`,
-        {
+        let response = await adminApi.updateAdmin(this.admin.id, {
           email: this.admin.email,
           name: this.admin.name,
           lastName: this.admin.lastName,
@@ -98,7 +96,7 @@ export default {
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
         console.log(response.data);
-        this.$router.push("/admins");
+        this.$router.push("/manager/admins");
       } catch (err) {
         console.log(err);
       }

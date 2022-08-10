@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import techApi from '@/services/techApi';
 
 export default {
     name: "ListTech",
@@ -97,7 +97,7 @@ export default {
     //LIST ALL
     async getTechs() {
       try {
-        const response = await axios.get("http://localhost:5000/tech/list");
+        const response = await techApi.getTechs();
         this.techs = response.data.reverse();
         console.log(this.techs)
       } catch (err) {
@@ -108,7 +108,7 @@ export default {
     //DELETE
     async deleteTech(id) {
       try {
-        const response = await axios.delete(`http://localhost:5000/tech/delete/${id}`);
+        const response = await techApi.deleteTech(id);
         console.log(response.data)
         this.getTechs()
       } catch (err) {

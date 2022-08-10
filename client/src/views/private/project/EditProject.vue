@@ -41,7 +41,7 @@
               <label>Foto:</label>
             </div>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="photo" @input="getImage">
+              <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="project.photo" @input="getImage">
             </div>
           </div>
           <hr>
@@ -97,7 +97,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import projectApi from '@/services/projectApi';
+import userApi from '@/services/userApi';
 
 export default {
   name: "EditProject",
@@ -108,7 +109,6 @@ export default {
       selected_founder: "",
       founder: null,
       previewImage: null,
-      photo: "",
     }
   },
 
@@ -120,39 +120,7 @@ export default {
   methods: {
 
     getImage() {
-      this.previewImage = this.photo
-    },
-
-    // ********************************************************
-    // GET USER
-    async getProject() {
-      try {
-        const response = await axios.get(`http://localhost:5000/project/find/${this.$route.params.title}`);
-        this.project = response.data[0];
-        this.previewImage = this.project.photo
-        this.getFounder();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getFounder() {
-      try {
-        const response = await axios.get(`http://localhost:5000/user/find/id/${this.project.projectFounder}`);
-        this.founder = response.data[0];
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getUsers() {
-      try {
-        const response = await axios.get("http://localhost:5000/user/list");
-        this.users = response.data.reverse();
-        console.log(this.users)
-      } catch (err) {
-        console.log(err);
-      }
+      this.previewImage = this.project.photo
     },
 
     saveFounder() {
@@ -163,29 +131,52 @@ export default {
       this.founder = null
     },
 
+    // GET USER
+    async getProject() {
+      try {
+        const response = await projectApi.getProject(this.$route.params.title);
+        this.project = response.data[0];
+        this.previewImage = this.project.photo
+        this.getFounder();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async getFounder() {
+      try {
+        const response = await userApi.getUserId(this.project.projectFounder);
+        this.founder = response.data[0];
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async getUsers() {
+      try {
+        const response = await userApi.getUsers();
+        this.users = response.data.reverse();
+        console.log(this.users)
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     async updateProject(e) {
       try {
         e.preventDefault();
-        // let img = this.$refs.photo.files[0]
-        // console.log(img)
-        // let blob = new Blob([img], { type: "image/*" });
-        // let buffer = await blob.arrayBuffer()
-        // let base64 = Buffer.from(buffer).toString('base64')
-        // console.log("buffer -- " + buffer)
-        // this.photo = base64
-        this.photo = this.previewImage
-        let response = await axios.put(`http://localhost:5000/project/update/${this.project.id}`,
-        {
+
+        let response = await projectApi.updateProject(this.project.id, {
           title: this.project.title,
           description: this.project.description,
           repository: this.project.repository,
           founder: this.founder,
-          photo: this.photo,
+          photo: this.previewImage,
         },
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
         console.log(response.data);
-        this.$router.push("/projects");
+        this.$router.push("/manager/projects");
       } catch (err) {
         console.log(err);
       }

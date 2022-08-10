@@ -49,7 +49,7 @@
       </div>
       <div class="row mb-3">
         <div class="col">
-          <router-link to="/projects" type="button" class="btn btn-outline-light">
+          <router-link to="/manager/projects" type="button" class="btn btn-outline-light">
             <i class="fa-solid fa-arrow-alt-circle-left"></i>  Atrás
           </router-link>
         </div>

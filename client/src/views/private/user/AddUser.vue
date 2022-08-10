@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import userApi from '@/services/userApi';
 // import { Buffer } from 'buffer';
 
 export default {
@@ -131,28 +131,6 @@ export default {
 
   methods: {
 
-    // updatePhoto(files) {
-    //   if (!files.length) {
-    //     // Store the file data
-    //     let buffer = Buffer.from(this.$refs.photo.data)
-    //     let base64 = Buffer.from(buffer).toString('base64')
-    //     this.photo = base64
-    //   }
-    // },
-
-    // async getImage(image) {
-    //   try {
-    //     let response = await axios.get(image, {
-    //       responseType: "arraybuffer"
-    //     })
-    //     // let response = await axios.get(this.previewImage)
-    //     let base64 = Buffer.from(response.data).toString('base64')
-    //     this.photo = base64
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
-
     getImage() {
       this.previewImage = this.photo
     },
@@ -165,36 +143,9 @@ export default {
         this.$refs.photo.click()
     },
 
-    pickFile () {
-      try {
-        let input = this.$refs.photo
-        let file = input.files
-        let reader = new FileReader
-        if (file && file[0]) {
-          this.photo = file[0]
-          reader.onload = e => {
-            this.previewImage = e.target.result
-          }
-          reader.readAsDataURL(file[0])
-          console.log(file[0])
-          this.$emit('input', file[0])
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    },
-
     async saveUser(e) {
       try {
         e.preventDefault();
-        // let img = this.$refs.photo.files[0]
-        // console.log(img)
-        // let blob = new Blob([img], { type: "image/*" });
-        // let buffer = await blob.arrayBuffer()
-        // let base64 = Buffer.from(buffer).toString('base64')
-        // console.log("buffer -- " + buffer)
-        // let base64 = Buffer.from(blob).toString('base64')
-        // this.photo = base64
 
         // VALID EMAIL
         if(!this.email) {
@@ -208,6 +159,7 @@ export default {
         if(!this.nickName) {
           this.errors.nickName = true;
         } else { this.errors.nickName = false; }
+        
         // VALID PASSWORD
         if(!this.pass) {
           this.errors.pass = true;
@@ -225,11 +177,9 @@ export default {
             this.errors.equal_pass = true;
           } else { this.errors.equal_pass = false; }
         }
-
         
         if(Object.values(this.errors).every(value => value === false)) {
-          let response = await axios.post("http://localhost:5000/user/add",
-          {
+          const response = await userApi.saveUser({
             email: this.email,
             photo: this.previewImage,
             name: this.name,
@@ -248,7 +198,7 @@ export default {
           this.photo = null,
           this.repeat_pass = "";
           console.log(response.data);
-          this.$router.push("/users");
+          this.$router.push("/manager/users");
         } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
       } catch (err) {
         console.log(err);

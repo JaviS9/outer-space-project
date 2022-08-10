@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import techApi from '@/services/techApi';
 
 export default {
     name: "AddTech",
@@ -126,8 +126,7 @@ export default {
         } else { this.errors.type = false; }
 
         if(Object.values(this.errors).every(value => value === false)) {
-          let response = await axios.post("http://localhost:5000/tech/add",
-          {
+          let response = await techApi.saveTech({
             name: this.name,
             photo: this.previewImage,
             type: this.type,
@@ -138,7 +137,7 @@ export default {
           this.type = "";
           this.photo = null;
           console.log(response.data);
-          this.$router.push("/techs");
+          this.$router.push("/manager/techs");
         } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
       } catch (err) {
         console.log(err);

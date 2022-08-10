@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import adminApi from '@/services/adminApi';
 
 export default {
   name: "ListAdmin",
@@ -106,7 +106,7 @@ export default {
     //LIST ALL
     async getAdmins() {
       try {
-        const response = await axios.get("http://localhost:5000/admin/list");
+        const response = await adminApi.getAdmins();
         this.admins = response.data.reverse();
         console.log(this.admins)
       } catch (err) {
@@ -117,7 +117,7 @@ export default {
     //DELETE
     async deleteAdmin(id) {
       try {
-        const response = await axios.delete(`http://localhost:5000/admin/delete/${id}`);
+        const response = await adminApi.deleteAdmin(id);
         console.log(response.data)
         this.getAdmins()
       } catch (err) {
@@ -127,7 +127,7 @@ export default {
 
     async searchAdmin() {
       try {
-        const response = await axios.get(`http://localhost:5000/admin/search/${this.admin_search}`);
+        const response = await adminApi.searchAdmin(this.admin_search);
         this.admins = response.data;
         console.log(this.admins)
       } catch (err) {

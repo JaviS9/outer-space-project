@@ -30,7 +30,7 @@
     </div>
     <div class="row mb-3">
       <div class="col">
-        <router-link to="/admins" type="button" class="btn btn-outline-light">
+        <router-link to="/manager/admins" type="button" class="btn btn-outline-light">
           <i class="fa-solid fa-arrow-alt-circle-left"></i>  Atrás
         </router-link>
       </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import adminApi from '@/services/adminApi';
 
 export default {
   name: "ViewUser",
@@ -58,7 +58,7 @@ export default {
     //FIND ONE
     async getProfile() {
       try {
-        const response = await axios.get(`http://localhost:5000/admin/find/id/${this.$route.params.id}`);
+        const response = await adminApi.getAdminId(this.$route.params.id);
         this.admin = response.data[0];
       } catch (err) {
         console.log(err);

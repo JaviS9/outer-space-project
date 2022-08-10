@@ -218,7 +218,7 @@ module.exports = {
         try{
             const [results, metadata] = await sequelize.query(
                 "SELECT * FROM user WHERE user.nickName LIKE :nickName",
-                { replacements: { nickName: '%' + req.params.nickName + '%'} }
+                { replacements: { nickName: req.params.nickName } }
               );
             res.status(200).send(results)
         } catch (err) {
