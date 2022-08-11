@@ -1,5 +1,5 @@
 <template>
-<div class="listUser">
+<div class="router-view">
   <div class="container mt-3">
     <div class="row">
       <div class="col">

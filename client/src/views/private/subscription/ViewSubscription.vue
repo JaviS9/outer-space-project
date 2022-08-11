@@ -1,5 +1,5 @@
 <template>
-<div class="viewProject">
+<div class="router-view">
   <div class="container mt-3">
     <div class="row">
       <div class="col text-center mt-5">

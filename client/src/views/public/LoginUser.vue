@@ -1,5 +1,5 @@
 <template>
-<div class="LoginUser">
+<div class="router-view">
     <div class="container" style="padding: 200px 0 0 0">
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-8 flex-column d-flex align-items-center justify-content-center p-0 m-0">

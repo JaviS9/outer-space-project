@@ -1,5 +1,5 @@
 <template>
-<div class="RegisterUser">
+<div class="router-view">
     <h1>Register</h1>
 </div>
 </template>

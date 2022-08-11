@@ -1,4 +1,5 @@
 <template>
+<div class="router-view">
     <div class="container text-center mt-3">
         <div class="row">
             <div class="col mt-5 mb-5">
@@ -6,6 +7,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>

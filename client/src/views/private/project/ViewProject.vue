@@ -1,5 +1,5 @@
 <template>
-<div class="viewProject">
+<div class="router-view">
   <div class="container mt-3">
     <div class="row">
       <div class="col text-center mt-5">
@@ -109,60 +109,10 @@
         <div class="card bg-black border border-2 rounded me-1">
           <div class="row-flex d-flex p-3">
             <span class="fw-bold ms-2 text-warning">Suscripciones</span>
-            <!-- BUTTON MODAL -->
-            <button type="button" class="ms-2 btn btn-outline-warning btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
-              <i class="fa fa-plus"></i>
-            </button>
-            <!-- MODAL SUBSCRIPTIONS -->
-            <div class="modal fade modal modal-lg" id="ModalSubscriptions" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-black border-warning p-3">
-                  <div class="row-flex d-flex align-items-start my-2">
-                    <p class="modal-title text-warning" id="exampleModalLabel">Suscripciones</p>
-                  </div>
-                  <div class="row-flex d-flex align-items-center my-2">
-                    <select 
-                      class="mdb-select md-form form-control"
-                      aria-placeholder="Elige los usuarios a suscribir"
-                      v-model="selected_user"
-                    >
-                      <option value="" disabled selected>Elige los usuarios a suscribir</option>
-                      <option
-                          v-for="user in users" :key="user.id"
-                          :value="user">{{user.nickName}}
-                      </option>
-                    </select>
-                    <button 
-                      type="button"
-                      class="btn btn-sm btn-outline-success rounded-circle ms-2"
-                      v-on:click="saveUser(selected_users)"
-                    >
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                  <div v-if="selected_users.length === 0" class="row my-2">
-                    <p class="text-danger text-center">No seleccionado</p>
-                  </div>
-                  <div v-else class="row my-2">
-                    <div class="col d-flex justify-content-start align-items-center">
-                      <button
-                        v-for="(subs) in selected_users" :key="subs.id" 
-                        type="button"
-                        class="btn btn-danger btn-sm rounded-pill p-2 me-2"
-                        v-on:click="deleteUser(subs.nickName, selected_users)"
-                      >
-                      {{ subs.nickName }} <i class="fa-solid fa-circle-xmark"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <!--  -->
-                  <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                    <button type="button" class="btn btn-outline-warning btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ModalForm :id="'ModalSubscription'"
+              :title="'suscripciones'" :type="'user'" :list="users" 
+              @selected_items="saveSubscription"
+            />
           </div>
           <div class="row-flex d-flex p-3">
             <div class="card-body p-0 bg-black">
@@ -203,68 +153,16 @@
         <div class="card bg-black border border-2 rounded ms-1">
           <div class="row-flex d-flex p-3">
             <span class="fw-bold ms-2 text-primary">Participaciones</span>
-            <!-- BUTTON MODAL -->
-            <button type="button" class="ms-2 btn btn-outline-primary btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalParticipations">
-              <i class="fa fa-plus"></i>
-            </button>
-            <!-- MODAL PARTICIPATIONS -->
-            <div class="modal fade modal modal-lg" id="ModalParticipations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-black border-primary p-3">
-                  <div class="row-flex d-flex align-items-start my-2">
-                    <p class="modal-title text-primary" id="exampleModalLabel">Suscripciones</p>
-                    <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="row-flex d-flex align-items-center my-2">
-                    <select 
-                      class="mdb-select md-form form-control"
-                      searchable="Busca aqui"
-                      aria-placeholder="Elige los proyectos a suscribir"
-                      v-model="selected_user"
-                    >
-                      <option value="" disabled selected>Elige los proyectos a suscribir</option>
-                      <option
-                          v-for="user in users" :key="user.id"
-                          :value="user">{{user.nickName}}
-                      </option>
-                    </select>
-                    <button 
-                      type="button"
-                      class="btn btn-sm btn-outline-success rounded-circle ms-2"
-                      v-on:click="saveUser(selected_users)"
-                    >
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                  <div v-if="selected_users.length === 0" class="row my-2">
-                    <p class="text-danger text-center">No seleccionado</p>
-                  </div>
-                  <div v-else class="row my-2">
-                    <div class="col d-flex justify-content-start align-items-center">
-                      <button
-                        v-for="(subs) in selected_users" :key="subs.id" 
-                        type="button"
-                        class="btn btn-danger btn-sm rounded-pill p-2 me-2"
-                        v-on:click="deleteUser(subs.nickName, selected_users)"
-                      >
-                      {{ subs.nickName }} <i class="fa-solid fa-circle-xmark"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <!--  -->
-                  <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm ms-2" v-on:click="saveParticipation">Participar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ModalForm :id="'ModalParticipation'"
+              :title="'participaciones'" :type="'user'" :list="users"
+              @selected_items="saveParticipation"
+            />
           </div>
           <div class="row-flex d-flex p-3">
             <div class="card-body p-0 bg-black">
               <li class="list-group">
                 <ul v-if="participations.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
-                  <p class="text-danger text-center">No hay suscripciones</p>
+                  <p class="text-danger text-center">No hay participaciones</p>
                 </ul>
                 <ul v-else v-for="user in participations" :key="user.id"
                   class="list-group-item text-white border-light border bg-black mb-2 p-3">
@@ -305,222 +203,217 @@ import moment from "moment";
 import "moment/locale/es";
 import projectApi from "@/services/projectApi";
 import userApi from "@/services/userApi";
+import ModalForm from "@/components/ModalForm.vue";
 
 export default {
-  name: 'ViewProject',
-  data() {
-    return {
-      founder: null,
-      project: null,
-      selected_user: null,
-      previewImage: null,
-      selected_users: [],
-      users: [],
-      subscriptions: [],
-      updates: [],
-      participations: [],
-      description: "",
-      num_subscriptions: 0,
-      donations: 0
-    };
-  },
- 
-  created() {
-    this.getProject();
-    this.getUsers();
-  },
-
-  methods: {
-    //FIND ONE
-    async getProject() {
-      try {
-        const response = await projectApi.getProject(this.$route.params.title);
-        this.project = response.data[0];
-        this.previewImage = this.project.photo;
-        this.getFounder();
-        this.getSubscriptions(this.project.id);
-        this.getUpdates(this.project.id);
-        this.getParticipations(this.project.id);
-      } catch (err) {
-        console.log(err);
-      }
+    name: "ViewProject",
+    data() {
+        return {
+            founder: null,
+            project: null,
+            selected_user: null,
+            previewImage: null,
+            selected_users: [],
+            users: [],
+            subscriptions: [],
+            updates: [],
+            participations: [],
+            description: "",
+            num_subscriptions: 0,
+            donations: 0
+        };
+    },
+    created() {
+        this.getProject();
+        this.getUsers();
     },
 
-    async getUsers() {
-      try {
-        const response = await userApi.getUsers();
-        this.users = response.data.reverse();
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    components: { ModalForm },
 
-    async getUpdates(id) {
-        try {
-          const response = await projectApi.getUpdates(id);
-          this.updates = response.data.reverse();
-        } catch (err) {
-          console.log(err);
-        }
-      },
-
-    async getSubscriptions (id) {
-      try {
-        const response = await projectApi.getSubscriptions(id);
-        this.subscriptions = response.data;
-        this.num_subscriptions = this.subscriptions.length
-        console.log("SUBSCRIPTIONS: " + response.data)
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getParticipations (id) {
-      try {
-        const response = await projectApi.getParticipations(id);
-        this.participations = response.data;
-        console.log("PARTICIPATIONS: " + response.data)
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getFounder() {
-      try {
-        const response = await userApi.getUserId(this.project.projectFounder);
-        this.founder = response.data[0];
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async saveSubscription (e) {
-      try {
-        e.preventDefault();
-        for(let i = 0; i < this.selected_users.length; i++){
-          this.subscriptions[i] = {idUser: this.selected_users[i].id, idProject: this.project.id}
-        }
-
-        const response = await userApi.saveSubscription({
-          subscriptions: this.subscriptions,
-        }, {
-          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-
-        console.log(response.data)
-        this.selected_projects = [];
-        window.location.reload();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async saveParticipation (e) {
-      try {
-        e.preventDefault();
-        for(let i = 0; i < this.selected_users.length; i++){
-          this.participations[i] = {idUser: this.selected_users[i].id, idProject: this.project.id }
-        }
-
-        const response = await userApi.saveParticipation({
-          participations: this.participations,
-        }, {
-          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-
-        console.log(response.data)
-        this.selected_projects = [];
-        window.location.reload();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async saveUpdate (e) {
-      try {
-        e.preventDefault();
-        const response = await projectApi.saveUpdate({
-          idProject: this.project.id,
-          description: this.description
-        }, {
-          headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-
-        console.log(response.data)
-        this.description = "";
-        window.location.reload();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async deleteSubscription(idUser) {
-      try {
-        const response = await userApi.deleteSubscription(idUser, this.project.id);
-        console.log(response.data)
-        this.getSubscriptions(this.project.id)
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async deleteParticipation(idUser) {
-      try {
-        const response = await userApi.deleteParticipation(idUser, this.project.id);
-        console.log(response.data)
-        this.getParticipations(this.project.id);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async deleteUpdate(date) {
-      try {
-        const response = await projectApi.deleteUpdate(this.project.id, date);
-        console.log(response.data)
-        this.getUpdates(this.project.id);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    // HELPERS
-    formatDate(date) {
-      return moment(date).fromNow();
-    },
-    
-    cancel() {
-      this.selected_users = [];
-    },
-
-    saveUser(list) {
-        let found = false
-        
-        for(let i = 0; i < list.length && found == false; i++){
-            if(this.selected_user.nickName == list[i].nickName){
-              found = true
+    methods: {
+        //FIND ONE
+        async getProject() {
+            try {
+                const response = await projectApi.getProject(this.$route.params.title);
+                this.project = response.data[0];
+                this.previewImage = this.project.photo;
+                this.getFounder();
+                this.getSubscriptions(this.project.id);
+                this.getUpdates(this.project.id);
+                this.getParticipations(this.project.id);
             }
-        }
-        if (found == false && this.selected_user != {}) { 
-            list.push(this.selected_user)
-            console.log(list)
-        }
-        else { console.log("ERROR: elemente ya añadido")} 
-    },
-
-    deleteUser(nickName, list) {
-        let found = -1
-        for(let i = 0; i < list.length && found == -1; i++){
-            if(nickName == list[i].nickName){
-              found = i
+            catch (err) {
+                console.log(err);
             }
-        }
-        if (found != -1) {
-            list.splice(found, 1)
-            console.log(list)
-        }
-    },
+        },
+        async getUsers() {
+            try {
+                const response = await userApi.getUsers();
+                this.users = response.data.reverse();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async getUpdates(id) {
+            try {
+                const response = await projectApi.getUpdates(id);
+                this.updates = response.data.reverse();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async getSubscriptions(id) {
+            try {
+                const response = await projectApi.getSubscriptions(id);
+                this.subscriptions = response.data;
+                this.num_subscriptions = this.subscriptions.length;
+                console.log("SUBSCRIPTIONS: " + response.data);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async getParticipations(id) {
+            try {
+                const response = await projectApi.getParticipations(id);
+                this.participations = response.data;
+                console.log("PARTICIPATIONS: " + response.data);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async getFounder() {
+            try {
+                const response = await userApi.getUserId(this.project.projectFounder);
+                this.founder = response.data[0];
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
 
-  },
+        async saveSubscription(selected_items) {
+            try {
+                this.selected_users = selected_items;
+                for (let i = 0; i < this.selected_users.length; i++) {
+                    this.subscriptions[i] = { idUser: this.selected_users[i].id, idProject: this.project.id };
+                }
+                const response = await userApi.saveSubscription({
+                    subscriptions: this.subscriptions,
+                }, {
+                    headers: { "Content-Type": "application/json; charset=UTF-8" }
+                });
+                console.log(response.data);
+                this.selected_projects = [];
+                window.location.reload();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async saveParticipation(selected_items) {
+            try {
+                this.selected_users = selected_items;
+                for (let i = 0; i < this.selected_users.length; i++) {
+                    this.participations[i] = { idUser: this.selected_users[i].id, idProject: this.project.id };
+                }
+                const response = await userApi.saveParticipation({
+                    participations: this.participations,
+                }, {
+                    headers: { "Content-Type": "application/json; charset=UTF-8" }
+                });
+                console.log(response.data);
+                this.selected_projects = [];
+                window.location.reload();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async saveUpdate(e) {
+            try {
+                e.preventDefault();
+                const response = await projectApi.saveUpdate({
+                    idProject: this.project.id,
+                    description: this.description
+                }, {
+                    headers: { "Content-Type": "application/json; charset=UTF-8" }
+                });
+                console.log(response.data);
+                this.description = "";
+                window.location.reload();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async deleteSubscription(idUser) {
+            try {
+                const response = await userApi.deleteSubscription(idUser, this.project.id);
+                console.log(response.data);
+                this.getSubscriptions(this.project.id);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async deleteParticipation(idUser) {
+            try {
+                const response = await userApi.deleteParticipation(idUser, this.project.id);
+                console.log(response.data);
+                this.getParticipations(this.project.id);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        async deleteUpdate(date) {
+            try {
+                const response = await projectApi.deleteUpdate(this.project.id, date);
+                console.log(response.data);
+                this.getUpdates(this.project.id);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+        // HELPERS
+        formatDate(date) {
+            return moment(date).fromNow();
+        },
+        cancel() {
+            this.selected_users = [];
+        },
+        saveUser(list) {
+            let found = false;
+            for (let i = 0; i < list.length && found == false; i++) {
+                if (this.selected_user.nickName == list[i].nickName) {
+                    found = true;
+                }
+            }
+            if (found == false && this.selected_user != {}) {
+                list.push(this.selected_user);
+                console.log(list);
+            }
+            else {
+                console.log("ERROR: elemente ya añadido");
+            }
+        },
+        deleteUser(nickName, list) {
+            let found = -1;
+            for (let i = 0; i < list.length && found == -1; i++) {
+                if (nickName == list[i].nickName) {
+                    found = i;
+                }
+            }
+            if (found != -1) {
+                list.splice(found, 1);
+                console.log(list);
+            }
+        },
+    },
 };
 </script>

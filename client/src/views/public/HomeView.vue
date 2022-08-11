@@ -1,11 +1,10 @@
 <template>
-  <div class="home">
+  <div class="router-view">
+    <MyCarrousel />
     <div class="container mt-3">
       <div class="row">
         <div class="col">
-          <p class="h3 fw-bold text-center mt-3">
-            Bienvenido a Outer Space Project
-          </p>
+          <MyServices />
         </div>
       </div>
     </div>
@@ -13,9 +12,11 @@
 </template>
 
 <script>
+import MyCarrousel from '@/components/MyCarrousel.vue';
+import MyServices from '@/components/MyServices.vue';
 
 export default {
-  name: 'HomeView'
-
+    name: "HomeView",
+    components: { MyCarrousel, MyServices }
 }
 </script>

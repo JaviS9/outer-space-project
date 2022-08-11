@@ -1,0 +1,112 @@
+<!-- BUTTON MODAL -->
+<button type="button" class="ms-2 btn btn-outline-warning btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
+  <i class="fa fa-plus"></i>
+</button>
+<!-- MODAL SUBSCRIPTIONS -->
+<div class="modal fade modal modal-lg" id="ModalSubscriptions" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-black border-warning p-3">
+      <div class="row-flex d-flex align-items-start my-2">
+        <p class="modal-title text-warning" id="exampleModalLabel">Suscripciones</p>
+      </div>
+      <div class="row-flex d-flex align-items-center my-2">
+        <select 
+          class="mdb-select md-form form-control"
+          aria-placeholder="Elige los usuarios a suscribir"
+          v-model="selected_user"
+        >
+          <option value="" disabled selected>Elige los usuarios a suscribir</option>
+          <option
+              v-for="user in users" :key="user.id"
+              :value="user">{{user.nickName}}
+          </option>
+        </select>
+        <button 
+          type="button"
+          class="btn btn-sm btn-outline-success rounded-circle ms-2"
+          v-on:click="saveUser(selected_users)"
+        >
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+      <div v-if="selected_users.length === 0" class="row my-2">
+        <p class="text-danger text-center">No seleccionado</p>
+      </div>
+      <div v-else class="row my-2">
+        <div class="col d-flex justify-content-start align-items-center">
+          <button
+            v-for="(subs) in selected_users" :key="subs.id" 
+            type="button"
+            class="btn btn-danger btn-sm rounded-pill p-2 me-2"
+            v-on:click="deleteUser(subs.nickName, selected_users)"
+          >
+          {{ subs.nickName }} <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <!--  -->
+      <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
+        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
+        <button type="button" class="btn btn-outline-warning btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- BUTTON MODAL -->
+<button type="button" class="ms-2 btn btn-outline-primary btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalParticipations">
+  <i class="fa fa-plus"></i>
+</button>
+<!-- MODAL PARTICIPATIONS -->
+<div class="modal fade modal modal-lg" id="ModalParticipations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-black border-primary p-3">
+      <div class="row-flex d-flex align-items-start my-2">
+        <p class="modal-title text-primary" id="exampleModalLabel">Participaciones</p>
+        <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="row-flex d-flex align-items-center my-2">
+        <select 
+          class="mdb-select md-form form-control"
+          searchable="Busca aqui"
+          aria-placeholder="Elige los proyectos a suscribir"
+          v-model="selected_user"
+        >
+          <option value="" disabled selected>Elige los proyectos a suscribir</option>
+          <option
+              v-for="user in users" :key="user.id"
+              :value="user">{{user.nickName}}
+          </option>
+        </select>
+        <button 
+          type="button"
+          class="btn btn-sm btn-outline-success rounded-circle ms-2"
+          v-on:click="saveUser(selected_users)"
+        >
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+      <div v-if="selected_users.length === 0" class="row my-2">
+        <p class="text-danger text-center">No seleccionado</p>
+      </div>
+      <div v-else class="row my-2">
+        <div class="col d-flex justify-content-start align-items-center">
+          <button
+            v-for="(subs) in selected_users" :key="subs.id" 
+            type="button"
+            class="btn btn-danger btn-sm rounded-pill p-2 me-2"
+            v-on:click="deleteUser(subs.nickName, selected_users)"
+          >
+          {{ subs.nickName }} <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <!--  -->
+      <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
+        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
+        <button type="button" class="btn btn-outline-primary btn-sm ms-2" v-on:click="saveParticipation">Participar</button>
+      </div>
+    </div>
+  </div>
+</div>
