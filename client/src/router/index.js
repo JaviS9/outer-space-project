@@ -104,14 +104,9 @@ const routes = [
     component: () => import('../views/public/HomeView.vue')
   },
   {
-    path: '/login',
-    name: 'LoginUser',
-    component: () => import('../views/public/LoginUser.vue')
-  },
-  {
-    path: '/register',
-    name: 'RegisterUser',
-    component: () => import('../views/public/RegisterUser.vue')
+    path: '/start',
+    name: 'LoginRegister',
+    component: () => import('../views/public/LoginRegister.vue')
   },
   {
     path: '/about',

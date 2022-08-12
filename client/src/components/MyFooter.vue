@@ -1,14 +1,14 @@
 <template>
   <footer class="p-2 border-top border-2 m-0">
-      <div v-if="status.admin === true" class="row-flex d-flex justify-content-center align-items-center text-center p-0">
-        <router-link to="/manager/users" class="d-inline p-2 nav-link active" aria-current="page">Usuarios</router-link><p class="ms-1 my-0">|</p>
-        <router-link to="/manager/projects" class="d-inline p-2 nav-link active" aria-current="page">Proyectos</router-link><p class="ms-1 my-0">|</p>
-        <router-link to="/manager/admins" class="d-inline p-2 nav-link active" aria-current="page">Administradores</router-link><p class="ms-1 my-0">|</p>
+      <div v-if="status.admin === true" class="row-flex d-flex justify-content-center align-items-center text-center p-0 mb-1">
+        <router-link to="/manager/users" class="d-inline p-2 nav-link active" aria-current="page">Usuarios</router-link><p class="mx-1 my-0">|</p>
+        <router-link to="/manager/projects" class="d-inline p-2 nav-link active" aria-current="page">Proyectos</router-link><p class="mx-1 my-0">|</p>
+        <router-link to="/manager/admins" class="d-inline p-2 nav-link active" aria-current="page">Administradores</router-link><p class="mx-1 my-0">|</p>
         <router-link to="/manager/techs" class="d-inline p-2 nav-link active" aria-current="page">Tecnologías</router-link>
       </div>
-      <div v-if="status.public === true" class="row-flex d-flex justify-content-center align-items-center text-center p-0">
-        <router-link to="/explore" class="nav-link active" aria-current="page">Explora</router-link><p class="ms-1 my-0">|</p>
-        <router-link to="/news" class="nav-link active" aria-current="page">Novedades</router-link><p class="ms-1 my-0">|</p>
+      <div v-if="status.public === true" class="row-flex d-flex justify-content-center align-items-center text-center p-0 mb-1">
+        <router-link to="/explore" class="nav-link active" aria-current="page">Explora</router-link><p class="mx-2 my-0">|</p>
+        <router-link to="/news" class="nav-link active" aria-current="page">Novedades</router-link><p class="mx-2 my-0">|</p>
         <router-link to="/about" class="nav-link active" aria-current="page">Sobre Nosotros</router-link>
       </div>
       <div class="row d-flex justify-content-center align-items-center text-center mx-5 my-0 border-top p-0">

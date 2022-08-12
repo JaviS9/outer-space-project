@@ -1,9 +1,12 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-2">
     <div class="container-fluid px-3">
-      <router-link to="/manager" class="navbar-brand me-5">
+      <router-link  v-if="status.admin === true" to="/manager" class="navbar-brand me-5">
           <img class="logo-icon" src="../assets/logo.png" alt="logo">OUTER SPACE PROJECT
           <span class="fw-bold text-warning">Manager</span>
+      </router-link>
+      <router-link  v-if="status.public === true" to="/" class="navbar-brand me-5">
+          <img class="logo-icon" src="../assets/logo.png" alt="logo">OUTER SPACE PROJECT
       </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -35,10 +38,8 @@
           </li>
         </ul>
         <div class="d-flex">
-            <router-link to="/login" class="nav-link active text-success" aria-current="page">Iniciar Sesión</router-link>
-            <router-link to="/register" class="nav-link active ms-2" aria-current="page">Registrarse</router-link>
-            
-            <router-link to="/" class="nav-link active text-danger ms-2" aria-current="page">Cerrar Sesión</router-link>
+            <router-link type="button" to="/start" class="nav-link active btn btn-sm border btn-success fw-bold p-2" aria-current="page">Comienza</router-link>
+            <router-link type="button" to="/" class="nav-link active btn btn-sm border btn-danger fw-bold p-2" aria-current="page">Cerrar Sesión</router-link>
         </div>
       </div>
     </div>

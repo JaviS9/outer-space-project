@@ -1,6 +1,5 @@
 <template>
 <div class="app">
-  
   <main>
     <MyNav :status="status"/>
     <router-view/>
@@ -19,9 +18,9 @@ export default {
   data() {
     return {
       status: {
-        admin: true,
+        admin: false,
         user: false,
-        public: false
+        public: true
       }
     }
   },

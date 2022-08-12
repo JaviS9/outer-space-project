@@ -12,8 +12,10 @@
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "core-js": "^3.8.3",
+    "mdb-ui-kit": "^4.4.0",
     "vue": "^3.2.13",
     "vue-awesome-paginate": "^1.0.23",
+    "vue-axios": "^3.4.1",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },

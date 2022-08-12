@@ -4,10 +4,39 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
+// SESSION MANAGEMENT
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
 const app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
+
+// //  Populate req.cookies
+// app.use(cookieParser());
+// //  Session setup
+// app.use(session({
+//   secret: 'wow very secret',
+//   cookie: {
+//     maxAge: 600000,
+//     secure: true
+//   },
+//   saveUninitialized: false,
+//   resave: false,
+//   unset: 'destroy'
+// }));
+
+// app.use(cors({
+//   origin: [
+//     'http://localhost:8080',
+//     'https://localhost:8080'
+//   ],
+//   credentials: true,
+//   exposedHeaders: ['set-cookie']
+// }));
+
+// Set headers
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -19,7 +48,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-//--------------------------------------------------------------------------------------
 // Catch 404 errors and forward to error handler.
 // This is called if no match is found in the preceding route functions.
 // error handler
