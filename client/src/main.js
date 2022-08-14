@@ -2,13 +2,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VueAwesomePaginate from "vue-awesome-paginate";
 
-// Session management
-// import axios from 'axios';
-// import VueAxios from 'vue-axios';
-// axios.defaults.withCredentials = true;
-// req.session.destroy(); Para cerrar la sesion
+//Pagination lib
+import VueAwesomePaginate from "vue-awesome-paginate";
 
 //Font Awesome Icons
 import "../node_modules/@fortawesome/fontawesome-free/css/all.css"

@@ -2,11 +2,13 @@ const userController = require('../controllers/user');
 const projectController = require('../controllers/project');
 const adminController = require('../controllers/admin');
 const techController = require('../controllers/tech')
+const authenticationController = require('../controllers/authentication')
 const app = require('../app');
 
 module.exports = (app) => {
-   // REGISTER AND LOGIN
-   app.post('/register', userController.addUser)
+   // *** REGISTER AND LOGIN ***
+   app.post('/register', authenticationController.register)
+   app.get('/login/:id/:password', authenticationController.login)
 
    // *** USER ***
    // GET
@@ -31,9 +33,6 @@ module.exports = (app) => {
    app.delete('/user/:idUser/delete/subscription/:idProject', userController.deleteSubscription);
    app.delete('/user/:idUser/delete/participation/:idProject', userController.deleteParticipation);
 
-   // SEARCH
-   app.delete('/user/search/:nickName', userController.searchUser);
-
    // *** PROJECT ***
    // GET
    app.get('/project/list', projectController.listProject);
@@ -53,9 +52,6 @@ module.exports = (app) => {
    app.delete('/project/delete/:id', projectController.deleteProject);
    app.delete('/project/:id/delete/update/:date', projectController.deleteUpdate)
 
-   // SEARCH
-   // app.delete('/project/search/:title', projectController.searchProject);
-
    // *** ADMIN ***
    // GET
    app.get('/admin/list', adminController.listAdmin); 
@@ -69,10 +65,6 @@ module.exports = (app) => {
 
    // DELETE
    app.delete('/admin/delete/:id', adminController.deleteAdmin);
-
-   // SEARCH
-   app.delete('/admin/search/:search', adminController.searchAdmin);
-
 
    // *** TECH *** 
    // GET
@@ -88,9 +80,6 @@ module.exports = (app) => {
 
    // DELETE
    app.delete('/tech/delete/:id', techController.deleteTech);
-
-   // SEARCH
-   app.delete('/tech/search/:search', techController.searchTech);
 
    // SUBSCRIPTION/DONATION
    

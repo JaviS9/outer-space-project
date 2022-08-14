@@ -1,7 +1,7 @@
-var models = require('../models');
+const models = require('../models');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../models');
-var Buffer = require('buffer/').Buffer
+// var Buffer = require('buffer/').Buffer
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -22,8 +22,8 @@ module.exports = {
             res.status(200).send(user)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: User not created -- ' + err
-            });
+                error: 'ERROR: Ya existe un usuario con esos datos'
+            })
         }
     },
 
@@ -33,7 +33,7 @@ module.exports = {
             res.status(200).send(subscriptions)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Subscriptions not created -- ' + err
+                error: 'ERROR: Esta suscripción ya existe'
             });
         }
     },
@@ -44,7 +44,7 @@ module.exports = {
             res.status(200).send(participations)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Participations not created -- ' + err
+                error: 'ERROR: Este usuario ya participa en el proyecto'
             });
         }
     },
@@ -212,20 +212,4 @@ module.exports = {
             });
         }
     },
-
-    // SEARCH
-    async searchUser (req, res) {
-        try{
-            const [results, metadata] = await sequelize.query(
-                "SELECT * FROM user WHERE user.nickName LIKE :nickName",
-                { replacements: { nickName: req.params.nickName } }
-              );
-            res.status(200).send(results)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: UserSearch not found -- ' + err
-            });
-        }
-    }
-
 };

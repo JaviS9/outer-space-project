@@ -1,4 +1,4 @@
-var models = require('../models');
+const models = require('../models');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../models');
 
@@ -77,23 +77,5 @@ module.exports = {
                 error: 'ERROR: Admin not deleted -- ' + err
             });
         }
-    },    
-
-    // SEARCH
-    async searchAdmin (req, res) {
-        try{
-            let name = req.params.search.split(" ")[0]
-            const [results, metadata] = await sequelize.query(
-                "SELECT * FROM admin WHERE admin.name LIKE %:name%",
-                { replacements: { name: name,
-                } }
-              );
-            res.status(200).send(results)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: AdminSearch not found -- ' + err
-            });
-        }
-    }
-
+    },
 };

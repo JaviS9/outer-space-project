@@ -1,11 +1,11 @@
 <template>
 <div class="app">
   <main>
-    <MyNav :status="status"/>
+    <MyNav />
     <router-view/>
     <div class="push"></div>
   </main>
-  <MyFooter :status="status"/>
+  <MyFooter />
 </div>
 </template>
 
@@ -15,15 +15,6 @@ import MyFooter from '@/components/MyFooter.vue';
 
 export default {
   name: "App",
-  data() {
-    return {
-      status: {
-        admin: false,
-        user: false,
-        public: true
-      }
-    }
-  },
 
   components: {
     MyNav,

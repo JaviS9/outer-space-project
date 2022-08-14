@@ -4,38 +4,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
-// SESSION MANAGEMENT
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-
 const app = express();
-app.use(morgan('combined'));
 app.use(bodyParser.json());
+app.use(morgan('combined'));
 app.use(cors());
-
-// //  Populate req.cookies
-// app.use(cookieParser());
-// //  Session setup
-// app.use(session({
-//   secret: 'wow very secret',
-//   cookie: {
-//     maxAge: 600000,
-//     secure: true
-//   },
-//   saveUninitialized: false,
-//   resave: false,
-//   unset: 'destroy'
-// }));
-
-// app.use(cors({
-//   origin: [
-//     'http://localhost:8080',
-//     'https://localhost:8080'
-//   ],
-//   credentials: true,
-//   exposedHeaders: ['set-cookie']
-// }));
-
 // Set headers
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');

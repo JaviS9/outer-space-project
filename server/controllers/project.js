@@ -1,7 +1,7 @@
-var models = require('../models');
+const models = require('../models');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../models');
-var Buffer = require('buffer/').Buffer
+// var Buffer = require('buffer/').Buffer
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -157,19 +157,4 @@ module.exports = {
             });
         }
     },
-
-    // SEARCH
-    async searchProject (req, res) {
-        try{
-            const [results, metadata] = await sequelize.query(
-                "SELECT * FROM project WHERE project.title LIKE :title",
-                { replacements: { title: '%' + req.params.title + '%'} }
-              );
-            res.status(200).send(results)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: ProjectSearch not found -- ' + err
-            });
-        }
-    }
 };

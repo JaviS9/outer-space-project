@@ -1,3 +1,20 @@
+const Promise = require('bluebird');
+const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
+
+function hashPassword (user, options) {
+  const SALT_FACTOR = 8
+  if (!user.changed('password')) {
+    return;
+  }
+
+  return bcrypt
+    .genSaltAsync(SALT_FACTOR)
+    .then(salt => bcrypt.hashAsync(user.password, salt, null))
+    .then(hash => {
+      user.setDataValue('password', hash)
+    })
+}
+
 'use strict';
 const {
   Model
@@ -11,11 +28,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Project, {foreignKey: {
-                                      name: 'projectFounder',
-                                      onDelete: 'CASCADE',
-                                      onUpdate: 'CASCADE'
-                                    }});
+      User.hasMany(models.Project, {
+        foreignKey: {
+        name: 'projectFounder',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      }});
       User.belongsToMany(models.Project, {
         through: 'Participation',
         as: 'participation',
@@ -91,7 +109,17 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
     freezeTableName: true,
     tableName: 'User',
-    classMethods: {}
+    classMethods: {},
+    hooks: {
+      beforeCreate: hashPassword,
+      beforeBulkCreate: hashPassword,
+      beforeUpdate: hashPassword,
+    }
   });
+
+  User.prototype.comparePassword = function(password) {
+    return bcrypt.compareAsync(password, this.password)
+  }
+
   return User;
 };

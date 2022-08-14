@@ -118,7 +118,6 @@ const routes = [
     name: 'PageNotfound',
     component: () => import('../views/public/PageNotFound.vue')
   },
-
   
 ]
 

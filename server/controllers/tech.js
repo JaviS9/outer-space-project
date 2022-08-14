@@ -1,6 +1,4 @@
-var models = require('../models');
-// const { v4: uuidv4 } = require('uuid');
-const { sequelize } = require('../models');
+const models = require('../models');
 
 module.exports = {
     //CREATE
@@ -86,22 +84,4 @@ module.exports = {
             });
         }
     },    
-
-    // SEARCH
-    async searchTech (req, res) {
-        try{
-            let name = req.params.search.split(" ")[0]
-            const [results, metadata] = await sequelize.query(
-                "SELECT * FROM tech WHERE tech.name LIKE %:name%",
-                { replacements: { name: name,
-                } }
-              );
-            res.status(200).send(results)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: TechSearch not found -- ' + err
-            });
-        }
-    }
-
 };
