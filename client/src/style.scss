@@ -14,15 +14,15 @@ html, body {
     .orange {color: rgb(255, 119, 0)}
     .greenyellow {color: greenyellow}
 
+    .bg-light {
+        background-image: url('../public/img/bg-light-speed.png');
+    }
+
     .app {
         margin: 0 auto;
         padding: 0;
         min-width: 100%;
         min-height: 100%;
-    }
-
-    .router-view {
-        margin-bottom: 50px;
     }
 
     main {
@@ -36,9 +36,16 @@ html, body {
         word-spacing: 0.15em;
     }
 
-    footer, .push {
+    .push {
         height: 100px;
         width: 100%;
+        opacity: 0;
+    }
+
+    footer {
+        height: 100px;
+        width: 100%;
+        background-color: black;
     }
 
     .user-image {

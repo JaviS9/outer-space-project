@@ -40,12 +40,17 @@
         <div class="d-flex">
             <router-link v-if="!$store.state.isUserLoggedIn && !$store.state.isAdminLoggedIn"
               type="button" to="/start" 
-              class="nav-link active btn btn-sm border btn-success p-1" 
-              aria-current="page">Comienza
+              class="nav-link active btn btn-sm border rounded-pill btn-success p-2" 
+              aria-current="page">Comenzar
+            </router-link>
+            <router-link v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn"
+              type="button" to="/"
+              class="nav-link active btn btn-sm border rounded-pill p-2 orange"
+              aria-current="page"><i class="fa-solid fa-user-astronaut me-1"></i>Perfil
             </router-link>
             <button v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn "
               type="button" v-on:click="shutSession"
-              class="nav-link active btn btn-sm border btn-danger p-1"
+              class="nav-link active btn btn-sm border rounded-pill btn-danger p-2 ms-2"
               aria-current="page">Cerrar Sesión
             </button>
         </div>
@@ -55,6 +60,8 @@
 </template>
 
 <script>
+import Authentication from '@/services/Authentication'
+
 export default {
   name: 'MyNav',
   props: {
@@ -71,8 +78,9 @@ export default {
             this.$store.dispatch('setToken', null)
             this.$store.dispatch('setUser', null)
           }
+          Authentication.deleteUserLogged()
+          this.$router.push('/')
       } catch (error) {
-          this.error = error.response.data.error
           window.alert(this.error)
       }
     }

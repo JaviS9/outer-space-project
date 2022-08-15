@@ -10,6 +10,7 @@ module.exports = (app) => {
    app.post('/register', authenticationController.register)
    app.get('/login/:id/:password', authenticationController.login)
 
+   //                         *** PRIVATE ***
    // *** USER ***
    // GET
    app.get('/user/list', userController.listUser); 

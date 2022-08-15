@@ -170,8 +170,8 @@ export default {
           },
           { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
-          this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setUser', response.data.user)
+          this.$store.dispatch('setToken', response.data.token)
           this.email = "";
           this.name = "";
           this.lastName = "";

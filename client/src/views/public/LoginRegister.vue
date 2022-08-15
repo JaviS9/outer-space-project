@@ -1,7 +1,7 @@
 <template>
-<div class="router-view">
-    <div class="container" style="padding: 100px 0 0 0">
-        <div class="row-flex d-flex align-items-center justify-content-center">
+<div class="router-view m-0">
+    <div style="padding: 100px 0 0 0">
+        <div class="row-flex d-flex align-items-center justify-content-center m-0">
             <div class="col-md-6 flex-column d-flex justify-content-center p-3 m-0">
                 <div class="card border align-self-end bg-black p-3 m-0"
                     style="width: 300px"
@@ -10,10 +10,9 @@
                     <form autocomplete="off">
                         <input autocomplete="username" type="text" class="form-control mt-2" v-model="id" placeholder="Introduce tu email o nickname">
                         <input autocomplete="current-password" type="password" class="form-control my-2" v-model="password" placeholder="Introduce la contraseña">
-                        <div class="row mb-2 p-2">
-                            <div class="col-md flex-column d-flex align-items-end justify-content-center p-0">
-                                <input type="submit" class="btn btn-md btn-outline-success" value="Iniciar sesión" v-on:click="login">
-                            </div>
+                        <p v-if="error != null" class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>{{ error }}</p>
+                        <div class="row-flex d-flex justify-content-end my-3">
+                            <input type="button" class="btn btn-md btn-outline-success" value="Iniciar sesión" v-on:click="login">
                         </div>
                     </form>
                 </div>
@@ -53,27 +52,31 @@ export default {
     methods: {
         async login() {
             try {
-                console.log(this.id, this.password)
+                this.error = null
                 const response = await Authentication.login({
                     id: this.id,
                     password: this.password,
                 });
-                console.log(response.data)
-                this.$store.dispatch('setToken', response.data.token)
-                if(response.data.admin) {
+                if(response.data.admin == true) {
                     this.$store.dispatch('setAdmin', response.data.user)
-                } else if (!response.data.admin) {
+                } else if (response.data.admin == false) {
                     this.$store.dispatch('setUser', response.data.user)
+                }
+                this.$store.dispatch('setToken', response.data.token)
+                Authentication.setUserLogged(response.data.token);
+                if(this.$store.state.isAdminLoggedIn) {
+                    this.$router.push('/manager')
+                } else {
+                    this.$router.push('/')
                 }
             } catch (error) {
                 this.error = error.response.data.error
-                console.log(this.error)
             }
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

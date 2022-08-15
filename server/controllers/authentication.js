@@ -42,14 +42,14 @@ module.exports = {
             const id = req.params.id
             const password = req.params.password
             var admin = false
-            const user = await models.User.findOne({
+            var user = await models.User.findOne({
                 where: { [Op.or] : [
                     { email: id },
                     { nickName: id }
                 ]}
             })
             if(!user) {
-                const user = await models.Admin.findOne(
+                user = await models.Admin.findOne(
                     { where: { email: id }, }
                 )
                 if(!user) {
@@ -65,9 +65,10 @@ module.exports = {
                 })
             }
             const userJson = user.toJSON()
+            const userToken = {user: userJson, admin: admin}
             res.send({
                 user: userJson,
-                token: jwtSignUser(userJson),
+                token: jwtSignUser(userToken),
                 admin: admin
             })
         } catch (err) {
