@@ -157,4 +157,33 @@ module.exports = {
             });
         }
     },
-};
+
+    // GET UPDATES
+    async listUpdate (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM project JOIN `update` ON id = idProject;",
+            );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Updates not found -- ' + err
+            });
+        }
+    },
+
+    // SEARCH
+    async searchProject (req, res) {
+        try {
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM project WHERE title LIKE %:title%",
+                { replacements: { title: req.params.title } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(404).send({
+                error: 'ERROR: Project not found -- ' + err
+            });
+        }
+    }
+}

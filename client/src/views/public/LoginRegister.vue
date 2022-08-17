@@ -1,18 +1,21 @@
 <template>
 <div class="router-view m-0">
-    <div style="padding: 100px 0 0 0">
+    <div style="padding: 30px 0 0 0">
+        <div class="container">
+            <p class="h3 text-center fw-bold mb-5">¡<span class="greenyellow">Inicia sesión</span> para comenzar o <span class="text-warning">registrate</span> si no tienes aún una cuenta!</p>
+        </div>
         <div class="row-flex d-flex align-items-center justify-content-center m-0">
             <div class="col-md-6 flex-column d-flex justify-content-center p-3 m-0">
                 <div class="card border align-self-end bg-black p-3 m-0"
                     style="width: 300px"
                 >
-                    <h5 class="text-center text-success">Inicia sesión</h5>
+                    <h5 class="text-center greenyellow">Inicia sesión</h5>
                     <form autocomplete="off">
                         <input autocomplete="username" type="text" class="form-control mt-2" v-model="id" placeholder="Introduce tu email o nickname">
                         <input autocomplete="current-password" type="password" class="form-control my-2" v-model="password" placeholder="Introduce la contraseña">
                         <p v-if="error != null" class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>{{ error }}</p>
                         <div class="row-flex d-flex justify-content-end my-3">
-                            <input type="button" class="btn btn-md btn-outline-success" value="Iniciar sesión" v-on:click="login">
+                            <input type="button" class="btn btn-md btn-outline-green" value="Iniciar sesión" v-on:click="login">
                         </div>
                     </form>
                 </div>
@@ -22,7 +25,7 @@
                     style="width: 300px"
                 >
                     <h5 class="text-center text-warning">Registrate</h5>
-                    <RegisterForm />
+                    <RegisterUserForm />
                 </div>
             </div>
         </div>
@@ -32,7 +35,7 @@
 </template>
 
 <script>
-import RegisterForm from '@/components/RegisterForm.vue';
+import RegisterUserForm from '@/components/RegisterUserForm.vue';
 import Authentication from '@/services/Authentication';
 
 export default {
@@ -46,7 +49,7 @@ export default {
     },
 
     components: {
-        RegisterForm
+        RegisterUserForm
     },
 
     methods: {

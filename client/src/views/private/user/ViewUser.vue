@@ -8,31 +8,9 @@
     </div>
   </div>
   <div class="container border-bottom mt-3">
-    <div class="row">
-      <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <div v-if="previewImage === null" class="bg-black border border-2 m-2 rounded-circle pt-5" style="width: 250px; height: 250px;">
-          <p class="text-center mt-5 text-danger text-photo">Foto no encontrada</p>
-        </div>
-        <div v-else class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
-        <!-- <img class="card-img-top icon-image-big" src="../../../../public/img/user/user-1.png" alt="alien-1"> -->
-      </div>
-      <div class="col-md-6 mx-3 flex-column justify-content-center">
-        <div class="card border-light bg-black py-1">
-          <div class="card-body bg-black px-0">
-            <li class="list-group" v-if="user === null">
-              <ul class="list-group-item bg-black text-white text-center mt-4"><p class="text-danger">No hay datos</p></ul>
-            </li>
-            <li class="list-group p-0" v-else>
-              <ul class="list-group-item m-0 text-white bg-black"><p>Email: <span class="fw-bold"> {{user.email}}</span></p></ul>
-              <ul class="list-group-item m-0 text-white bg-black"><p>Nombre: <span class="fw-bold"> {{user.name}}</span></p></ul>
-              <ul class="list-group-item m-0 text-white bg-black"><p>Apellidos: <span class="fw-bold"> {{user.lastName}}</span></p></ul>
-              <ul class="list-group-item m-0 text-white bg-black"><p>Nickname: <span class="fw-bold"> {{user.nickName}}</span></p></ul>
-              <ul class="list-group-item m-0 text-white bg-black"><p>Biografía: <span class="fw-bold"> {{user.biography}}</span></p></ul>
-              <ul class="list-group-item m-0 text-white bg-black border-top"><p>Contraseña: <span class="fw-bold"> {{user.password}}</span></p></ul>
-            </li>
-          </div>
-        </div>
-      </div>
+    <!-- USER INFO -->
+    <div class="row mb-3 py-3">
+      <UserCard :user="user"/>
     </div>
     <div class="row mb-3">
       <div class="col">
@@ -52,15 +30,15 @@
                 <div class="col-sm-1 flex-column d-flex justify-content-center align-items-start">
                   <i class="fa fa-rocket rounded-circle border border-info p-2"></i>
                 </div>
-                <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
+                <div class="col-sm-11 flex-column d-flex justify-content-center align-items-start">
                   <span class="fw-bold ms-2">Proyectos fundados</span>
                 </div>
-                <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
+                <!-- <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
                   <router-link :to="{name: 'AddProject'}"
                     type="button" class="ms-2 btn btn-success text-white border border-2 btn-sm rounded-circle">
                     <i class="fa fa-plus"></i>
                   </router-link>
-                </div>
+                </div> -->
               </div>
             </ul>
             <ul v-if="projectsFunded.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
@@ -70,7 +48,6 @@
               class="list-group-item text-white border-light border bg-black mb-2 p-3">
               <div class="row-flex d-flex justify-content-center align-items-center p-0">
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <!-- <div v-if="pro.photo === null" class="border-light rounded-circle" style="width: 30px; height: 30px"></div> -->
                   <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
                 </div>
                 <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
@@ -99,62 +76,10 @@
                   <span class="fw-bold ms-2">Suscripciones</span>
                 </div>
                 <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
-                  <!-- BUTTON MODAL -->
-                  <button type="button" class="ms-2 btn btn-success text-white border border-2 btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- MODAL SUBSCRIPTIONS -->
-              <div class="modal fade modal modal-lg" id="ModalSubscriptions" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content bg-black border-warning p-3">
-                    <div class="row-flex d-flex align-items-start my-2">
-                      <p class="modal-title text-warning" id="exampleModalLabel">Suscripciones</p>
-                      <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="row-flex d-flex align-items-center my-2">
-                      <select 
-                        class="mdb-select md-form form-control"
-                        searchable="Busca aqui"
-                        aria-placeholder="Elige los proyectos a suscribir"
-                        v-model="selected_project"
-                      >
-                        <option value="" disabled selected>Elige los proyectos a suscribir</option>
-                        <option
-                            v-for="pro in projects" :key="pro.id"
-                            :value="pro">{{pro.title}}
-                        </option>
-                      </select>
-                      <button 
-                        type="button"
-                        class="btn btn-sm btn-outline-success rounded-circle ms-2"
-                        v-on:click="saveProject(selected_projects)"
-                      >
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
-                    <div v-if="selected_projects.length === 0" class="row my-2">
-                      <p class="text-danger text-center">No seleccionado</p>
-                    </div>
-                    <div v-else class="row my-2">
-                      <div class="col d-flex justify-content-start align-items-center">
-                        <button
-                          v-for="(subs) in selected_projects" :key="subs.id" 
-                          type="button"
-                          class="btn btn-danger btn-sm rounded-pill p-2 me-2"
-                          v-on:click="deleteProject(subs.title, selected_projects)"
-                        >
-                        {{ subs.title }} <i class="fa-solid fa-circle-xmark"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <!--  -->
-                    <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
-                      <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                      <button type="button" class="btn btn-outline-warning btn-sm ms-2" v-on:click="saveSubscription">Suscribirse</button>
-                    </div>
-                  </div>
+                  <ModalForm :id="'ModalSubscription'"
+                    :title="'suscripciones'" :type="'project'" :list="projects" 
+                    @selected_items="saveSubscription"
+                  />
                 </div>
               </div>
             </ul>
@@ -200,62 +125,10 @@
                   <span class="fw-bold ms-2">Participaciones</span>
                 </div>
                 <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
-                  <!-- BUTTON MODAL -->
-                  <button type="button" class="btn btn-success text-white border border-light border-2 btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalParticipation">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- MODAL PARTICIPATIONS -->
-              <div class="modal fade modal modal-lg" id="ModalParticipation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content bg-black border-primary p-3">
-                    <div class="row-flex d-flex align-items-start my-2">
-                      <p class="modal-title text-primary" id="exampleModalLabel">Participaciones</p>
-                      <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="row-flex d-flex align-items-center my-2">
-                      <select 
-                        class="mdb-select md-form form-control"
-                        searchable="Busca aqui"
-                        aria-placeholder="Elige los proyectos a participar"
-                        v-model="selected_project"
-                      >
-                        <option value="" disabled selected>Elige los proyectos a participar</option>
-                        <option
-                            v-for="pro in projects" :key="pro.id"
-                            :value="pro">{{pro.title}}
-                        </option>
-                      </select>
-                      <button 
-                        type="button"
-                        class="btn btn-sm btn-outline-success rounded-circle ms-2"
-                        v-on:click="saveProject(selected_projects)"
-                      >
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
-                    <div v-if="selected_projects.length === 0" class="row my-2">
-                      <p class="text-danger text-center">No seleccionado</p>
-                    </div>
-                    <div v-else class="row my-2">
-                      <div class="col d-flex justify-content-start align-items-center">
-                        <button
-                          v-for="(subs) in selected_projects" :key="subs.id" 
-                          type="button"
-                          class="btn btn-danger btn-sm rounded-pill p-2 me-2"
-                          v-on:click="deleteProject(subs.title, selected_projects)"
-                        >
-                        {{ subs.title }} <i class="fa-solid fa-circle-xmark"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <!--  -->
-                    <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
-                      <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                      <button type="submit" class="btn btn-outline-primary btn-sm ms-2" v-on:click="saveParticipation">Participar</button>
-                    </div>
-                  </div>
+                  <ModalForm :id="'ModalParticipation'"
+                    :title="'participaciones'" :type="'project'" :list="projects"
+                    @selected_items="saveParticipation"
+                  />
                 </div>
               </div>
             </ul>
@@ -297,6 +170,8 @@
 <script>
 import userApi from '@/services/userApi';
 import projectApi from '@/services/projectApi';
+import ModalForm from '@/components/ModalForm.vue';
+import UserCard from '@/components/UserCard.vue';
 
 export default {
   name: "ViewUser",
@@ -317,6 +192,11 @@ export default {
     this.getProfile();
     this.getProjects();
   },
+
+  components: {
+    ModalForm,
+    UserCard
+},
 
   methods: {
     //FIND ONE
@@ -372,9 +252,9 @@ export default {
       }
     },
 
-    async saveSubscription (e) {
+    async saveSubscription (selected_items) {
       try {
-        e.preventDefault();
+        this.selected_projects = selected_items;
         for(let i = 0; i < this.selected_projects.length; i++){
           this.subscriptions[i] = {idUser: this.user.id, idProject: this.selected_projects[i].id}
         }
@@ -392,9 +272,9 @@ export default {
       }
     },
 
-    async saveParticipation (e) {
+    async saveParticipation (selected_items) {
       try {
-        e.preventDefault();
+        this.selected_projects = selected_items;
         for(let i = 0; i < this.selected_projects.length; i++){
           this.participations[i] = {idUser: this.user.id, idProject: this.selected_projects[i].id}
         }

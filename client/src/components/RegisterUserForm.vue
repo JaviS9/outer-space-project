@@ -1,6 +1,6 @@
 <template>
 <div class="row-flex d-flex m-2">
-  <div class="col-md-12">
+  <div class="col">
     <form autocomplete="off">
         <div class="mb-2">
             <input type="email" class="form-control" placeholder="Email" v-model="email">
@@ -28,11 +28,11 @@
                 <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe un nombre de usuario.</p>
             </div>
         </div>
-        <!-- <div class="mb-2">
+        <!-- <div v-if="$store.state.isAdminLoggedIn" class="mb-2">
             <textarea class="form-control" rows="3" placeholder="Biografía" v-model="biography"></textarea>
         </div> -->
         <!-- INSERTAR FOTOS -->
-        <!-- <div class="mb-2">
+        <!-- <div v-if="$store.state.isAdminLoggedIn" class="mb-2">
             <input type="text" class="form-control" placeholder="Foto de usuario" v-model="photo" @input="getImage">
         </div> -->
         <hr>
@@ -62,11 +62,11 @@
         </div>
 
         <div class="mb-2 mt-3 row-flex d-flex justify-content-end">
-            <input type="submit" class="btn btn-outline-success btn-md" value="Registrar" @click="saveUser">
+            <input type="submit" class="btn btn-outline-warning btn-md" value="Registrar" @click="saveUser">
         </div>
     </form>
   </div>
-  <!-- <div class="col-md-6 m-3">
+  <!-- <div v-if="$store.state.isAdminLoggedIn" class="col-md-6 m-3">
     <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
   </div> -->
 </div>

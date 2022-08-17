@@ -10,20 +10,22 @@ module.exports = (app) => {
    app.post('/register', authenticationController.register)
    app.get('/login/:id/:password', authenticationController.login)
 
-   //                         *** PRIVATE ***
    // *** USER ***
    // GET
    app.get('/user/list', userController.listUser); 
    app.get('/user/find/:nickName', userController.findUser);
    app.get('/user/find/id/:id', userController.findUserId);
-   app.get('/user/find/projects/:id', userController.findUserFundedProjects)
-   app.get('/user/find/subscriptions/:id', userController.findUserSubscriptions)
-   app.get('/user/find/participations/:id', userController.findUserParticipations)
+   app.get('/user/find/projects/:id', userController.findUserFundedProjects);
+   app.get('/user/find/subscriptions/:id', userController.findUserSubscriptions);
+   app.get('/user/find/participations/:id', userController.findUserParticipations);
+   app.get('/user/find/techs/:id', userController.findUserTechs);
+   app.get('/user/search/:nickName', userController.searchUser);
 
    // POST
    app.post('/user/add', userController.addUser);
-   app.post('/user/add/subscription', userController.addSubscription)
-   app.post('/user/add/participation', userController.addParticipation)
+   app.post('/user/add/subscription', userController.addSubscription);
+   app.post('/user/add/participation', userController.addParticipation);
+   app.post('/user/add/tech', userController.addTech);
 
    // PUT
    app.put('/user/update/:id', userController.updateUser);
@@ -38,9 +40,10 @@ module.exports = (app) => {
    // GET
    app.get('/project/list', projectController.listProject);
    app.get('/project/find/:title', projectController.findProject);
-   app.get('/project/find/updates/:id', projectController.findProjectUpdates)
-   app.get('/project/find/subscriptions/:id', projectController.findProjectSubscriptions)
-   app.get('/project/find/participations/:id', projectController.findProjectParticipations)
+   app.get('/project/find/updates/:id', projectController.findProjectUpdates);
+   app.get('/project/find/subscriptions/:id', projectController.findProjectSubscriptions);
+   app.get('/project/find/participations/:id', projectController.findProjectParticipations);
+   app.get('/project/search/:title', projectController.searchProject);
 
    // POST
    app.post('/project/add', projectController.addProject);
@@ -51,12 +54,17 @@ module.exports = (app) => {
 
    // DELETE
    app.delete('/project/delete/:id', projectController.deleteProject);
-   app.delete('/project/:id/delete/update/:date', projectController.deleteUpdate)
+   app.delete('/project/:id/delete/update/:date', projectController.deleteUpdate);
+
+   // *** UPDATES ***
+   // GET ALL UPDATES WITH PROJECT INFO
+   app.get('/project/update/list', projectController.listUpdate);
 
    // *** ADMIN ***
    // GET
    app.get('/admin/list', adminController.listAdmin); 
    app.get('/admin/find/id/:id', adminController.findAdminId);
+   app.get('/admin/search/:name', adminController.searchAdmin);
 
    // POST
    app.post('/admin/add', adminController.addAdmin);
@@ -72,6 +80,7 @@ module.exports = (app) => {
    app.get('/tech/list', techController.listTech);
    app.get('/tech/find/:name', techController.findTech);
    app.get('/tech/find/id/:id', techController.findTechId);
+   app.get('/tech/search/:name', techController.searchTech);
 
    // POST
    app.post('/tech/add', techController.addTech);

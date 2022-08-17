@@ -314,6 +314,7 @@ export default {
                 console.log(err);
             }
         },
+        
         async saveParticipation(selected_items) {
             try {
                 this.selected_users = selected_items;

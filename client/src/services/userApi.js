@@ -31,6 +31,10 @@ export default {
       return Api().get(`user/find/participations/${id}`);
     },
 
+    async getTechs (id) {
+      return Api().get(`user/find/techs/${id}`);
+    },
+
     // CREATE USER
     async saveUser(userData) {
       return Api().post('user/add', userData)
@@ -44,6 +48,11 @@ export default {
     // CREATE PART
     async saveParticipation (participations) {
       return await Api().post("user/add/participation", participations)
+    },
+
+    // CREATE TECHS
+    async saveTechs (techs) {
+      return await Api().post("user/add/tech", techs)
     },
 
     // DELETE SUBS

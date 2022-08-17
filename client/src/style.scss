@@ -14,6 +14,18 @@ html, body {
     .orange {color: rgb(255, 119, 0)}
     .greenyellow {color: greenyellow}
 
+    .border-blue {border-color: rgb(43, 152, 255)}
+    .border-purple {border-color: rgb(159, 80, 255)}
+    .border-orange {border-color: rgb(255, 119, 0)}
+    .border-green {border-color: greenyellow}
+
+    .btn-outline-green{color: greenyellow ;border-color: greenyellow}
+    .btn-outline-green:hover{color: black ;background-color: greenyellow ;border-color: greenyellow}
+
+    .bg-admin {
+        background-image: url('../public/img/admin-1.png');
+    }
+    
     .bg-light {
         background-image: url('../public/img/bg-light-speed.png');
     }
@@ -34,6 +46,45 @@ html, body {
         color: white;
         letter-spacing: 0.03em;
         word-spacing: 0.15em;
+    }
+
+    img.ship1 {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        right: 80px;
+        bottom: 45%;
+        padding: 0 2px;
+        -webkit-transform: rotate(-40deg);
+        -moz-transform: rotate(-40deg);
+        -ms-transform: rotate(-40deg);
+        transform: rotate(-40deg);
+    }
+
+    img.ship2 {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        right: 220px;
+        bottom: 55%;
+        padding: 0 2px;
+        -webkit-transform: rotate(40deg);
+        -moz-transform: rotate(40deg);
+        -ms-transform: rotate(40deg);
+        transform: rotate(40deg);
+    }
+
+    img.planet {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        right: 130px;
+        bottom: 75%;
+        padding: 0 2px;
+        -webkit-transform: rotate(20deg);
+        -moz-transform: rotate(20deg);
+        -ms-transform: rotate(20deg);
+        transform: rotate(20deg);
     }
 
     .push {
@@ -135,6 +186,31 @@ html, body {
             bottom: -5px;
             font-size: 15px;
             padding: 0 2px;
+        }
+    }
+
+    .user-container {
+        .user-photo {
+            width: 250px;
+            height: 250px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+    
+        .user-info {
+            margin: 0;
+            padding-left: 6vw;
+            position: absolute;
+            min-width: auto;
+            min-height: auto;
+        }
+
+        .user-card {
+            min-width: 500px;
+            min-height: auto;
+            padding: 10px;
+            padding-left: 60px;
         }
     }
 }

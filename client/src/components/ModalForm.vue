@@ -1,9 +1,15 @@
 <template>
 <div>
     <!-- BUTTON MODAL -->
-    <button type="button"
+    <button  v-if="type === 'user'" type="button"
         class="ms-2 btn btn-sm rounded-circle"
         :class="{ 'btn-outline-warning': title == 'suscripciones', 'btn-outline-primary': title == 'participaciones'}"
+        data-bs-toggle="modal"
+        :data-bs-target="'#' + id">
+        <i class="fa fa-plus"></i>
+    </button>
+    <button v-if="type === 'project'" type="button"
+        class="btn btn-success text-white border border-2 btn-sm rounded-circle"
         data-bs-toggle="modal"
         :data-bs-target="'#' + id">
         <i class="fa fa-plus"></i>
@@ -65,7 +71,7 @@
                         v-for="(item) in selected_items" :key="item.id"
                         type="button"
                         class="btn btn-danger btn-sm rounded-pill p-2 me-2"
-                        v-on:click="deleteItem(item.nickName, list)"
+                        v-on:click="deleteItem(item.nickName, selected_items)"
                         >
                         {{ item.nickName }} <i class="fa-solid fa-circle-xmark"></i>
                         </button>
@@ -77,7 +83,7 @@
                         v-for="(item) in selected_items" :key="item.id" 
                         type="button"
                         class="btn btn-danger btn-sm rounded-pill p-2 me-2"
-                        v-on:click="deleteItem(item.title, list)"
+                        v-on:click="deleteItem(item.title, selected_items)"
                         >
                         {{ item.title }} <i class="fa-solid fa-circle-xmark"></i>
                         </button>

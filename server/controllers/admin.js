@@ -78,4 +78,19 @@ module.exports = {
             });
         }
     },
+
+    // SEARCH
+    async searchAdmin (req, res) {
+        try {
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM admin WHERE name LIKE %:name%",
+                { replacements: { name: req.params.name } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(404).send({
+                error: 'ERROR: Admin not found -- ' + err
+            });
+        }
+    }
 };

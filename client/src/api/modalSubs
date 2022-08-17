@@ -1,3 +1,7 @@
+
+<!-- class="ms-2 btn btn-sm rounded-circle"
+:class="{ 'btn-outline-warning': title == 'suscripciones', 'btn-outline-primary': title == 'participaciones'}" -->
+
 <!-- BUTTON MODAL -->
 <button type="button" class="ms-2 btn btn-outline-warning btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#ModalSubscriptions">
   <i class="fa fa-plus"></i>

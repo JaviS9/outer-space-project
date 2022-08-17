@@ -4,12 +4,16 @@
         <div class="row">
             <div class="col">
                 <p class="h3 fw-bold">Explora los proyectos más populares</p>
-                <form>
+                <SearchBox :table="Project" @search="searchProject" />
+                <!-- <form>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Busca un proyecto">
+                                    <input type="text" class="form-control" placeholder="Busca un proyecto"
+                                        v-model="search"
+                                        onkeyup="filter(projects, search)"
+                                    >
                                 </div>
                                 <div class="col">
                                     <input type="submit" class="btn btn-outline-light" value="Buscar">
@@ -17,7 +21,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </form> -->
             </div>
         </div>
     </div>
@@ -30,6 +34,7 @@
                 class="col-md-3 p-2 d-flex flex-column border justify-content-center"
                 v-else
                 v-for="project in projects" :key="project.id"
+                :id="project.id"
             >
                 <li class="list-group">
                     <ul class="list-group-item bg-black text-white m-0 p-2 text-center">
@@ -55,29 +60,48 @@
 
 <script>
 import projectApi from '@/services/projectApi';
+import SearchBox from '@/components/SearchBox.vue';
 
 export default {
-    name:'ExploreProjects',
+    name: "ExploreProjects",
     data() {
         return {
-            projects: []
-        }
+            search: "",
+            projects: [],
+            aux_projects: []
+        };
     },
-
     created() {
-        this.getProjects()
+        this.getProjects();
     },
-
     methods: {
+        filter(list, search) {
+            let filter;
+            filter = search.value.toUpperCase();
+            for (let i = 0; i < list.length; i++) {
+                if (!list[i].title.toUpperCase().indexOf(filter) > -1) {
+                    this.aux_projects.push(list[i]);
+                    list.splice(i, 1);
+                }
+            }
+        },
+        
+        searchProject(search) {
+            this.projects = search
+        },
+
         async getProjects() {
-            try{
-                const projects = await projectApi.getProjects()
-                this.projects = projects.data.reverse()
-            } catch (err) {
+            try {
+                const projects = await projectApi.getProjects();
+                this.projects = projects.data.reverse();
+            }
+            catch (err) {
                 console.log(err);
             }
         }
-    }
+    },
+
+    components: { SearchBox }
 }
 </script>
 

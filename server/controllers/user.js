@@ -48,6 +48,17 @@ module.exports = {
             });
         }
     },
+
+    async addTech(req, res) {        
+        try{
+            const techs = await models.UserTech.bulkCreate(req.body.techs);
+            res.status(200).send(techs)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Este usuario ya participa en el proyecto'
+            });
+        }
+    },
     
     //READ ALL
     async listUser(_, res) {
@@ -88,12 +99,12 @@ module.exports = {
 
     async findUserFundedProjects (req, res) {
         try{
-            const user = await models.Project.findAll(
+            const projects = await models.User.findAll(
                 { where: { projectFounder: req.params.id }});
-            res.status(200).send(user)
+            res.status(200).send(projects)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Projectsfunded not found -- ' + err
+                error: 'ERROR: Projectfunded not found -- ' + err
             });
         }
     },
@@ -101,7 +112,7 @@ module.exports = {
     async findUserSubscriptions (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM subscription JOIN project ON project.id = subscription.idProject WHERE subscription.idUser = :id",
+                "SELECT * FROM subscription JOIN project ON project.id = subscription.idUser WHERE subscription.idUser = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
@@ -115,7 +126,21 @@ module.exports = {
     async findUserParticipations (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM participation JOIN project ON project.id = participation.idProject WHERE participation.idUser = :id",
+                "SELECT * FROM participation JOIN project ON project.id = participation.idUser WHERE participation.idUser = :id",
+                { replacements: { id: req.params.id } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participations not found -- ' + err
+            });
+        }
+    },
+
+    async findUserTechs (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM usertech JOIN tech ON tech.id = usertech.idTech WHERE usertech.idUser = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
@@ -184,7 +209,7 @@ module.exports = {
             const subscription = await models.Subscription.destroy(
                 { where: {
                     [Op.and] : [
-                        { idProject: req.params.idProject },
+                        { idUser: req.params.idUser },
                         { idUser: req.params.idUser }
                     ]
                 }} );
@@ -201,7 +226,7 @@ module.exports = {
             const participation = await models.Participation.destroy(
                 { where: {
                     [Op.and] : [
-                        { idProject: req.params.idProject },
+                        { idUser: req.params.idUser },
                         { idUser: req.params.idUser }
                     ]
                 }} );
@@ -212,4 +237,19 @@ module.exports = {
             });
         }
     },
+
+    // SEARCH
+    async searchUser (req, res) {
+        try {
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM user WHERE nickName LIKE %:nickName%",
+                { replacements: { nickName: req.params.nickName } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(404).send({
+                error: 'ERROR: User not found -- ' + err
+            });
+        }
+    }
 };

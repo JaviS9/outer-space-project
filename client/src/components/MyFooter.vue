@@ -13,7 +13,7 @@
       </div>
       <div class="row d-flex justify-content-center align-items-center text-center mx-5 my-0 border-top p-0">
         <router-link v-if="$store.state.isAdminLoggedIn === true" to="/manager" class="p-2 nav-link active d-flex align-items-center justify-content-center" aria-current="page">
-          <p class="me-1 my-0">Copyright</p><i class="fa-regular fa-copyright"></i><p class="ms-2 my-0">2022 OUTER SPACE PROJECT <span class="text-warning">Manager</span>, All rights reserved</p>
+          <p class="me-1 my-0">Copyright</p><i class="fa-regular fa-copyright"></i><p class="ms-2 my-0">2022 OUTER SPACE PROJECT <span class="orange">Manager</span>, All rights reserved</p>
         </router-link>
         <router-link v-else to="/" class="p-2 nav-link active d-flex align-items-center justify-content-center" aria-current="page">
           <p class="me-1 my-0">Copyright</p><i class="fa-regular fa-copyright"></i><p class="ms-2 my-0">2022 OUTER SPACE PROJECT, All rights reserved</p>

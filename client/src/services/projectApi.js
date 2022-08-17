@@ -49,5 +49,15 @@ export default {
     // DELETE UPDATE
     deleteUpdate (idProject, date) {
         return Api().delete(`http://localhost:5000/project/${idProject}/delete/update/${date}`)
-    }
+    },
+
+    // GET ALL UPDATES
+    listAllUpdates () {
+        return Api().get('project/update/list');
+    },
+
+    // SEARCH
+    searchProject(title) {
+        return Api().get(`project/search/${title}`)
+    },
 }

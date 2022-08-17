@@ -99,7 +99,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   {
     path: '/manager/admins/profile/:id',
     name: 'ViewAdmin',
@@ -107,7 +108,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   {
     path: '/manager/admins/add',
     name: 'AddAdmin',
@@ -115,7 +117,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   {
     path: '/manager/admins/edit/:id',
     name: 'EditAdmin',
@@ -123,7 +126,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   // *** TECH ROUTES ***
   {
     path: '/manager/techs',
@@ -132,7 +136,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   {
     path: '/manager/techs/add',
     name: 'AddTech',
@@ -140,7 +145,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   {
     path: '/manager/techs/edit/:tech_name',
     name: 'EditTech',
@@ -148,7 +154,8 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
   // *** SUBSCRIPTION ***
   {
     path: '/manager/subscription/user/:nickName/project/:title',
@@ -157,7 +164,36 @@ const routes = [
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
       else next()
-    }, },
+    },
+  },
+  // *** USER ROUTES (SEMI-PRIVATE) *** 
+  {
+    path: '/myprofile',
+    name: 'MyProfile',
+    component: () => import('../views/user/MyProfile.vue'),
+      beforeEnter: (to, from, next) => {
+      if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn) ) next({ name: 'LoginRegister' })
+      else next()
+    },
+  },
+  {
+    path: '/myprojects',
+    name: 'MyProjects',
+    component: () => import('../views/user/MyProjects.vue'),
+      beforeEnter: (to, from, next) => {
+      if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
+      else next()
+    },
+  },
+  {
+    path: '/subscribe/:title',
+    name: 'ToSubscribe',
+    component: () => import('../views/user/ToSubscribe.vue'),
+      beforeEnter: (to, from, next) => {
+      if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
+      else next()
+    },
+  },
   // *** PUBLIC ROUTES ***
   {
     path: '/',
@@ -175,9 +211,24 @@ const routes = [
     component: () => import('../views/public/ExploreProjects.vue')
   },
   {
+    path: '/news',
+    name: 'NewsProjects',
+    component: () => import('../views/public/NewsProjects.vue')
+  },
+  {
     path: '/about',
     name: 'AboutView',
     component: () => import('../views/public/AboutView.vue')
+  },
+  {
+    path: '/project/:title',
+    name: 'Project',
+    component: () => import('../views/public/ProjectPage.vue')
+  },
+  {
+    path: '/user/:nickName',
+    name: 'User',
+    component: () => import('../views/public/UserProfile.vue')
   },
   {
     path: '/:pathMatch(.*)*',

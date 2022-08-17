@@ -3,7 +3,7 @@
     <div class="container-fluid px-3">
       <router-link  v-if="$store.state.isAdminLoggedIn" to="/manager" class="navbar-brand me-5">
           <img class="logo-icon" src="../assets/logo.png" alt="logo">OUTER SPACE PROJECT
-          <span class="fw-bold text-warning">Manager</span>
+          <span class="fw-bold orange">Manager</span>
       </router-link>
       <router-link  v-else to="/" class="navbar-brand me-5">
           <img class="logo-icon" src="../assets/logo.png" alt="logo">OUTER SPACE PROJECT
@@ -43,16 +43,41 @@
               class="nav-link active btn btn-sm border rounded-pill btn-success p-2" 
               aria-current="page">Comenzar
             </router-link>
-            <router-link v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn"
-              type="button" to="/"
-              class="nav-link active btn btn-sm border rounded-pill p-2 orange"
-              aria-current="page"><i class="fa-solid fa-user-astronaut me-1"></i>Perfil
-            </router-link>
-            <button v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn "
-              type="button" v-on:click="shutSession"
-              class="nav-link active btn btn-sm border rounded-pill btn-danger p-2 ms-2"
-              aria-current="page">Cerrar Sesión
-            </button>
+            <div class="btn-group" v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn">
+              <button v-if="$store.state.isUserLoggedIn" type="button"
+                class="btn btn-sm border border-3 rounded-circle p-2 dropdown-toggle imagePreview__mini-image"
+                :style="{ 'background-image': `url(${$store.state.user.photo})` }"
+                data-bs-toggle="dropdown" aria-expanded="false">
+              </button>
+              <button v-if="$store.state.isAdminLoggedIn" type="button"
+                class="btn btn-sm bg-admin border border-3 rounded-circle p-2 text-white dropdown-toggle imagePreview__mini-image"
+                data-bs-toggle="dropdown" aria-expanded="false">
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end bg-black text-white border border-2">
+                <li>
+                  <router-link 
+                    type="button" to="/myprofile"
+                    class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
+                    aria-current="page">Mi perfil
+                  </router-link>
+                </li>
+                <li v-if="$store.state.isUserLoggedIn">
+                  <router-link 
+                    type="button" to="/myprojects"
+                    class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
+                    aria-current="page">Mis proyectos
+                  </router-link>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="nav-link active pb-2 flex-column d-flex align-items-center justify-content-center">
+                  <button
+                    type="submit" v-on:click="shutSession"
+                    class="nav-link active btn btn-sm border rounded-pill btn-danger p-2"
+                    aria-current="page">Cerrar Sesión
+                  </button>
+                </li>
+              </ul>
+            </div>
         </div>
       </div>
     </div>

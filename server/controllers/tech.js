@@ -83,5 +83,20 @@ module.exports = {
                 error: 'ERROR: Tech not deleted -- ' + err
             });
         }
-    },    
+    },
+
+    // SEARCH
+    async searchTech (req, res) {
+        try {
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM tech WHERE name LIKE %:name%",
+                { replacements: { name: req.params.name } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(404).send({
+                error: 'ERROR: Tech not found -- ' + err
+            });
+        }
+    }
 };
