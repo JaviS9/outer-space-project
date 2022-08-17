@@ -4,24 +4,7 @@
         <div class="row">
             <div class="col">
                 <p class="h3 fw-bold">Explora los proyectos más populares</p>
-                <SearchBox :table="Project" @search="searchProject" />
-                <!-- <form>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Busca un proyecto"
-                                        v-model="search"
-                                        onkeyup="filter(projects, search)"
-                                    >
-                                </div>
-                                <div class="col">
-                                    <input type="submit" class="btn btn-outline-light" value="Buscar">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form> -->
+                <SearchBox :table="'Project'" @search="searchProject" />
             </div>
         </div>
     </div>

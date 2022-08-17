@@ -1,4 +1,5 @@
 const models = require('../models');
+const { sequelize } = require('../models');
 
 module.exports = {
     //CREATE
@@ -89,8 +90,8 @@ module.exports = {
     async searchTech (req, res) {
         try {
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM tech WHERE name LIKE %:name%",
-                { replacements: { name: req.params.name } }
+                "SELECT * FROM tech WHERE name LIKE :name",
+                { replacements: { name: '%' + req.params.name + '%' } }
               );
             res.status(200).send(results)
         } catch (err) {

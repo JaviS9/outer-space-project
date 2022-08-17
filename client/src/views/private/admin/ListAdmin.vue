@@ -11,20 +11,7 @@
           </router-link>
         </p>
         <p>Listado de administradores.</p>
-        <form>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col">
-                  <input type="text" class="form-control" placeholder="Busca un administrador" v-model="admin_search">
-                </div>
-                <div class="col">
-                  <input type="submit" class="btn btn-outline-light" value="Buscar" @click="searchAdmin">
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+        <SearchBox :table="'Admin'" @search="searchAdmin" />
       </div>
     </div>
   </div>
@@ -81,19 +68,44 @@
         </div>
       </div>
     </div>
+    <!-- PAGES -->
+    <div class="row-flex d-flex mb-5 align-items-center justify-content-center bg-black">
+      <button type="button"
+        class="button-page" :disabled="current <= 1"
+        v-on:click="prevPage()"
+      ><i class="fa-solid fa-caret-left"></i>
+      </button>
+
+      <button v-for="(index) in numPages" :key="index" 
+        type="button"
+        class="button-page"
+        v-on:click="changePage(index)"
+      ><i class="fa-solid" :class="'fa-' + index"></i>
+      </button>
+
+      <button type="button"
+        class="button-page" :disabled="current >= numPages"
+        v-on:click="nextPage()"
+      ><i class="fa-solid fa-caret-right"></i>
+      </button>
+    </div>
+    <!--  -->
   </div>
 </div>
 </template>
 
 <script>
 import adminApi from '@/services/adminApi';
+import SearchBox from '@/components/SearchBox.vue';
 
 export default {
   name: "ListAdmin",
   data() {
     return {
       admins: [],
-      admin_search: ""
+      admin_search: "",
+      pageSize: 9,
+      current: 1
     };
   },
  
@@ -101,8 +113,43 @@ export default {
     this.getAdmins();
   },
 
+  computed: {
+    numPages() {
+      var res = Math.floor(this.admins.length/this.pageSize);
+      // var res = Math.round(n + 0,49)
+      if(res > 10) { res = 10 }
+      console.log(res)
+      return res + 1
+    },
+    indexStart() {
+      return (this.current - 1) * this.pageSize;
+    },
+    indexEnd() {
+      return this.indexStart + this.pageSize;
+    },
+    paginated() {
+      return this.admins.slice(this.indexStart, this.indexEnd);
+    }
+  },
+
+  components: {
+    SearchBox,
+  },
+
   methods: {
 
+    changePage(index) {
+      this.current = index
+    },
+
+    prevPage () {
+      this.current--
+    },
+
+    nextPage () {
+      this.current++
+    },
+    
     //LIST ALL
     async getAdmins() {
       try {
@@ -125,14 +172,8 @@ export default {
       }
     },
 
-    async searchAdmin() {
-      try {
-        const response = await adminApi.searchAdmin(this.admin_search);
-        this.admins = response.data;
-        console.log(this.admins)
-      } catch (err) {
-        console.log(err);
-      }
+    searchAdmin(search) {
+      this.admins = search
     }
   },
 };

@@ -11,20 +11,7 @@
           </router-link>
         </p>
         <p>Listado de usuarios.</p>
-        <form>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col">
-                  <input type="text" class="form-control" placeholder="Busca un usuario" v-model="user_search">
-                </div>
-                <div class="col">
-                  <input type="submit" class="btn btn-outline-light" value="Buscar" @click="searchUser">
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+        <SearchBox :table="'User'" @search="searchUser" />
       </div>
     </div>
   </div>
@@ -34,9 +21,9 @@
         <p class="h5 text-danger mt-5">No se han encontrado usuarios</p>
       </div>
       <div 
-      class="col-md-4 p-4 d-flex flex-column align-items-center justify-content-center"
-      v-else
-      v-for="user in users" :key="user.id"
+        class="col-md-4 p-4 d-flex flex-column align-items-center justify-content-center"
+        v-else
+        v-for="(user, index) in paginated" :key="index"
       >
         <div class="card mx-4 border-light bg-black" style="width: 350px;">
           <div class="card-body p-0 text-center">
@@ -92,19 +79,44 @@
         </div>
       </div>
     </div>
+    <!-- PAGES -->
+    <div class="row-flex d-flex mb-5 align-items-center justify-content-center bg-black">
+      <button type="button"
+        class="button-page" :disabled="current <= 1"
+        v-on:click="prevPage()"
+      ><i class="fa-solid fa-caret-left"></i>
+      </button>
+
+      <button v-for="(index) in numPages" :key="index" 
+        type="button"
+        class="button-page"
+        v-on:click="changePage(index)"
+      ><i class="fa-solid" :class="'fa-' + index"></i>
+      </button>
+
+      <button type="button"
+        class="button-page" :disabled="current >= numPages"
+        v-on:click="nextPage()"
+      ><i class="fa-solid fa-caret-right"></i>
+      </button>
+    </div>
+    <!--  -->
   </div>
 </div>
 </template>
 
 <script>
 import userApi from "@/services/userApi";
+import SearchBox from "@/components/SearchBox.vue";
 
 export default {
   name: "ListUser",
   data() {
     return {
       users: [],
-      user_search: ""
+      user_search: "",
+      pageSize: 9,
+      current: 1
     };
   },
  
@@ -112,7 +124,46 @@ export default {
     this.getUsers();
   },
 
+  computed: {
+    numPages() {
+      var res = Math.floor(this.users.length/this.pageSize);
+      // var res = Math.round(n + 0,49)
+      if(res > 10) { res = 10 }
+      console.log(res)
+      return res + 1
+    },
+    indexStart() {
+      return (this.current - 1) * this.pageSize;
+    },
+    indexEnd() {
+      return this.indexStart + this.pageSize;
+    },
+    paginated() {
+      return this.users.slice(this.indexStart, this.indexEnd);
+    }
+  },
+
+  components: {
+    SearchBox,
+  },
+
   methods: {
+    changePage(index) {
+      this.current = index
+    },
+
+    prevPage () {
+      this.current--
+    },
+
+    nextPage () {
+      this.current++
+    },
+
+    getImage(name) {
+      return "../../../../public/img/" + name + ".png";
+    },
+
     async getUsers() {
       try{
         const users = await userApi.getUsers()
@@ -133,14 +184,8 @@ export default {
       }
     },
 
-    async searchUser() {
-      try {
-        const users = await userApi.searchUser(this.user_search)
-        this.users = users.data.reverse();
-        console.log(this.users)
-      } catch (err) {
-        console.log(err);
-      }
+    searchUser(search) {
+      this.users = search
     }
   },
 };

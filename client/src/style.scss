@@ -19,6 +19,8 @@ html, body {
     .border-orange {border-color: rgb(255, 119, 0)}
     .border-green {border-color: greenyellow}
 
+    .bg-grey { background-color: #999999;}
+
     .btn-outline-green{color: greenyellow ;border-color: greenyellow}
     .btn-outline-green:hover{color: black ;background-color: greenyellow ;border-color: greenyellow}
 
@@ -211,6 +213,47 @@ html, body {
             min-height: auto;
             padding: 10px;
             padding-left: 60px;
+        }
+    }
+
+    .button-page {
+        width: 36px;
+        background-color: black;
+        border-radius: 50%;
+        border: 2px solid white;
+        color: white;
+        padding: 5px;
+        margin-right: 10px;
+    }
+
+    .button-page:hover {
+        color: orange;
+        border: 2px solid orange;
+    }
+
+    .button-page:disabled {
+        border: 2px solid #999999;
+        background: black;
+        color: #666666;
+    }
+
+    .container-x {
+        position: relative;
+        top: -34px;
+        background-color: transparent;
+        width: auto;
+        
+        #search-x {
+            border: 0;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            background-color: transparent;
+            color: black;
+
+            :hover {
+                color: orange;
+            }
         }
     }
 }

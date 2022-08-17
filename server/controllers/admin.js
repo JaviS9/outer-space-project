@@ -83,8 +83,8 @@ module.exports = {
     async searchAdmin (req, res) {
         try {
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM admin WHERE name LIKE %:name%",
-                { replacements: { name: req.params.name } }
+                "SELECT * FROM admin WHERE name LIKE :name",
+                { replacements: { name: '%' + req.params.name + '%' } }
               );
             res.status(200).send(results)
         } catch (err) {

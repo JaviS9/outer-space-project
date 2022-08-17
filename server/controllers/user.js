@@ -242,8 +242,8 @@ module.exports = {
     async searchUser (req, res) {
         try {
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM user WHERE nickName LIKE %:nickName%",
-                { replacements: { nickName: req.params.nickName } }
+                "SELECT * FROM user WHERE nickName LIKE :nickName",
+                { replacements: { nickName: '%' + req.params.nickName + '%' } }
               );
             res.status(200).send(results)
         } catch (err) {

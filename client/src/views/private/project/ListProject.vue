@@ -10,20 +10,7 @@
           </router-link>
         </p>
         <p>Listado de proyectos.</p>
-        <form>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col">
-                  <input type="text" class="form-control" placeholder="Busca un proyecto">
-                </div>
-                <div class="col">
-                  <input type="submit" class="btn btn-outline-light" value="Buscar">
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+        <SearchBox :table="'Project'" @search="searchProject" />
       </div>
     </div>
   </div>
@@ -74,18 +61,43 @@
             </div>
         </div>
     </div>
+    <!-- PAGES -->
+      <div class="row-flex d-flex mb-5 align-items-center justify-content-center bg-black">
+        <button type="button"
+          class="button-page" :disabled="current <= 1"
+          v-on:click="prevPage()"
+        ><i class="fa-solid fa-caret-left"></i>
+        </button>
+
+        <button v-for="(index) in numPages" :key="index"
+          type="button"
+          class="button-page" 
+          v-on:click="changePage(index)"
+        ><i class="fa-solid" :class="'fa-' + index"></i>
+        </button>
+
+        <button type="button"
+          class="button-page" :disabled="current >= numPages"
+          v-on:click="nextPage()"
+        ><i class="fa-solid fa-caret-right"></i>
+        </button>
+      </div>
+      <!--  -->
   </div>
 </div>
 </template>
 
 <script>
 import projectApi from "@/services/projectApi";
+import SearchBox from "@/components/SearchBox.vue";
 
 export default {
     name: "ListProject",
     data() {
     return {
       projects: [],
+      pageSize: 5,
+      current: 1
     };
   },
  
@@ -93,7 +105,42 @@ export default {
     this.getProjects();
   },
 
+  computed: {
+    numPages() {
+      var res = Math.floor(this.projects.length/this.pageSize);
+      // var res = Math.round(n + 0,49)
+      if(res > 10) { res = 10 }
+      console.log(res)
+      return res + 1
+    },
+    indexStart() {
+      return (this.current - 1) * this.pageSize;
+    },
+    indexEnd() {
+      return this.indexStart + this.pageSize;
+    },
+    paginated() {
+      return this.projects.slice(this.indexStart, this.indexEnd);
+    }
+  },
+
+  components: {
+    SearchBox,
+  },
+  
   methods: {
+
+    changePage(index) {
+      this.current = index
+    },
+
+    prevPage () {
+      this.current--
+    },
+
+    nextPage () {
+      this.current++
+    },
 
     //LIST ALL
     async getProjects() {
@@ -116,6 +163,10 @@ export default {
         console.log(err);
       }
     },
+
+    searchProject (search) {
+      this.projects = search
+    }
     
   }
 }

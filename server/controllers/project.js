@@ -176,8 +176,8 @@ module.exports = {
     async searchProject (req, res) {
         try {
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM project WHERE title LIKE %:title%",
-                { replacements: { title: req.params.title } }
+                "SELECT * FROM project WHERE title LIKE :title",
+                { replacements: { title: '%' + req.params.title + '%' } }
               );
             res.status(200).send(results)
         } catch (err) {
