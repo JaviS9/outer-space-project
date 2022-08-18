@@ -9,21 +9,25 @@
     </div>
   </div>
   <div class="container mt-5 border-bottom border-1">
-    <div class="row">
+    <div class="row-flex d-flex align-items-center justify-content-center">
       <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <div class="imagePreview__icon-image-big" :style="{ 'background-image': `url(${previewImage})` }"></div>
+        <div class="imagePreview__icon-image-big border border-3" :style="{ 'background-image': `url(${previewImage})` }"></div>
       </div>
-      <div class="col-md-8 align-items-center justify-content-center">
+      <div class="col-md-6 align-items-center justify-content-center">
         <div class="row">
           <div class="card bg-black align-self-center"></div>
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <div class="card blockquote p-3 border-light border-2 rounded-circle bg-black text-center justify-content-center" style="width: 220px; height: 220px;">
+                <div class="card blockquote p-3 border border-3 rounded-circle bg-black text-center justify-content-center"
+                  style="width: 220px; height: 220px;"
+                >
                   <span class="card-title mb-0">Suscripciones</span>
                   <p class="number-score mt-0">{{num_subscriptions}}</p>
                 </div>              
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-              <div class="card blockquote p-3 border-light border-2 rounded-circle bg-black text-center justify-content-center" style="width: 220px; height: 220px;">
+              <div class="card blockquote p-3 border border-3 rounded-circle bg-black text-center justify-content-center"
+                style="width: 220px; height: 220px;"
+              >
                 <span class="card-title mb-0">Donaciones</span>
                 <p class="number-score mt-0">{{donations}}</p>
               </div>
@@ -34,13 +38,15 @@
                   <ul class="list-group-item bg-black text-center mt-4"><p class="text-danger">No hay datos</p></ul>
                 </li>
                 <li class="list-group" v-else>
-                  <ul class="list-group-item text-white border bg-black mb-2 pb-0 pt-3">
-                    <p class="mb-5">{{project.description}}</p>
-                    <p v-if="founder === null"><span class="fw-bold"> Fundador: </span>No hay datos</p>
-                    <p v-else><span class="fw-bold"> Fundador: </span>{{founder.nickName}}</p>
-                    <p><span class="fw-bold"> Repositorio: </span>{{project.repository}}</p>
+                  <ul class="list-group-item text-white border border-3 bg-black mb-2 pb-0 pt-3">
+                    <p><span class="fw-bold"> Fundador: </span>{{founder.nickName}}</p>
+                    <p v-if="project.repository"><span class="fw-bold"> Repositorio: </span>{{project.repository}}</p>
+                    <div class="border-top border-1"></div>
+                    <p v-if="project.description" class="mt-2 mb-3">{{project.description}}</p>
                   </ul>
-                  <ul class="list-group-item text-white bg-black m-0 pb-0 border"><p>Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p></ul>
+                  <ul class="list-group-item text-white border border-3 bg-black m-0 pb-0 border">
+                    <p>Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p>
+                  </ul>
                 </li>
               </div>
             </div>
@@ -381,6 +387,7 @@ export default {
                 console.log(err);
             }
         },
+        
         // HELPERS
         formatDate(date) {
             return moment(date).fromNow();

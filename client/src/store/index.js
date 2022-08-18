@@ -7,7 +7,7 @@ export default createStore({
     user: null,
     admin: null,
     isUserLoggedIn: false,
-    isAdminLoggedIn: false
+    isAdminLoggedIn: false,
   },
   getters: {
   },
@@ -30,7 +30,7 @@ export default createStore({
     },
     setAdmin(state, admin) {
       state.admin = admin
-    }
+    },
   },
   actions: {
     setToken({commit}, token) {
@@ -41,7 +41,7 @@ export default createStore({
     },
     setAdmin({commit}, admin) {
       commit('setAdmin', admin)
-    }
+    },
   },
   modules: {
   }

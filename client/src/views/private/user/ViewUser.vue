@@ -8,10 +8,9 @@
     </div>
   </div>
   <div class="container border-bottom mt-3">
-    <!-- USER INFO -->
-    <div class="row mb-3 py-3">
-      <UserCard :user="user"/>
-    </div>
+    <!-- USER CARD -->
+    <UserCard :user="user" />
+    <!--  -->
     <div class="row mb-3">
       <div class="col">
         <router-link to="/manager/users" type="button" class="btn btn-outline-light">
@@ -182,6 +181,7 @@ export default {
       previewImage: null,
       projects: [],
       selected_projects: [],
+      techs: [],
       subscriptions: [],
       projectsFunded: [],
       participations: []
@@ -205,12 +205,22 @@ export default {
         const response = await userApi.getUser(this.$route.params.nickName);
         this.user = response.data[0];
         this.previewImage = this.user.photo
+        this.getTechs(this.user.id)
         this.getSubscriptions(this.user.id);
         this.getFundedProjects(this.user.id);
         this.getParticipations(this.user.id);
       } catch (err) {
         console.log(err);
       }
+    },
+
+    async getTechs(id) {
+        try {
+            const techs = await userApi.getTechs(id)
+            this.techs = techs.data
+        } catch (err) {
+            console.log(err)
+        }
     },
 
     async getProjects() {
@@ -263,7 +273,6 @@ export default {
         }, {
           headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
-
         console.log(response.data)
         this.selected_projects = [];
         window.location.reload();

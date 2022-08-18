@@ -13,7 +13,7 @@
         <form>
           <p>Rellena el formulario para actualizar los datos del proyecto.</p>
           <div class="row mb-2">
-            <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
+            <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Titulo:</label>
             </div>
             <div class="col-sm-9">
@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="row mb-2">
-            <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
+            <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Descripción:</label>
             </div>
             <div class="col-sm-9">
@@ -29,7 +29,7 @@
             </div>
           </div>
           <div class="row mb-2">
-            <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
+            <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Repositorio:</label>
             </div>
             <div class="col-sm-9">
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="row mb-2">
-            <div class="col-sm-3 d-flex flex-column align-items-start justify-content-center">
+            <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Foto:</label>
             </div>
             <div class="col-sm-9">
@@ -45,16 +45,16 @@
             </div>
           </div>
           <hr>
-          <div class="my-2">
-            <div class="d-flex flex-row mb-3">
-                <p class="me-3">Añade al fundador del proyecto: </p>
+          <div class="m-0 p-0">
+            <div class="row-flex d-flex align-items-center justify-content-start py-3">
+                <p class="me-3 p-0 my-0">Añade al fundador del proyecto: </p>
                 <p v-if="founder === null" class="text-danger">No seleccionado</p>
                 <button v-else 
                   type="button"
                   class="btn btn-danger btn-md rounded-pill p-2"
                   v-on:click="deleteFounder"
                 >
-                  {{ founder.nickName }} <i class="fa-solid fa-circle-xmark"></i>
+                  {{ founder.nickName }}<i class="fa-solid fa-circle-xmark"></i>
                 </button>
             </div>
             <div class="row">
@@ -70,7 +70,7 @@
                   </option>
                 </select>
               </div>
-              <div class="col-md-1 ms-4 d-flex justify-content-center">
+              <div class="col-md-1 ms-2 d-flex justify-content-center">
                 <button
                   type="button"
                   class="btn btn-md btn-outline-success rounded-circle"

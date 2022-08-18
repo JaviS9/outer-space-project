@@ -55,7 +55,7 @@ module.exports = {
             res.status(200).send(techs)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Este usuario ya participa en el proyecto'
+                error: 'ERROR: Esta tecnología ya la tiene el usuario'
             });
         }
     },
@@ -99,7 +99,7 @@ module.exports = {
 
     async findUserFundedProjects (req, res) {
         try{
-            const projects = await models.User.findAll(
+            const projects = await models.Project.findAll(
                 { where: { projectFounder: req.params.id }});
             res.status(200).send(projects)
         } catch (err) {
@@ -112,7 +112,7 @@ module.exports = {
     async findUserSubscriptions (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM subscription JOIN project ON project.id = subscription.idUser WHERE subscription.idUser = :id",
+                "SELECT * FROM subscription JOIN project ON project.id = subscription.idProject WHERE subscription.idUser = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
@@ -126,7 +126,7 @@ module.exports = {
     async findUserParticipations (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM participation JOIN project ON project.id = participation.idUser WHERE participation.idUser = :id",
+                "SELECT * FROM participation JOIN project ON project.id = participation.idProject WHERE participation.idUser = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
@@ -174,7 +174,7 @@ module.exports = {
         }
     },
 
-    //UPDATE STAUS
+    //UPDATE STATUS
     async updateUserStatus (req, res) {
         try {
             const user = await models.User.update({
@@ -210,7 +210,7 @@ module.exports = {
                 { where: {
                     [Op.and] : [
                         { idUser: req.params.idUser },
-                        { idUser: req.params.idUser }
+                        { idProject: req.params.idProject }
                     ]
                 }} );
             res.status(200).send("SUCCESS: Subscription deleted")
@@ -227,13 +227,30 @@ module.exports = {
                 { where: {
                     [Op.and] : [
                         { idUser: req.params.idUser },
-                        { idUser: req.params.idUser }
+                        { idProject: req.params.idProject }
                     ]
                 }} );
             res.status(200).send("SUCCESS: Participation deleted")
         } catch (err) {
             res.status(400).send({
                 error: 'ERROR: Participation not deleted -- ' + err
+            });
+        }
+    },
+
+    async deleteTech (req, res) {
+        try {
+            const tech = await models.UserTech.destroy(
+                { where: {
+                    [Op.and] : [
+                        { idUser: req.params.idUser },
+                        { idTech: req.params.idTech }
+                    ]
+                }} );
+            res.status(200).send("SUCCESS: Tech deleted")
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Tech not deleted -- ' + err
             });
         }
     },

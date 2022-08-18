@@ -35,6 +35,7 @@ module.exports = (app) => {
    app.delete('/user/delete/:id', userController.deleteUser);
    app.delete('/user/:idUser/delete/subscription/:idProject', userController.deleteSubscription);
    app.delete('/user/:idUser/delete/participation/:idProject', userController.deleteParticipation);
+   app.delete('/user/:idUser/delete/tech/:idTech', userController.deleteTech);
 
    // *** PROJECT ***
    // GET

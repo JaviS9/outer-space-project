@@ -64,6 +64,11 @@ export default {
     async deleteParticipation(idUser, idProject) {
       return await Api().delete(`user/${idUser}/delete/participation/${idProject}`);
     },
+
+    // DELETE TECH
+    async deleteTech(idUser, idTech) {
+      return await Api().delete(`user/${idUser}/delete/tech/${idTech}`);
+    },
     
     // UPDATE USER
     updateUser(id, userData) {

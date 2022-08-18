@@ -37,6 +37,28 @@
                 </li>
             </div>
         </div>
+        <!-- PAGES -->
+        <div class="row-flex d-flex my-5 align-items-center justify-content-center bg-black">
+        <button type="button"
+            class="button-page" :disabled="current <= 1"
+            v-on:click="prevPage()"
+        ><i class="fa-solid fa-caret-left"></i>
+        </button>
+
+        <button v-for="(index) in numPages" :key="index" 
+            type="button"
+            class="button-page"
+            v-on:click="changePage(index)"
+        ><i class="fa-solid" :class="'fa-' + index"></i>
+        </button>
+
+        <button type="button"
+            class="button-page" :disabled="current >= numPages"
+            v-on:click="nextPage()"
+        ><i class="fa-solid fa-caret-right"></i>
+        </button>
+        </div>
+        <!--  -->
     </div>
   </div>
 </template>
@@ -51,13 +73,48 @@ export default {
         return {
             search: "",
             projects: [],
-            aux_projects: []
+            aux_projects: [],
+            pageSize: 12,
+            current: 1
         };
     },
     created() {
         this.getProjects();
     },
+
+    computed: {
+        numPages() {
+        var res = Math.floor(this.projects.length/this.pageSize);
+        // var res = Math.round(n + 0,49)
+        if(res > 10) { res = 10 }
+        console.log(res)
+        return res + 1
+        },
+        indexStart() {
+        return (this.current - 1) * this.pageSize;
+        },
+        indexEnd() {
+        return this.indexStart + this.pageSize;
+        },
+        paginated() {
+        return this.projects.slice(this.indexStart, this.indexEnd);
+        }
+    },
+
     methods: {
+
+        changePage(index) {
+            this.current = index
+        },
+
+        prevPage () {
+            this.current--
+        },
+
+        nextPage () {
+            this.current++
+        },
+
         filter(list, search) {
             let filter;
             filter = search.value.toUpperCase();

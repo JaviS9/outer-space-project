@@ -2,22 +2,14 @@
 <div class="router-view">
   <div class="container mt-3">
     <div class="row">
-      <div class="col">
-        <p class="h3 fw-bold">Edita los datos del usuario</p>
-      </div>
-    </div>
-  </div>
-  <div class="container mt-3">
-    <div class="row">
       <div class="col-md-6">
         <form>
-          <p>Actualizar datos del usuario.</p>
           <div class="row mb-2">
             <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Email:</label>
             </div>
             <div class="col-sm-10">
-              <input type="email" class="form-control" :placeholder="user.email" v-model="user.email">
+              <input type="email" class="form-control" :placeholder="user.email" v-model="email">
             </div>
           </div>
           <div class=" row mb-2">
@@ -25,7 +17,7 @@
               <label>Nombre:</label>
             </div>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :placeholder="user.name" v-model="user.name">
+              <input type="text" class="form-control" :placeholder="user.name" v-model="name">
             </div>
           </div>
           <div class=" row mb-2">
@@ -33,23 +25,23 @@
               <label>Apellidos:</label>
             </div>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :placeholder="user.lastName" v-model="user.lastName">
+              <input type="text" class="form-control" :placeholder="user.lastName" v-model="lastName">
             </div>
           </div>
-          <div class=" row mb-2">
+          <div v-if="$store.state.isUserLoggedIn" class=" row mb-2">
             <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Nickname:</label>
             </div>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :placeholder="user.nickName" v-model="user.nickName">
+              <input type="text" class="form-control" :placeholder="user.nickName" v-model="nickName">
             </div>
           </div>
-          <div class="row mb-2">
+          <div v-if="$store.state.isUserLoggedIn" class="row mb-2">
             <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Biografía:</label>
             </div>
             <div class="col-sm-10">
-              <textarea class="form-control" rows="3" :placeholder="user.biography" v-model="user.biography"></textarea>
+              <textarea class="form-control" rows="3" :placeholder="user.biography" v-model="biography"></textarea>
             </div>
           </div>
           <!-- <div class="mb-2">
@@ -57,20 +49,20 @@
               @change="updatePhoto($event.target.files)"
               @input="pickFile">
           </div> -->
-           <div class="row mb-2">
+           <div v-if="$store.state.isUserLoggedIn" class="row mb-2">
             <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Foto:</label>
             </div>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :placeholder="user.photo" v-model="user.photo" @input="getImage">
+              <input type="text" class="form-control" :placeholder="user.photo" v-model="photo">
             </div>
           </div>
           <div class="row mb-2">
-            <div class="col-sm-2 d-flex flex-column align-items-start justify-content-top">
-              <label class="mt-3">Tecnologías:</label>
+            <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
+              <label>Tecnologías:</label>
             </div>
             <!-- TECHS -->
-            <div class="col-sm-10">
+            <div v-if="$store.state.isUserLoggedIn" class="col-sm-10">
               <div class="row-flex d-flex align-items-center my-2">
                 <select
                   class="mdb-select md-form form-control"
@@ -112,10 +104,10 @@
           <hr>
           <p>Cambiar contraseña.</p>
           <div class="mb-2">
-              <input name="password" autocomplete="on" type="password" class="form-control" placeholder="Nueva contraseña" v-model="password">
+              <input name="password" autocomplete="off" type="password" class="form-control" placeholder="Nueva contraseña" v-model="pass">
           </div>
           <div class="mb-2">
-              <input name="repeat_password" autocomplete="on" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+              <input name="repeat_password" autocomplete="off" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
           </div>
           <div class="mb-2 mt-3">
             <!-- BUTTON -->
@@ -125,7 +117,7 @@
       </div>
       <div class="col-md-3 d-flex flex-column justify-content-top align-items-center">
         <!-- FOTO -->
-        <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
+        <div class="imagePreview__user-image" :style="{ 'background-image': `url(${photo})` }"></div>
       </div>
     </div>
   </div>
@@ -134,6 +126,7 @@
 
 <script>
 import userApi from '@/services/userApi';
+import adminApi from '@/services/adminApi';
 import techApi from '@/services/techApi';
 
 export default {
@@ -141,60 +134,79 @@ export default {
   data() {
     return {
       user: {},
+      email: "",
+      name: "",
+      lastName: "",
+      nickName: "",
+      biography: "",
+      photo: null,
       repeat_pass: "",
-      previewImage: null,
+      pass: "",
+
       selected_tech: "",
+      new_techs: [],
       techs: [],
       selected_techs: [],
-      usertechs: []
-
+      usertechs: [],
+      changes: 0
     }
   },
 
+  props: {
+    userinfo: {},
+  },
+
   created() {
-    this.getUser();
+    this.user = this.$props.userinfo;
+    if(this.$store.state.isUserLoggedIn) {
+      this.getUserTechs(this.user.id)
+      this.getTechs()
+      this.email     = this.user.email
+      this.name      = this.user.name 
+      this.lastName  = this.user.lastName 
+      this.nickName  = this.user.nickName
+      this.biography = this.user.biography
+      this.photo     = this.user.photo
+    } else {
+      this.email     = this.user.email
+      this.name      = this.user.name 
+      this.lastName  = this.user.lastName 
+    }
   },
 
   methods: {
 
-    getImage() {
-      this.previewImage = this.user.photo
-    },
-    
-    // GET USER
-    async getUser() {
-      try {
-        const response = await userApi.getUser(this.$route.params.nickName);
-        this.user = response.data[0];
-        this.getUserTechs(this.user.id)
-        this.getTechs()
-        this.previewImage = this.user.photo
-      } catch (err) {
-        console.log(err);
-      }
-    },
     async updateUser(e) {
-
       try {
         e.preventDefault();
-        const response = await userApi.updateUser(this.user.id, {
-          email: this.user.email,
-          photo: this.previewImage,
-          name: this.user.name,
-          lastName: this.user.lastName,
-          nickName: this.user.nickName,
-          biography: this.user.biography,
+        if (this.pass != '') { this.user.password = this.pass }
+
+        const updatedUser = {
+          id:       this.user.id,
+          email:    this.email,
+          photo:    this.photo,
+          name:     this.name,
+          lastName: this.lastName,
+          nickName: this.nickName,
+          biography:this.biography,
           password: this.user.password,
-        })
-        console.log(response.data)
-        this.saveUserTech(this.user.id)
-        this.$router.push("/manager/users");
+        }
+        var response
+        if (this.$store.state.isUserLoggedIn) {
+          response = await userApi.updateUser(this.user.id, updatedUser)
+        } else {
+          response = await adminApi.updateAdmin(this.user.id, updatedUser)
+        }
+        console.log(response)
+        if (this.changes > 0) { this.saveUserTech(this.user.id) }
+        window.location.reload()
       } catch (err) {
         console.log(err);
       }
     },
 
     saveTech(list) {
+      this.changes++
       let found = false;
       for (let i = 0; i < list.length && found == false; i++) {
         if (this.selected_tech.name == list[i].name) {
@@ -203,6 +215,7 @@ export default {
       }
       if (found == false && this.selected_tech != {}) {
         list.push(this.selected_tech);
+        this.new_techs.push(this.selected_tech);
         console.log(list);
       }
       else {
@@ -211,6 +224,7 @@ export default {
     },
 
     deleteTech (atrib, list) {
+      this.changes++
       let found = -1;
       for (let i = 0; i < list.length && found == -1; i++) {
         if (atrib == list[i].name) {
@@ -244,8 +258,8 @@ export default {
 
     async saveUserTech(idUser) {
       try {
-          for (let i = 0; i < this.selected_techs.length; i++) {
-              this.usertechs[i] = { idUser: idUser, idTech: this.selected_techs[i].id };
+          for (let i = 0; i < this.new_techs.length; i++) {
+              this.usertechs[i] = { idUser: idUser, idTech: this.new_techs[i].id };
           }
           const response = await userApi.saveTechs({
               techs: this.usertechs,

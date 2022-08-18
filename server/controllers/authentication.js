@@ -41,17 +41,20 @@ module.exports = {
         try {
             const id = req.params.id
             const password = req.params.password
+
             var admin = false
             var user = await models.User.findOne({
                 where: { [Op.or] : [
                     { email: id },
-                    { nickName: id }
+                    { nickName: id },
                 ]}
             })
             if(!user) {
-                user = await models.Admin.findOne(
-                    { where: { email: id }, }
-                )
+                var user = await models.Admin.findOne({
+                    where: { [Op.or] : [
+                        { email: id },
+                    ]}
+                })
                 if(!user) {
                     res.status(403).send({
                         error: 'Los datos de inicio de sesión son incorrectos'

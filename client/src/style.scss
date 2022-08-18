@@ -226,6 +226,30 @@ html, body {
         margin-right: 10px;
     }
 
+    .button-section {
+        background-color: black;
+        color: white;
+        position: relative;
+        padding: 15px 20px 20px 20px;
+        border-top: 3px solid white;
+        border-left: 3px solid white;
+        border-right: 3px solid white;
+        
+        &.notselected {
+            bottom: -11px;
+        }
+
+        &.selected {
+            color: orange;
+            bottom: -22px;
+        }
+
+    }
+
+    .button-section:hover {
+        color: orange;
+    }
+
     .button-page:hover {
         color: orange;
         border: 2px solid orange;

@@ -170,16 +170,16 @@ const routes = [
   {
     path: '/myprofile',
     name: 'MyProfile',
-    component: () => import('../views/user/MyProfile.vue'),
+    component: () => import('../views/semiprivate/MyProfile.vue'),
       beforeEnter: (to, from, next) => {
-      if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn) ) next({ name: 'LoginRegister' })
+      if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn) || from.name == 'MyProfile' ) next({ name: 'LoginRegister' })
       else next()
     },
   },
   {
     path: '/myprojects',
     name: 'MyProjects',
-    component: () => import('../views/user/MyProjects.vue'),
+    component: () => import('../views/semiprivate/MyProjects.vue'),
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
       else next()
@@ -188,7 +188,7 @@ const routes = [
   {
     path: '/subscribe/:title',
     name: 'ToSubscribe',
-    component: () => import('../views/user/ToSubscribe.vue'),
+    component: () => import('../views/semiprivate/ToSubscribe.vue'),
       beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
       else next()

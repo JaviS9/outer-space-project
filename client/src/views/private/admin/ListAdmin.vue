@@ -69,7 +69,7 @@
       </div>
     </div>
     <!-- PAGES -->
-    <div class="row-flex d-flex mb-5 align-items-center justify-content-center bg-black">
+    <div class="row-flex d-flex my-5 align-items-center justify-content-center bg-black">
       <button type="button"
         class="button-page" :disabled="current <= 1"
         v-on:click="prevPage()"
