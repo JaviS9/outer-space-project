@@ -9,13 +9,16 @@
         <i class="fa fa-plus"></i>
     </button>
     <button v-if="type === 'project'" type="button"
-        class="btn btn-success text-white border border-2 btn-sm rounded-circle"
+        class="btn btn-sm btn-success text-white border border-2 rounded-pill"
         data-bs-toggle="modal"
         :data-bs-target="'#' + id">
         <i class="fa fa-plus"></i>
     </button>
     <!-- MODAL SUBSCRIPTIONS -->
-    <div class="modal fade modal modal-lg" :id="id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade modal-lg" 
+        data-bs-backdrop="static" data-bs-keyboard="false" 
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"
+        :id="id" >
         <div class="modal-dialog">
             <div 
                 class="modal-content bg-black p-3"

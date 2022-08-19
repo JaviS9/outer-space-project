@@ -50,29 +50,82 @@
       id="EditProfilePanel" 
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
-      <p class="h5 pb-3 text-center text-primary fw-bold">Actualiza los datos de tu perfil</p>
+      <p class="h5 ms-3 mb-5 fw-bold">Actualiza los datos de tu perfil</p>
       <UpdateUserForm :userinfo="user"/>
     </div>
-    <!-- MY PROJECTS -->
+    <!-- MY FUNDED PROJECTS -->
     <div v-if="button_state.fundedProject"
       id="ProjectsPanel"
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
-      <p class="h5">Mis proyectos</p>
+      <p class="h5 ms-3 fw-bold text-info">Mis proyectos
+        <button type="button" 
+          class="btn btn-sm btn-success text-white border border-2 rounded-pill"
+          data-bs-toggle="modal" data-bs-target="#MyProjectsModal">
+          <i class="fa fa-plus"></i>
+        </button>
+      </p>
+      <!-- MODAL -->
+      <div class="modal fade modal-lg" 
+        id="MyProjectsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-black border border-2 text-white p-3">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="staticBackdropLabel">Crea un nuevo proyecto</h5>
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+                <i class="fa fa-xmark"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <CreateProjectForm :user="profile" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row-flex d-flex align-items-center justify-content-center">
+        <div class="col-10">
+          <ProjectList :listProjects="projectsFunded" :listName="'fundedProjects'" />
+        </div>
+      </div>
     </div>
     <!-- SUBS -->
     <div v-if="button_state.subscription"
       id="SuscriptionsPanel"
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
-      <p class="h5">Suscripciones</p>
+      <div class="row-flex d-flex align-items-center justify-content-start">
+        <p class="h5 ms-3 me-2 fw-bold text-warning">Mis suscripciones</p>
+        <ModalForm 
+          :id="'ModalSubscription'"
+          :title="'suscripciones'" :type="'project'" :list="projects" 
+          @selected_items="saveSubscription"
+        />
+      </div>
+      <div class="row-flex d-flex align-items-center justify-content-center">
+        <div class="col-10">
+          <ProjectList :listProjects="subscriptions" :listName="'subscriptions'" />
+        </div>
+      </div>
     </div>
     <!-- PART -->
     <div v-if="button_state.participation"
       id="ParticipationsPanel"
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
-      <p class="h5">Participaciones</p>
+      <div class="row-flex d-flex align-items-center justify-content-start">
+        <p class="h5 ms-3 me-2 fw-bold text-primary">Mis participaciones</p>
+        <ModalForm 
+          :id="'ModalParticipation'"
+          :title="'participaciones'" :type="'project'" :list="projects"
+          @selected_items="saveParticipation"
+        />
+      </div>
+      <div class="row-flex d-flex align-items-center justify-content-center">
+        <div class="col-10">
+          <ProjectList :listProjects="participations" :listName="'participations'" />
+        </div>
+      </div>
     </div>
   </div>
 
@@ -90,8 +143,13 @@
 <script>
 import UserCard from '@/components/UserCard.vue';
 import UpdateUserForm from '@/components/UpdateUserForm.vue';
+import ProjectList from '@/components/ProjectList.vue';
+import CreateProjectForm from '@/components/CreateProjectForm.vue';
+
+import projectApi from '@/services/projectApi';
 import userApi from '@/services/userApi';
 import adminApi from '@/services/adminApi';
+import ModalForm from '@/components/ModalForm.vue';
 
 export default {
     name: "MyProfile",
@@ -99,6 +157,10 @@ export default {
         return {
             profile: null,
             user: null,
+            projects: [],
+            projectsFunded: [],
+            subscriptions: [],
+            participations: [],
             button_state: {
               editProfile: false,
               fundedProject: false,
@@ -114,10 +176,14 @@ export default {
         } else if (this.$store.state.isAdminLoggedIn) {
           this.profile = this.$store.state.admin;
            this.getAdmin(this.profile.id)
-        }            
+        }
+        this.getProjects();
+        this.getSubscriptions(this.profile.id);
+        this.getFundedProjects(this.profile.id);
+        this.getParticipations(this.profile.id);
     },
 
-    components: { UserCard, UpdateUserForm },
+    components: { UserCard, UpdateUserForm, ProjectList, CreateProjectForm, ModalForm },
 
     methods: {
 
@@ -139,8 +205,105 @@ export default {
         } catch (err) {
           console.log(err)
         }
-      }, 
+      },
 
+      async getProjects() {
+      try {
+        const projects = await projectApi.getProjects();
+        this.projects = projects.data.reverse();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+      async getFundedProjects (id) {
+        try {
+          const response = await userApi.getFundedProjects(id);
+          this.projectsFunded = response.data;
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      async getSubscriptions (id) {
+        try {
+          const response = await userApi.getSubscriptions(id);
+          this.subscriptions = response.data;
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      async getParticipations (id) {
+        try {
+          const response = await userApi.getParticipations(id);
+          this.participations = response.data;
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+       async saveSubscription (selected_items) {
+        try {
+          this.selected_projects = selected_items;
+          for(let i = 0; i < this.selected_projects.length; i++){
+            this.subscriptions[i] = {idUser: this.profile.id, idProject: this.selected_projects[i].id}
+          }
+          let response = await userApi.saveSubscription({
+            subscriptions: this.subscriptions,
+          }, {
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+          );
+          console.log(response.data)
+          this.selected_projects = [];
+          window.location.reload();
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      async saveParticipation (selected_items) {
+        try {
+          this.selected_projects = selected_items;
+          for(let i = 0; i < this.selected_projects.length; i++){
+            this.participations[i] = {idUser: this.profile.id, idProject: this.selected_projects[i].id}
+          }
+
+          let response = await userApi.saveParticipation({
+            participations: this.participations,
+          }, {
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+          );
+
+          console.log(response.data)
+          this.selected_projects = [];
+          window.location.reload();
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      async deleteSubscription(idProject) {
+        try {
+          const response = await userApi.deleteSubscription(this.profile.id, idProject);
+          console.log(response.data)
+          this.getSubscriptions(this.profile.id)
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      async deleteParticipation(idProject) {
+        try {
+          const response = await userApi.deleteParticipation(this.profile.id, idProject);
+          console.log(response.data)
+          this.getParticipations(this.profile.id);
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      // HELPERS
       openClose (section) {
         switch(section) {
           case 'EditProfile': 

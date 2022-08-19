@@ -53,10 +53,17 @@
                   <span>{{pro.title}}</span>
                 </div>
                 <div class="col-sm-2 flex-column d-flex justify-content-center align-items-end">
-                  <router-link :to="{ name: 'ViewProject', params: {title: pro.title}}"
-                    type="button" class="btn btn-outline-warning">
-                    <i class="fa fa-eye"></i>
-                  </router-link>
+                  <div class="row-flex d-flex justify-content-center align-items-center">
+                    <router-link :to="{ name: 'ViewProject', params: {title: pro.title}}"
+                      type="button" class="btn btn-outline-warning">
+                      <i class="fa fa-eye"></i>
+                    </router-link>
+                    <button
+                      @click="deleteFundedProject(pro.id)"
+                      class="btn btn-outline-danger ms-2">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </ul>
@@ -297,6 +304,18 @@ export default {
         console.log(response.data)
         this.selected_projects = [];
         window.location.reload();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async deleteFundedProject(idProject) {
+      try {
+        const response = await projectApi.deleteProject(idProject);
+        console.log(response.data)
+        this.getFundedProjects(this.user.id)
+        this.getSubscriptions(this.user.id)
+        this.getParticipations(this.user.id);
       } catch (err) {
         console.log(err);
       }

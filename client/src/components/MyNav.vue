@@ -53,19 +53,13 @@
                 class="btn btn-sm bg-admin border border-3 rounded-circle p-2 text-white dropdown-toggle imagePreview__mini-image"
                 data-bs-toggle="dropdown" aria-expanded="false">
               </button>
-              <ul class="dropdown-menu dropdown-menu-end bg-black text-white border border-2">
+              <ul v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn"
+                class="dropdown-menu dropdown-menu-end bg-black text-white border border-2">
                 <li>
-                  <router-link 
-                    type="button" to="/myprofile"
+                  <router-link
+                    type="button" :to="{ name: 'MyProfile' }"
                     class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
                     aria-current="page">Mi perfil
-                  </router-link>
-                </li>
-                <li v-if="$store.state.isUserLoggedIn">
-                  <router-link 
-                    type="button" to="/myprojects"
-                    class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
-                    aria-current="page">Mis proyectos
                   </router-link>
                 </li>
                 <li><hr class="dropdown-divider"></li>

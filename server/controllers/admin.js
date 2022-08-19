@@ -56,7 +56,8 @@ module.exports = {
                 password: req.body.password,
                 updatedAt: new Date(),
             }, {
-                where: { id: req.params.id }
+                where: { id: req.params.id },
+                individualHooks: true
             });
             res.status(200).send(admin)
         } catch (err) {

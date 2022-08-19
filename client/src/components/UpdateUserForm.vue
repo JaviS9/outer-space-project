@@ -3,7 +3,7 @@
   <div class="container mt-3">
     <div class="row">
       <div class="col-md-6">
-        <form>
+        <form autocomplete="off">
           <div class="row mb-2">
             <div class="col-sm-2 d-flex flex-column align-items-start justify-content-center">
               <label>Email:</label>
@@ -102,12 +102,24 @@
             <!--  -->
           </div>
           <hr>
-          <p>Cambiar contraseña.</p>
+          <p>Cambiar contraseña:
+            <i v-if="errors.length_pass == true"
+              class="fa-solid fa-info m-0 border border-2 px-2 py-1 rounded-circle bg-danger"
+              data-bs-toggle="tooltip bs-tooltip-right" data-bs-placement="right"
+              title="La contraseña debe tener almenos 6 caracteres.">
+            </i>
+          </p>
           <div class="mb-2">
               <input name="password" autocomplete="off" type="password" class="form-control" placeholder="Nueva contraseña" v-model="pass">
           </div>
           <div class="mb-2">
               <input name="repeat_password" autocomplete="off" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+          </div>
+          <div v-if="errors.rep_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe de nuevo la contraseña.</p>
+          </div>
+          <div v-if="errors.equal_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
           </div>
           <div class="mb-2 mt-3">
             <!-- BUTTON -->
@@ -142,7 +154,11 @@ export default {
       photo: null,
       repeat_pass: "",
       pass: "",
-
+      errors: {
+        rep_pass: false,
+        equal_pass: false,
+        length_pass: false,
+      },
       selected_tech: "",
       new_techs: [],
       techs: [],
@@ -179,27 +195,42 @@ export default {
     async updateUser(e) {
       try {
         e.preventDefault();
-        if (this.pass != '') { this.user.password = this.pass }
-
-        const updatedUser = {
-          id:       this.user.id,
-          email:    this.email,
-          photo:    this.photo,
-          name:     this.name,
-          lastName: this.lastName,
-          nickName: this.nickName,
-          biography:this.biography,
-          password: this.user.password,
+        // VALID PASSWORD
+        if(this.pass) {
+          if(this.pass.length <= 5) {
+            this.errors.length_pass = true;
+          } else { this.errors.length_pass = false;}
+          if(!this.repeat_pass) {
+            this.errors.rep_pass = true;
+          } else {
+            this.errors.rep_pass = false;
+            if(this.pass != this.repeat_pass) {
+              this.errors.equal_pass = true;
+            } else { this.errors.equal_pass = false; }
+          }
         }
-        var response
-        if (this.$store.state.isUserLoggedIn) {
-          response = await userApi.updateUser(this.user.id, updatedUser)
-        } else {
-          response = await adminApi.updateAdmin(this.user.id, updatedUser)
+        if(Object.values(this.errors).every(value => value === false)) {
+          if (this.pass != '') { this.user.password = this.pass }
+          const updatedUser = {
+            id:       this.user.id,
+            email:    this.email,
+            photo:    this.photo,
+            name:     this.name,
+            lastName: this.lastName,
+            nickName: this.nickName,
+            biography:this.biography,
+            password: this.user.password,
+          }
+          var response
+          if (this.$store.state.isUserLoggedIn) {
+            response = await userApi.updateUser(this.user.id, updatedUser)
+          } else {
+            response = await adminApi.updateAdmin(this.user.id, updatedUser)
+          }
+          console.log(response)
+          if (this.changes > 0) { this.saveUserTech(this.user.id) }
+          window.location.reload()
         }
-        console.log(response)
-        if (this.changes > 0) { this.saveUserTech(this.user.id) }
-        window.location.reload()
       } catch (err) {
         console.log(err);
       }

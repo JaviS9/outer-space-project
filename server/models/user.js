@@ -112,8 +112,8 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {},
     hooks: {
       beforeCreate: hashPassword,
-      beforeBulkCreate: hashPassword,
       beforeUpdate: hashPassword,
+      beforeBulkCreate: hashPassword,
     }
   });
 

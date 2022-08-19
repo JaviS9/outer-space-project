@@ -154,6 +154,12 @@ html, body {
             height: 150px
         }
 
+        &__list-image {
+            @extend .imagePreview;
+            width: 60px;
+            height: 60px
+        }
+
         &__tech-logo {
             @extend .imagePreview;
             width: 140px;

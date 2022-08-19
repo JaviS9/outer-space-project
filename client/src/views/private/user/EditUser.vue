@@ -110,12 +110,24 @@
             <!--  -->
           </div>
           <hr>
-          <p>Cambiar contraseña.</p>
+          <p>Cambiar contraseña:
+            <i v-if="errors.length_pass == true"
+              class="fa-solid fa-info m-0 border border-2 px-2 py-1 rounded-circle bg-danger"
+              data-bs-toggle="tooltip bs-tooltip-right" data-bs-placement="right"
+              title="La contraseña debe tener almenos 6 caracteres.">
+            </i>
+          </p>
           <div class="mb-2">
-              <input name="password" autocomplete="on" type="password" class="form-control" placeholder="Nueva contraseña" v-model="password">
+              <input name="password" autocomplete="off" type="password" class="form-control" placeholder="Nueva contraseña" v-model="pass">
           </div>
           <div class="mb-2">
-              <input name="repeat_password" autocomplete="on" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+              <input name="repeat_password" autocomplete="off" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+          </div>
+          <div v-if="errors.rep_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe de nuevo la contraseña.</p>
+          </div>
+          <div v-if="errors.equal_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
           </div>
           <div class="mb-2 mt-3">
             <!-- BUTTON -->
@@ -140,13 +152,19 @@ export default {
   name: "EditUser",
   data() {
     return {
-      user: {},
-      repeat_pass: "",
-      previewImage: null,
-      selected_tech: "",
-      techs: [],
+      user:           {},
+      pass:       "",
+      repeat_pass:    "",
+      previewImage:   null,
+      errors: {
+        rep_pass: false,
+        equal_pass: false,
+        length_pass: false,
+      },
+      selected_tech:  "",
+      techs:          [],
       selected_techs: [],
-      usertechs: []
+      usertechs:      []
 
     }
   },
@@ -174,21 +192,39 @@ export default {
       }
     },
     async updateUser(e) {
-
       try {
         e.preventDefault();
-        const response = await userApi.updateUser(this.user.id, {
-          email: this.user.email,
-          photo: this.previewImage,
-          name: this.user.name,
-          lastName: this.user.lastName,
-          nickName: this.user.nickName,
-          biography: this.user.biography,
-          password: this.user.password,
-        })
-        console.log(response.data)
-        this.saveUserTech(this.user.id)
-        this.$router.push("/manager/users");
+
+        // VALID PASSWORD
+        if(this.pass) {
+          if(this.pass.length <= 5) {
+            this.errors.length_pass = true;
+          } else { this.errors.length_pass = false;}
+          if(!this.repeat_pass) {
+            this.errors.rep_pass = true;
+          } else {
+            this.errors.rep_pass = false;
+            if(this.pass != this.repeat_pass) {
+              this.errors.equal_pass = true;
+            } else { this.errors.equal_pass = false; }
+          }
+        }
+        
+        if(Object.values(this.errors).every(value => value === false)) {
+          if (this.password != '') { this.user.password = this.pass }
+          const response = await userApi.updateUser(this.user.id, {
+            email: this.user.email,
+            photo: this.user.photo,
+            name: this.user.name,
+            lastName: this.user.lastName,
+            nickName: this.user.nickName,
+            biography: this.user.biography,
+            password: this.user.password,
+          })
+          console.log(response.data)
+          this.saveUserTech(this.user.id)
+          this.$router.push("/manager/users");
+        }
       } catch (err) {
         console.log(err);
       }

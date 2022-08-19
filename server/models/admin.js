@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
 
 function hashPassword (admin, options) {
-  const SALT_FACTOR = 8
+  const SALT_FACTOR = 10
   if (!admin.changed('password')) {
     return;
   }
@@ -73,8 +73,8 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {},
     hooks: {
       beforeCreate: hashPassword,
-      beforeBulkCreate: hashPassword,
       beforeUpdate: hashPassword,
+      beforeBulkCreate: hashPassword,
     }
   });
 

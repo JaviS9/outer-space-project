@@ -62,27 +62,29 @@
         </div>
     </div>
     <!-- PAGES -->
-      <div class="row-flex d-flex my-5 align-items-center justify-content-center bg-black">
-        <button type="button"
-          class="button-page" :disabled="current <= 1"
-          v-on:click="prevPage()"
-        ><i class="fa-solid fa-caret-left"></i>
-        </button>
+    <div v-if="numPages > 1"
+      class="row-flex d-flex my-5 align-items-center justify-content-center bg-black"
+    >
+      <button type="button"
+        class="button-page" :disabled="current <= 1"
+        v-on:click="prevPage()"
+      ><i class="fa-solid fa-caret-left"></i>
+      </button>
 
-        <button v-for="(index) in numPages" :key="index"
-          type="button"
-          class="button-page" 
-          v-on:click="changePage(index)"
-        ><i class="fa-solid" :class="'fa-' + index"></i>
-        </button>
+      <button v-for="(index) in numPages" :key="index"
+        type="button"
+        class="button-page" 
+        v-on:click="changePage(index)"
+      ><i class="fa-solid" :class="'fa-' + index"></i>
+      </button>
 
-        <button type="button"
-          class="button-page" :disabled="current >= numPages"
-          v-on:click="nextPage()"
-        ><i class="fa-solid fa-caret-right"></i>
-        </button>
-      </div>
-      <!--  -->
+      <button type="button"
+        class="button-page" :disabled="current >= numPages"
+        v-on:click="nextPage()"
+      ><i class="fa-solid fa-caret-right"></i>
+      </button>
+    </div>
+    <!--  -->
   </div>
 </div>
 </template>
