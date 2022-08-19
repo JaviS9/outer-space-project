@@ -24,7 +24,7 @@
                                     <i class="fa fa-eye"></i>
                                 </router-link>
                                 <router-link v-if="listName == 'subscriptions'"
-                                    :to="{ name: 'MySubscription', params: {title: pro.title}}"
+                                    :to="{ name: 'MySubscription', params: {nickName: founder, title: pro.title}}"
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
@@ -55,6 +55,7 @@ export default {
     },
 
     props: {
+        founder: String,
         listName: String,
         listProjects: []
     },

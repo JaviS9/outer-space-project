@@ -104,7 +104,7 @@
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :listProjects="subscriptions" :listName="'subscriptions'" />
+          <ProjectList :founder="profile.nickName" :listProjects="subscriptions" :listName="'subscriptions'" />
         </div>
       </div>
     </div>

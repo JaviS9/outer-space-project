@@ -185,8 +185,9 @@ const routes = [
       else next()
     },
   },
+  // *** FOR SUBSCRIPTION ***
   {
-    path: '/mysubscription/:title',
+    path: '/mysubscription/:nickName/:title',
     name: 'MySubscription',
     component: () => import('../views/semiprivate/MySubscription.vue'),
     beforeEnter: (to, from, next) => {
@@ -195,7 +196,7 @@ const routes = [
     },
   },
   {
-    path: '/subscribe/:title',
+    path: '/subscribe/:nickName/:title',
     name: 'ToSubscribe',
     component: () => import('../views/semiprivate/ToSubscribe.vue'),
     beforeEnter: (to, from, next) => {
@@ -231,12 +232,12 @@ const routes = [
   },
   {
     path: '/project/:title',
-    name: 'Project',
+    name: 'ProjectPage',
     component: () => import('../views/public/ProjectPage.vue')
   },
   {
     path: '/user/:nickName',
-    name: 'User',
+    name: 'UserProfile',
     component: () => import('../views/public/UserProfile.vue')
   },
   {
