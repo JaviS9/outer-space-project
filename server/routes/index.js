@@ -3,6 +3,7 @@ const projectController = require('../controllers/project');
 const adminController = require('../controllers/admin');
 const techController = require('../controllers/tech')
 const authenticationController = require('../controllers/authentication')
+const donationController = require('../controllers/donation')
 const app = require('../app');
 
 module.exports = (app) => {
@@ -19,6 +20,7 @@ module.exports = (app) => {
    app.get('/user/find/subscriptions/:id', userController.findUserSubscriptions);
    app.get('/user/find/participations/:id', userController.findUserParticipations);
    app.get('/user/find/techs/:id', userController.findUserTechs);
+   app.get('/user/find/donations/:id', userController.findUserDonations)
    app.get('/user/search/:nickName', userController.searchUser);
 
    // POST
@@ -36,6 +38,18 @@ module.exports = (app) => {
    app.delete('/user/:idUser/delete/subscription/:idProject', userController.deleteSubscription);
    app.delete('/user/:idUser/delete/participation/:idProject', userController.deleteParticipation);
    app.delete('/user/:idUser/delete/tech/:idTech', userController.deleteTech);
+
+   // *** SUBSCRIPTION // DONATION ***
+   // GET
+   app.get('/donation/list', donationController.listDonation);
+   app.get('/subcription/find/donations/user/:idUser/project/:idProject', donationController.findSubscriptionDonations);
+   
+   // POST
+   app.post('/donation/add', donationController.addDonation);
+
+   // DELETE
+   app.delete('/donation/:id/delete/user/:idUser/project/:idProject', donationController.deleteDonation);
+
 
    // *** PROJECT ***
    // GET
@@ -91,7 +105,5 @@ module.exports = (app) => {
 
    // DELETE
    app.delete('/tech/delete/:id', techController.deleteTech);
-
-   // SUBSCRIPTION/DONATION
    
 };

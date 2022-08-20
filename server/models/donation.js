@@ -16,19 +16,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Donation.init({
-    idUser: {
+    id: {
       allowNull: false,
       primaryKey: true,
-      type: DataTypes.UUID,
-    },
-    idProject: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
     },
     date: {
       allowNull: false,
-      primaryKey: true,
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },

@@ -12,7 +12,9 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul v-if="$store.state.isAdminLoggedIn" class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul v-if="$store.state.isAdminLoggedIn" 
+          class="navbar-nav me-auto mb-2 mb-lg-0"
+        >
           <li class="nav-item text-white">
             <router-link to="/manager/users" class="nav-link active" aria-current="page">Usuarios</router-link>
           </li>

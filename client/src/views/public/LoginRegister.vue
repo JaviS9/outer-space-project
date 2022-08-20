@@ -67,6 +67,7 @@ export default {
                 }
                 this.$store.dispatch('setToken', response.data.token)
                 Authentication.setUserLogged(response.data.token);
+                
                 if(this.$store.state.isAdminLoggedIn) {
                     this.$router.push('/manager')
                 } else {

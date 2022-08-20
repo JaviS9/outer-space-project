@@ -77,11 +77,6 @@ const routes = [
       else next()
     },
   },
-  // {
-  //   path: '/projects/add/:founder',
-  //   name: 'AddProject',
-  //   component: () => import('../views/private/project/AddProject.vue')
-  // },
   {
     path: '/manager/projects/edit/:title',
     name: 'EditProject',

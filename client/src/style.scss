@@ -14,10 +14,10 @@ html, body {
     .orange {color: rgb(255, 119, 0)}
     .greenyellow {color: greenyellow}
 
-    .border-blue {border-color: rgb(43, 152, 255)}
-    .border-purple {border-color: rgb(159, 80, 255)}
-    .border-orange {border-color: rgb(255, 119, 0)}
-    .border-green {border-color: greenyellow}
+    .border-blue {border: 2px solid rgb(43, 152, 255)}
+    .border-purple {border: 2px solid rgb(159, 80, 255)}
+    .border-orange {border: 2px solid rgb(255, 119, 0)}
+    .border-green {border: 2px solid greenyellow}
 
     .bg-grey { background-color: #999999;}
 

@@ -35,6 +35,10 @@ export default {
       return Api().get(`user/find/techs/${id}`);
     },
 
+    async getDonations (id) {
+      return Api().get(`user/find/donations/${id}`);
+    },
+
     // CREATE USER
     async saveUser(userData) {
       return Api().post('user/add', userData)

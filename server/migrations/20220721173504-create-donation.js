@@ -2,10 +2,16 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Donation', {
-      idUser: {
+      id: {
         allowNull: false,
         primaryKey: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+      },
+      idUser: {
+        allowNull: false,
         type: Sequelize.UUID,
+        primaryKey: true,
         references: {
           model: 'Subscription',
           key: 'idUser',
@@ -16,8 +22,8 @@ module.exports = {
       },
       idProject: {
         allowNull: false,
-        primaryKey: true,
         type: Sequelize.UUID,
+        primaryKey: true,
         references: {
           model: 'Subscription',
           key: 'idProject',
@@ -28,7 +34,6 @@ module.exports = {
       },
       date: {
         allowNull: false,
-        primaryKey: true,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },

@@ -62,7 +62,7 @@
         </div>
 
         <div class="mb-2 mt-3 row-flex d-flex justify-content-end">
-            <input type="submit" class="btn btn-outline-warning btn-md" value="Registrar" @click="saveUser">
+            <input type="button" class="btn btn-outline-warning btn-md" value="Registrar" @click="saveUser">
         </div>
     </form>
   </div>

@@ -19,15 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     idUser: {
       allowNull: false,
       primaryKey: true,
-      // onDelete: "CASCADE",
-      // onUpdate: "CASCADE",
       type: DataTypes.UUID
     },
     idProject: {
       allowNull: false,
       primaryKey: true,
-      // onDelete: "CASCADE",
-      // onUpdate: "CASCADE",
       type: DataTypes.UUID
     },
     startDate: {

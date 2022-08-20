@@ -1,17 +1,13 @@
-const configjson = require('./config.json')
-const db = configjson.development
 
 module.exports = {
     port: process.env.PORT || 5000,
-    db: {
-        database: process.env.DB_NAME || db.database,
-        user: process.env.DB_USER || db.user,
-        password: process.env.DB_PASS || db.password,
-        options: {
-            dialect: process.env.DIALECT || db.dialect,
-            host: process.env.HOST || db.host,
-            storage: './osp-database.mysql'
-        }
+    development: {
+        username: process.env.DB_USER || "root",
+        password: process.env.DB_PASS || "tfg2022",
+        database: process.env.DB_NAME || "osp-database",
+        port: "3000",
+        host: process.env.HOST || "localhost",
+        dialect: process.env.DIALECT || "mysql",
     },
     authentication: {
         jwtSecret: process.env.JWT_SECRET || 'secret'
