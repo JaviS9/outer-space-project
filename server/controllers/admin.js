@@ -34,6 +34,18 @@ module.exports = {
     },
 
     //READ ONE
+    async findAdmin(req, res) {
+        try{
+            const admin = await models.Admin.findAll(
+                { where: { email: req.params.email }});
+            res.status(200).send(admin)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Admin not found -- ' + err
+            });
+        }
+    },
+
     async findAdminId(req, res) {
         try{
             const admin = await models.Admin.findAll(
@@ -41,7 +53,7 @@ module.exports = {
             res.status(200).send(admin)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: findAdminId not found -- ' + err
+                error: 'ERROR: Admin id not found -- ' + err
             });
         }
     },

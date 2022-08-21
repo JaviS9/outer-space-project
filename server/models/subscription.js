@@ -15,12 +15,12 @@ module.exports = (sequelize, DataTypes) => {
       Subscription.belongsTo(models.Project, {foreignKey: 'idProject', targetKey: 'id'})
       Subscription.hasMany(models.Donation, {foreignKey: {
                                               name: 'idUser',
-                                              onDelete: 'NO ACTION',
+                                              onDelete: 'CASCADE',
                                               onUpdate: 'CASCADE'
                                             }});
       Subscription.hasMany(models.Donation, {foreignKey: {
                                               name: 'idProject',
-                                              onDelete: 'NO ACTION',
+                                              onDelete: 'CASCADE',
                                               onUpdate: 'CASCADE'
                                             }});
     }

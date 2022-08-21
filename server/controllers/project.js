@@ -107,6 +107,20 @@ module.exports = {
         }
     },
 
+    async findProjectDonations (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM donation JOIN user ON user.id = donation.idUser WHERE donation.idProject = :id",
+                { replacements: { id: req.params.id } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participations not found -- ' + err
+            });
+        }
+    },
+
     //UPDATE
     async updateProject (req, res) {
         try {

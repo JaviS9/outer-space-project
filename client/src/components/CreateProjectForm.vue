@@ -65,8 +65,8 @@ export default {
       founder: null,
       previewImage: "",
       planets: [
-        "https://cdn-icons-png.flaticon.com/512/3590/3590284.png",
-        "https://cdn-icons-png.flaticon.com/512/814/814513.png",
+        "https://cdn-icons-png.flaticon.com/512/2949/2949010.png",
+        "https://cdn-icons-png.flaticon.com/512/2949/2949009.png",
         "https://cdn-icons-png.flaticon.com/512/1374/1374275.png"
       ],
       errors: {

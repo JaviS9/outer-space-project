@@ -32,10 +32,10 @@
               </div>
               <div class="col-md-6 d-flex flex-column justify-content-center align-items-top p-1">
                 <li class="list-group justify-content-top align-items-top m-0">
-                  <ul class="list-group-item bg-black border text-center text-white py-3 px-2 m-0">
+                  <ul class="list-group-item bg-black border border-bottom-0 text-center text-white pt-3 pb-1 px-2 m-0">
                     <span class="h5 fw-bold m-0 p-0">{{tech.name}}</span>
                   </ul>
-                  <ul class="list-group-item bg-black border text-center border-top-0 text-white py-3 px-2 m-0">
+                  <ul class="list-group-item bg-black border text-center border-top-0 text-white pb-3 pt-0 px-2 m-0">
                     <p class="p-0 m-0">Tipo de tecnología: <span class="fw-bold">{{tech.type}}</span></p>                        
                   </ul>
                 </li>

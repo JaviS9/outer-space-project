@@ -15,51 +15,50 @@
     </div>
   </div>
   <div class="container mt-5">
-    <div class="col-md-12 d-flex flex-column align-items-center justify-content-center"
-      v-if="projects.length === 0"
-    >
-      <p class="h5 text-danger">No se han encontrado proyectos</p>
+    <div v-if="projects.length === 0"
+      class="col-md-12 d-flex flex-column align-items-center justify-content-center"
+    ><p class="h5 text-danger">No se han encontrado proyectos</p>
     </div>
-    <div class="row"
-      v-for="project in projects" :key="project.id"
+    <div v-else v-for="project in projects" :key="project.id"
+      class="col-md-10 flex-column align-items-center justify-content-center"
     >
-        <div class="col card border-light bg-black align-self-center mx-2 mb-3">
-            <div class="card-body p-0 bg-black">
-                <div class="row-flex d-flex justify-content-center align-items-center">
-                    <div class="col-sm-2 d-flex justify-content-center p-2">
-                        <div class="imagePreview__project-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
-                    </div>
-                    <div class="col-sm-9 d-flex flex-column justify-content-center p-2 m-0">
-                      <div class="card-body p-0 bg-black">
-                        <li class="list-group">
-                          <ul class="list-group-item text-white bg-black border border-bottom-0 mb-0">
-                            <p><span class="h4 fw-bold">{{project.title}}</span></p>
-                            <p class="my-3">{{project.description}}</p>
-                          </ul>
-                          <ul class="list-group-item text-white bg-black border mb-0">
-                            <p class="mb-0">Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p>
-                          </ul>
-                        </li>
-                      </div>
-                    </div>
-                    <div class="col-sm-1 ml-1 d-flex flex-column justify-content-center align-items-center pt-2">
-                        <router-link :to="{ name: 'ViewProject', params: {title: project.title}}"
-                          type="button" class="btn btn-outline-warning mb-2">
-                          <i class="fa fa-eye"></i>
-                        </router-link>
-                        <router-link :to="{ name: 'EditProject', params: {title: project.title}}"
-                          type="button" class="btn btn-outline-primary mb-2">
-                          <i class="fa fa-pen"></i>
-                        </router-link>
-                        <button 
-                          @click="deleteProject(project.id)"
-                          class="btn btn-outline-danger mb-2">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </div>
+      <div class="card border border-2 bg-black align-self-center mx-3 mb-4 p-1">
+        <div class="card-body p-0 bg-black">
+          <div class="row-flex d-flex justify-content-center align-items-center">
+              <div class="col-md-3 d-flex justify-content-center p-3">
+                  <div class="imagePreview__project-image border border-3 rounded-circle" :style="{ 'background-image': `url(${project.photo})` }"></div>
+              </div>
+              <div class="col-md-8 d-flex flex-column justify-content-center p-2 m-0">
+                <div class="card-body p-0 bg-black">
+                  <li class="list-group">
+                    <ul class="list-group-item text-white bg-black border border-2 border-bottom-0 mb-0">
+                      <p class="mb-2 mt-1"><span class="h4 fw-bold orange">{{project.title}}</span></p>
+                      <p class="mb-2">{{project.description}}</p>
+                    </ul>
+                    <ul class="list-group-item text-white bg-black border border-2 border-top-0 mb-0">
+                      <p class="my-1">Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p>
+                    </ul>
+                  </li>
                 </div>
-            </div>
+              </div>
+              <div class="col-md-1 d-flex flex-column justify-content-center align-items-center">
+                <router-link :to="{ name: 'ViewProject', params: {title: project.title}}"
+                  type="button" class="btn btn-outline-warning mb-2">
+                  <i class="fa fa-eye"></i>
+                </router-link>
+                <router-link :to="{ name: 'EditProject', params: {title: project.title}}"
+                  type="button" class="btn btn-outline-primary mb-2">
+                  <i class="fa fa-pen"></i>
+                </router-link>
+                <button 
+                  @click="deleteProject(project.id)"
+                  class="btn btn-outline-danger">
+                    <i class="fa fa-trash"></i>
+                </button>
+              </div>
+          </div>
         </div>
+      </div>
     </div>
     <!-- PAGES -->
     <div v-if="numPages > 1"

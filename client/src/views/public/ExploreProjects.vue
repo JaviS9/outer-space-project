@@ -23,12 +23,16 @@
                     <ul class="list-group-item bg-black text-white m-0 p-2 text-center">
                         {{ project.title }}
                     </ul>
-                    <ul class="list-group-item bg-black text-white mx-0 my-2 p-2">
-                        <div class="imagePreview__user-image" :style="{ 'background-image': `url(${project.photo})` }"></div>
+                    <ul class="list-group-item bg-black text-white mx-0 my-2 py-2 ps-3 d-flex align-items-center justify-content-center">
+                        <div class="imagePreview__user-image m-0 p-0"
+                            :style="{ 'background-image': `url(${project.photo})` }"
+                        >
+                        </div>
                     </ul>
                     <ul class="list-group-item bg-black text-white mx-0 mb-2 p-0 justify-content-center d-flex">
-                        <router-link to="/" type="button" class="btn btn-md btn-outline-warning rounded-pill">
-                            <i class="fa fa-eye me-2"></i>Ver proyecto
+                        <router-link :to="{ name: 'ProjectPage', params: {title: project.title}}"
+                            type="button" class="btn btn-md btn-outline-warning rounded-pill"
+                        ><i class="fa fa-eye me-2"></i>Ver proyecto
                         </router-link>
                         <router-link to="/" type="button" class="btn btn-md btn-outline-success rounded-pill ms-2">
                             <i class="fa fa-plus me-2"></i>Suscribirse

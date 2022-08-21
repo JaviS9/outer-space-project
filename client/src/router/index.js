@@ -151,49 +151,20 @@ const routes = [
       else next()
     },
   },
-  // *** SUBSCRIPTION ***
+  // *** SUBSCRIPTION (PRIVATE) ***
   {
-    path: '/manager/subscription/user/:nickName/project/:title',
+    path: '/subscription/:nickName/:title',
     name: 'ViewSubscription',
     component: () => import('../views/private/subscription/ViewSubscription.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.name !== 'LoginRegister' && !store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
-      else next()
-    },
-  },
-  // *** USER ROUTES (SEMI-PRIVATE) *** 
-  {
-    path: '/myprofile',
-    name: 'MyProfile',
-    component: () => import('../views/semiprivate/MyProfile.vue'),
     beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn)) next({ name: 'LoginRegister' })
       else next()
     },
   },
   {
-    path: '/myproject/:title',
-    name: 'MyProject',
-    component: () => import('../views/semiprivate/MyProject.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
-      else next()
-    },
-  },
-  // *** FOR SUBSCRIPTION ***
-  {
-    path: '/mysubscription/:nickName/:title',
-    name: 'MySubscription',
-    component: () => import('../views/semiprivate/MySubscription.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
-      else next()
-    },
-  },
-  {
     path: '/subscribe/:nickName/:title',
     name: 'ToSubscribe',
-    component: () => import('../views/semiprivate/ToSubscribe.vue'),
+    component: () => import('../views/private/subscription/ToSubscribe.vue'),
     beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
       else next()
@@ -228,12 +199,12 @@ const routes = [
   {
     path: '/project/:title',
     name: 'ProjectPage',
-    component: () => import('../views/public/ProjectPage.vue')
+    component: () => import('../views/public/ProjectPage.vue'),
   },
   {
     path: '/user/:nickName',
     name: 'UserProfile',
-    component: () => import('../views/public/UserProfile.vue')
+    component: () => import('../views/public/UserProfile.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

@@ -58,8 +58,13 @@
               <ul v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn"
                 class="dropdown-menu dropdown-menu-end bg-black text-white border border-2">
                 <li>
-                  <router-link
-                    type="button" :to="{ name: 'MyProfile' }"
+                  <router-link v-if="$store.state.isUserLoggedIn"
+                    type="button" :to="{ name: 'UserProfile', params: {nickName: $store.state.user.nickName } }"
+                    class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
+                    aria-current="page">Mi perfil
+                  </router-link>
+                  <router-link v-if="$store.state.isAdminLoggedIn"
+                    type="button" :to="{ name: 'UserProfile', params: {nickName: $store.state.admin.email } }"
                     class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
                     aria-current="page">Mi perfil
                   </router-link>

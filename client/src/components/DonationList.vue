@@ -1,6 +1,6 @@
 <template>
   <div class="row p-3 mt-3">
-    <div class="col">
+    <div class="col-12 border-bottom border-top border-2 pt-3 mb-3">
       <div v-if="donations.length === 0">
         <p class="text-danger text-center h5 p-3">No hay donaciones</p>
       </div>
@@ -11,25 +11,38 @@
         <div class="card-body m-0 p-0">
           <div class="row-flex d-flex align-items-center justify-content-center p-2">
             <!--  -->
-            <div class="col-md-1 flex-column d-flex align-items-start justify-content-center">
-                <p class="m-0 p-2 rounded-pill d-flex align-items-center justify-content-center orange border-orange"
-                >#{{formatId(don.id)}}
+            <div class="col-md-2 flex-column d-flex align-items-start justify-content-center">
+                <p class="m-0 p-2 rounded-pill d-flex align-items-center justify-content-center orange border-orange">
+                  #{{formatId(don.id)}}
                 </p>
             </div>
-            <div class="col-md-3 flex-column d-flex align-items-start justify-content-center">
-              <div class="row-flex d-flex justify-content-center align-items-center">
+            <div class="flex-column d-flex justify-content-center"
+              :class="{'col-md-4 align-items-start': $store.state.isAdminLoggedIn, 'col-md-5 align-items-center': !$store.state.isAdminLoggedIn}"
+            >
+              <div class="row-flex d-flex justify-content-center align-items-center p-2">
                 <p class="m-0">Donación: <span class="fw-bold">{{ don.donation }}</span> <i class="fa fa-euro-sign"></i></p>
               </div>
             </div>
-            <div class="col-md-4 flex-column d-flex align-items-start justify-content-center">
+            <div class="flex-column d-flex justify-content-center p-2"
+              :class="{'col-md-4 align-items-start': $store.state.isAdminLoggedIn, 'col-md-5 align-items-end': !$store.state.isAdminLoggedIn}"
+            >
                 <p class="m-0">{{formatDate(don.date)}}</p>
             </div>
-            <div class="col-md-4 flex-column d-flex align-items-start justify-content-center">
-              BOTONEZZ
+            <div v-if="$store.state.isAdminLoggedIn"
+              class="col-md-2 flex-column d-flex align-items-end justify-content-center">
+              <button type="button" v-on:click="deleteDonation(don.id)"
+                class="btn btn-md btn-danger rounded-pill text-black"
+              ><i class="fa fa-trash"></i>
+              </button>
             </div>
             <!--  -->
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row-flex d-flex align-items-center justify-content-start">
+      <div class="col-5 border border-2 rounded-pill py-3 px-4">
+        <p class="m-0 p-0">TOTAL de donaciones: <span class="fw-bold greenyellow">{{num_donations}} <i class="fa fa-euro-sign"></i></span></p>
       </div>
     </div>
   </div>
@@ -42,7 +55,8 @@ export default {
     name:'DonationList',
     data() {
       return {
-        donations: []
+        donations: [],
+        num_donations: 0
       }
     },
 
@@ -63,17 +77,35 @@ export default {
       },
 
       formatDate(date){
-        return "Fecha: " + date.substring(0, 10) + ", Hora: " +  date.substring(14, date.length - 5)
+        return "Fecha: " + date.substring(0, 10).replaceAll('-', '/') + ", Hora: " +  date.substring(14, date.length - 5)
       },
 
       async getSubscriptionDonations(idUser, idProject) {
         try {
           const donations = await subscriptionApi.getSubscriptionDonations(idUser, idProject)
           this.donations = donations.data
+          let sum = 0;
+          if(this.donations.length > 0) {
+            this.donations.forEach(key => {
+                sum += key.donation;
+            });
+          }
+          this.num_donations = sum
+        } catch (err) {
+          console.log(err)
+        }
+      },
+
+      async deleteDonation(idDonation) {
+        try {
+          const response = await subscriptionApi.deleteDonation(idDonation, this.$props.userid, this.$props.projectid)
+          console.log(response)
+          this.getSubscriptionDonations(this.$props.userid, this.$props.projectid)
         } catch (err) {
           console.log(err)
         }
       }
+
     }
 }
 </script>

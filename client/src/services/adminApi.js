@@ -6,12 +6,16 @@ export default {
         return Api().get('admin/list');
     },
 
-    // GET USER ID
+    // GET
+    async getAdmin(email) {
+        return Api().get(`admin/find/${email}`);
+    },
+  
     async getAdminId(idFounder) {
       return Api().get(`admin/find/id/${idFounder}`);
     },
 
-    // CREATE ADMIN
+    // CREATE
     async saveAdmin(adminData) {
       return Api().post('admin/add', adminData)
     },

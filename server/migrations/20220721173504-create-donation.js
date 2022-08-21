@@ -17,7 +17,7 @@ module.exports = {
           key: 'idUser',
           as: 'idUser'
         },
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
       idProject: {
@@ -29,7 +29,7 @@ module.exports = {
           key: 'idProject',
           as: 'idProject'
         },
-        onDelete: "NO ACTION",
+        onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
       date: {

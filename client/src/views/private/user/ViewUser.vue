@@ -29,15 +29,34 @@
                 <div class="col-sm-1 flex-column d-flex justify-content-center align-items-start">
                   <i class="fa fa-rocket rounded-circle border border-info p-2"></i>
                 </div>
-                <div class="col-sm-11 flex-column d-flex justify-content-center align-items-start">
+                <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
                   <span class="fw-bold ms-2">Proyectos fundados</span>
                 </div>
-                <!-- <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
-                  <router-link :to="{name: 'AddProject'}"
-                    type="button" class="ms-2 btn btn-success text-white border border-2 btn-sm rounded-circle">
+                <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
+                  <button type="button" 
+                    class="btn btn-sm btn-success text-white border border-2 rounded-pill"
+                    data-bs-toggle="modal" data-bs-target="#MyProjectsModal">
                     <i class="fa fa-plus"></i>
-                  </router-link>
-                </div> -->
+                  </button>
+                  <!-- MODAL -->
+                  <div class="modal fade modal-lg" 
+                    id="MyProjectsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
+                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content bg-black border border-2 text-white p-3">
+                        <div class="modal-header">
+                          <h5 class="modal-title fw-bold" id="staticBackdropLabel">Crea un nuevo proyecto</h5>
+                          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+                            <i class="fa fa-xmark"></i>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <CreateProjectForm :user="user" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ul>
             <ul v-if="projectsFunded.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
@@ -106,6 +125,10 @@
                     <router-link :to="{ name: 'ViewProject', params: {title: pro.title} }"
                       type="button" class="btn btn-outline-warning">
                       <i class="fa fa-eye"></i>
+                    </router-link>
+                    <router-link :to="{ name: 'ViewSubscription', params: {nickName: user.nickName, title: pro.title}}"
+                        type="button" class="btn btn-outline-green ms-2">
+                        <i class="fa-solid fa-coins"></i>
                     </router-link>
                     <button
                       @click="deleteSubscription(pro.id)"
@@ -176,8 +199,10 @@
 <script>
 import userApi from '@/services/userApi';
 import projectApi from '@/services/projectApi';
+
 import ModalForm from '@/components/ModalForm.vue';
 import UserCard from '@/components/UserCard.vue';
+import CreateProjectForm from '@/components/CreateProjectForm.vue';
 
 export default {
   name: "ViewUser",
@@ -202,7 +227,8 @@ export default {
 
   components: {
     ModalForm,
-    UserCard
+    UserCard,
+    CreateProjectForm
 },
 
   methods: {

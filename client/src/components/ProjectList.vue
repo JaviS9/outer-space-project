@@ -19,17 +19,18 @@
                         <div class="col-md-3 flex-column d-flex align-items-end justify-content-center">
                             <div class="row-flex d-flex justify-content-center align-items-center">
                                 <router-link v-if="listName != ''"
-                                    :to="{ name: 'MyProject', params: {title: pro.title}}"
+                                    :to="{ name: 'ProjectPage', params: {title: pro.title}}"
                                     type="button" class="btn btn-outline-warning">
                                     <i class="fa fa-eye"></i>
                                 </router-link>
                                 <router-link v-if="listName == 'subscriptions'"
-                                    :to="{ name: 'MySubscription', params: {nickName: founder, title: pro.title}}"
+                                    :to="{ name: 'ViewSubscription', params: {nickName: user, title: pro.title}}"
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
                                 <button v-if="listName != ''"
-                                    @click="deleteFundedProject(pro.id)"
+                                    type="button"
+                                    @click="deleteProject(pro.id)"
                                     class="btn btn-outline-danger ms-2">
                                     <i class="fa fa-trash"></i>
                                 </button>
@@ -55,13 +56,19 @@ export default {
     },
 
     props: {
-        founder: String,
+        user: String,
         listName: String,
-        listProjects: []
     },
 
     created() {
-        this.projects = this.$props.listProjects
+        switch(this.$props.listName) {
+            case 'fundedProjects': this.getFundedProjects(this.$store.state.user.id);
+                break;
+            case 'subscriptions' : this.getSubscriptions(this.$store.state.user.id);
+                break;
+            case 'participations': this.getParticipations(this.$store.state.user.id);
+                break;
+        }        
     },
 
     methods: {
@@ -72,20 +79,21 @@ export default {
                 switch(this.$props.listName) {
                     case 'fundedProjects':
                         response = await projectApi.deleteProject(idProject);
+                        this.getFundedProjects(this.$store.state.user.id);
                         console.log(response.data)
-                        this.getFundedProjects(this.$store.state.user.id)
                         break;
                     case 'subscriptions' : 
                         response = await userApi.deleteSubscription(this.$store.state.user.id, idProject);
+                        this.getSubscriptions(this.$store.state.user.id);
                         console.log(response.data)
-                        this.getSubscriptions(this.$store.state.user.id)
                         break;
                     case 'participations': 
                         response = await userApi.deleteParticipation(this.$store.state.user.id, idProject);
+                        this.getParticipations(this.$store.state.user.id);
                         console.log(response.data)
-                        this.getParticipations(this.$store.state.user.id)
                         break;
                 }
+                window.location.reload()
             } catch (err) {
                 console.log(err);
             }
@@ -94,7 +102,7 @@ export default {
         async getFundedProjects (id) {
             try {
                 const response = await userApi.getFundedProjects(id);
-                this.projectsFunded = response.data;
+                this.projects = response.data;
             } catch (err) {
                 console.log(err);
             }
@@ -103,7 +111,7 @@ export default {
         async getSubscriptions (id) {
             try {
                 const response = await userApi.getSubscriptions(id);
-                this.subscriptions = response.data;
+                this.projects = response.data;
             } catch (err) {
                 console.log(err);
             }
@@ -112,7 +120,7 @@ export default {
         async getParticipations (id) {
             try {
                 const response = await userApi.getParticipations(id);
-                this.participations = response.data;
+                this.projects = response.data;
             } catch (err) {
                 console.log(err);
             }

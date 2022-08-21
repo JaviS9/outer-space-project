@@ -4,62 +4,26 @@
     <div class="row">
       <div class="col text-center mt-5">
         <p v-if="project === null" class="h2 fw-bold">No hay datos</p> 
-        <p v-else class="h2 fw-bold">{{project.title}}</p> 
+        <p v-else class="h2 fw-bold">Proyecto <span class="orange">{{project.title}}</span></p> 
       </div>
     </div>
   </div>
   <div class="container mt-5 border-bottom border-1">
-    <div class="row-flex d-flex align-items-center justify-content-center">
-      <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-        <div class="imagePreview__icon-image-big border border-3" :style="{ 'background-image': `url(${previewImage})` }"></div>
+    <!-- PROJECT INFO -->
+    <ProjectCard
+      :projectinfo="project"
+      :founder="founder"
+      :num_subscriptions="num_subscriptions"
+      :num_participations="num_participations"
+      :num_donations="num_donations"
+    />
+    <div class="row mb-3">
+      <div class="col">
+        <router-link to="/manager/projects" type="button" class="btn btn-outline-light">
+          <i class="fa-solid fa-arrow-alt-circle-left"></i>  Atrás
+        </router-link>
       </div>
-      <div class="col-md-6 align-items-center justify-content-center">
-        <div class="row">
-          <div class="card bg-black align-self-center"></div>
-            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <div class="card blockquote p-3 border border-3 rounded-circle bg-black text-center justify-content-center"
-                  style="width: 220px; height: 220px;"
-                >
-                  <span class="card-title mb-0">Suscripciones</span>
-                  <p class="number-score mt-0">{{num_subscriptions}}</p>
-                </div>              
-            </div>
-            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-              <div class="card blockquote p-3 border border-3 rounded-circle bg-black text-center justify-content-center"
-                style="width: 220px; height: 220px;"
-              >
-                <span class="card-title mb-0">Donaciones</span>
-                <p class="number-score mt-0">{{donations}}</p>
-              </div>
-            </div>
-            <div class="col flex-column justify-content-center align-items-center mt-3">
-              <div class="card-body p-0 bg-black">
-                <li class="list-group" v-if="project === null">
-                  <ul class="list-group-item bg-black text-center mt-4"><p class="text-danger">No hay datos</p></ul>
-                </li>
-                <li class="list-group" v-else>
-                  <ul class="list-group-item text-white border border-3 bg-black mb-2 pb-0 pt-3">
-                    <p><span class="fw-bold"> Fundador: </span>{{founder.nickName}}</p>
-                    <p v-if="project.repository"><span class="fw-bold"> Repositorio: </span>{{project.repository}}</p>
-                    <div class="border-top border-1"></div>
-                    <p v-if="project.description" class="mt-2 mb-3">{{project.description}}</p>
-                  </ul>
-                  <ul class="list-group-item text-white border border-3 bg-black m-0 pb-0 border">
-                    <p>Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p>
-                  </ul>
-                </li>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <router-link to="/manager/projects" type="button" class="btn btn-outline-light">
-            <i class="fa-solid fa-arrow-alt-circle-left"></i>  Atrás
-          </router-link>
-        </div>
-      </div>
+    </div>
   </div>
   <div class="container my-3">
     <div class="row d-flex justify-content-center align-items-center p-0">
@@ -112,7 +76,7 @@
     <div class="row d-flex justify-content-center align-items-top p-0 border-top pt-5">
       <!-- Suscripciones -->
       <div class="col-md-6 flex-column justify-content-center align-items-center p-0">
-        <div class="card bg-black border border-2 rounded me-1">
+        <div class="card bg-black border border-3 rounded me-1">
           <div class="row-flex d-flex p-3">
             <span class="fw-bold ms-2 text-warning">Suscripciones</span>
             <ModalForm :id="'ModalSubscription'"
@@ -123,11 +87,11 @@
           <div class="row-flex d-flex p-3">
             <div class="card-body p-0 bg-black">
               <li class="list-group">
-                <ul v-if="subscriptions.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
-                  <p class="text-danger text-center">No hay suscripciones</p>
+                <ul v-if="subscriptions.length === 0" class="text-white border border-2 rounded bg-black mb-2 p-3">
+                  <p class="text-danger text-center m-0 p-0">No hay suscripciones</p>
                 </ul>
                 <ul v-else v-for="user in subscriptions" :key="user.id"
-                  class="list-group-item text-white border-light border bg-black mb-2 p-3">
+                  class="text-white border border-2 rounded bg-black mb-2 p-3">
                   <div class="row-flex d-flex justify-content-center align-items-center p-0">
                     <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
                       <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
@@ -140,6 +104,10 @@
                         <router-link :to="{ name: 'ViewUser', params: {nickName: user.nickName} }"
                           type="button" class="btn btn-outline-warning">
                           <i class="fa fa-eye"></i>
+                        </router-link>
+                        <router-link :to="{ name: 'ViewSubscription', params: {nickName: user.nickName, title: project.title}}"
+                            type="button" class="btn btn-outline-green ms-2">
+                            <i class="fa-solid fa-coins"></i>
                         </router-link>
                         <button
                           @click="deleteSubscription(user.id)"
@@ -156,7 +124,7 @@
         </div>
       </div>
       <div class="col-md-6 flex-column justify-content-center align-items-center p-0">
-        <div class="card bg-black border border-2 rounded ms-1">
+        <div class="card bg-black border border-3 rounded ms-1">
           <div class="row-flex d-flex p-3">
             <span class="fw-bold ms-2 text-primary">Participaciones</span>
             <ModalForm :id="'ModalParticipation'"
@@ -167,11 +135,11 @@
           <div class="row-flex d-flex p-3">
             <div class="card-body p-0 bg-black">
               <li class="list-group">
-                <ul v-if="participations.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
-                  <p class="text-danger text-center">No hay participaciones</p>
+                <ul v-if="participations.length === 0" class="text-white border border-2 rounded bg-black mb-2 p-3">
+                  <p class="text-danger text-center m-0 p-0">No hay participaciones</p>
                 </ul>
                 <ul v-else v-for="user in participations" :key="user.id"
-                  class="list-group-item text-white border-light border bg-black mb-2 p-3">
+                  class="text-white border border-2 rounded bg-black mb-2 p-3">
                   <div class="row-flex d-flex justify-content-center align-items-center p-0">
                     <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
                       <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
@@ -210,6 +178,7 @@ import "moment/locale/es";
 import projectApi from "@/services/projectApi";
 import userApi from "@/services/userApi";
 import ModalForm from "@/components/ModalForm.vue";
+import ProjectCard from "@/components/ProjectCard.vue";
 
 export default {
     name: "ViewProject",
@@ -218,15 +187,16 @@ export default {
             founder: null,
             project: null,
             selected_user: null,
-            previewImage: null,
             selected_users: [],
             users: [],
-            subscriptions: [],
-            updates: [],
-            participations: [],
             description: "",
             num_subscriptions: 0,
-            donations: 0
+            num_participations: 0,
+            num_donations: 0,
+            subscriptions: [],
+            participations: [],
+            donations: [],
+            updates: [],
         };
     },
     created() {
@@ -234,7 +204,7 @@ export default {
         this.getUsers();
     },
 
-    components: { ModalForm },
+    components: { ModalForm, ProjectCard },
 
     methods: {
         //FIND ONE
@@ -247,11 +217,13 @@ export default {
                 this.getSubscriptions(this.project.id);
                 this.getUpdates(this.project.id);
                 this.getParticipations(this.project.id);
+                this.getDonations(this.project.id);
             }
             catch (err) {
                 console.log(err);
             }
         },
+
         async getUsers() {
             try {
                 const response = await userApi.getUsers();
@@ -261,6 +233,7 @@ export default {
                 console.log(err);
             }
         },
+
         async getUpdates(id) {
             try {
                 const response = await projectApi.getUpdates(id);
@@ -270,27 +243,47 @@ export default {
                 console.log(err);
             }
         },
+
         async getSubscriptions(id) {
-            try {
-                const response = await projectApi.getSubscriptions(id);
-                this.subscriptions = response.data;
-                this.num_subscriptions = this.subscriptions.length;
-                console.log("SUBSCRIPTIONS: " + response.data);
-            }
-            catch (err) {
-                console.log(err);
-            }
+          try {
+            const response = await projectApi.getSubscriptions(id);
+            this.subscriptions = response.data;
+            this.num_subscriptions = this.subscriptions.length
+          }
+          catch (err) {
+            console.log(err);
+          }
         },
+
         async getParticipations(id) {
-            try {
-                const response = await projectApi.getParticipations(id);
-                this.participations = response.data;
-                console.log("PARTICIPATIONS: " + response.data);
-            }
-            catch (err) {
-                console.log(err);
-            }
+          try {
+            const response = await projectApi.getParticipations(id);
+            this.participations = response.data;
+            this.num_participations = this.participations.length
+          }
+          catch (err) {
+            console.log(err);
+          }
         },
+
+        async getDonations(id) {
+          try {
+            const response = await projectApi.getDonations(id);
+            this.donations = response.data;
+
+            let sum = 0;
+            if(this.donations.length > 0) {
+              this.donations.forEach(key => {
+                  sum += key.donation;
+              });
+            }
+            this.num_donations = sum
+          }
+          catch (err) {
+            console.log(err);
+          }
+        },
+
         async getFounder() {
             try {
                 const response = await userApi.getUserId(this.project.projectFounder);
@@ -340,6 +333,7 @@ export default {
                 console.log(err);
             }
         },
+
         async saveUpdate(e) {
             try {
                 e.preventDefault();
@@ -357,6 +351,7 @@ export default {
                 console.log(err);
             }
         },
+
         async deleteSubscription(idUser) {
             try {
                 const response = await userApi.deleteSubscription(idUser, this.project.id);
@@ -367,6 +362,7 @@ export default {
                 console.log(err);
             }
         },
+
         async deleteParticipation(idUser) {
             try {
                 const response = await userApi.deleteParticipation(idUser, this.project.id);
@@ -377,6 +373,7 @@ export default {
                 console.log(err);
             }
         },
+
         async deleteUpdate(date) {
             try {
                 const response = await projectApi.deleteUpdate(this.project.id, date);
@@ -392,9 +389,11 @@ export default {
         formatDate(date) {
             return moment(date).fromNow();
         },
+
         cancel() {
             this.selected_users = [];
         },
+
         saveUser(list) {
             let found = false;
             for (let i = 0; i < list.length && found == false; i++) {
@@ -410,6 +409,7 @@ export default {
                 console.log("ERROR: elemente ya añadido");
             }
         },
+
         deleteUser(nickName, list) {
             let found = -1;
             for (let i = 0; i < list.length && found == -1; i++) {

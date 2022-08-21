@@ -26,6 +26,11 @@ export default {
         return Api().get(`project/find/participations/${id}`)
     },
 
+    // GET DONATIONS
+    async getDonations(id) {
+        return Api().get(`project/find/donations/${id}`)
+    },
+
     // CREATE
     saveProject(projectData) {
         return Api().post('project/add', projectData);

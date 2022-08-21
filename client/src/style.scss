@@ -131,7 +131,7 @@ html, body {
     }
 
     .number-score {
-        font-size: 60px;
+        font-size: 30px;
     }
 
     .imagePreview {
@@ -172,10 +172,10 @@ html, body {
             height: 40px;
         }
 
-        &__icon-image-big {
+        &__project-page {
             @extend .imagePreview;
-            width: 300px;
-            height: 300px;
+            width: 290px;
+            height: 290px;
         }
     }
 
@@ -192,6 +192,24 @@ html, body {
             position: absolute;
             right: 10px;
             bottom: -5px;
+            font-size: 15px;
+            padding: 0 2px;
+        }
+    }
+
+    .news {
+        button {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 13px;
+            top: 10px;
+        }
+
+        span {
+            position: absolute;
+            right: 10px;
+            bottom: -22px;
             font-size: 15px;
             padding: 0 2px;
         }

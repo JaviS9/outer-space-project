@@ -58,6 +58,7 @@ module.exports = (app) => {
    app.get('/project/find/updates/:id', projectController.findProjectUpdates);
    app.get('/project/find/subscriptions/:id', projectController.findProjectSubscriptions);
    app.get('/project/find/participations/:id', projectController.findProjectParticipations);
+   app.get('/project/find/donations/:id', projectController.findProjectDonations)
    app.get('/project/search/:title', projectController.searchProject);
 
    // POST
@@ -77,7 +78,8 @@ module.exports = (app) => {
 
    // *** ADMIN ***
    // GET
-   app.get('/admin/list', adminController.listAdmin); 
+   app.get('/admin/list', adminController.listAdmin);
+   app.get('/admin/find/:email', adminController.findAdmin);
    app.get('/admin/find/id/:id', adminController.findAdminId);
    app.get('/admin/search/:name', adminController.searchAdmin);
 

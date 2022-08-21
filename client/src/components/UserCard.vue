@@ -39,8 +39,8 @@
                     </button>
                 </ul>
                 <ul v-if="user.biography"
-                    class="list-group-item border-top border-1 text-white bg-black mx-0 my-1">
-                    <p>Biografía: <span class="fw-bold">{{user.biography}}</span></p>
+                    class="list-group-item border-top border-1 text-white bg-black mx-0 my-1 px-2">
+                    <p class="m-0 p-0">Biografía: <span class="fw-bold">{{user.biography}}</span></p>
                 </ul>
              </li>
           </div>
