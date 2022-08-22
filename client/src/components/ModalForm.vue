@@ -107,6 +107,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert';
+
 export default {
     name:'ModalForm',
     data() {
@@ -146,7 +148,7 @@ export default {
                 console.log(list);
             }
             else {
-                window.alert("ERROR: Elemento ya añadido");
+                swal("Cuidado!", "Elemento ya añadido", "error");
             }
         },
 

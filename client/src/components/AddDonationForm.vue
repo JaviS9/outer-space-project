@@ -32,8 +32,7 @@ export default {
   },
 
   props: {
-    userid: String,
-    projectid: String,
+    subscriptionid: String,
   },
 
   methods: {
@@ -41,8 +40,7 @@ export default {
             try {
                 if (this.donation != null) {
                     const donation = await subscriptionApi.saveDonation({
-                        idUser: this.$props.userid,
-                        idProject: this.$props.projectid,
+                        idSubscription: this.$props.subscriptionid,
                         donation: this.donation
                     })
                     console.log(donation)

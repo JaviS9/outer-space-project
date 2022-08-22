@@ -20,6 +20,14 @@
           <div class="mb-2">
             <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="photo" @input="getImage">
           </div>
+          <div class="col-8 d-flex align-items-center justify-content-start">
+            <p class="m-0">Financiación: </p>
+            <input type="number" min="1" step="any" class="form-control ms-2" placeholder="        _ _ , _ _" v-model="financiation">
+            <i class="fa fa-euro-sign ms-1"></i>
+          </div>
+          <div v-if="errors.financiation == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor introduzca una cifra.</p>
+          </div>
           <hr>
           <div class="my-2">
             <div class="d-flex flex-row align-items-center justify-content-start mb-3">
@@ -71,6 +79,7 @@ export default {
       ],
       errors: {
           title: false,
+          financiation: false
       }
     };
   },
@@ -100,6 +109,9 @@ export default {
       try {
         e.preventDefault();
         
+        if(!this.financiation || this.financiation <= 0 || this.financiation === null) {
+          this.errors.financiation = true;
+        } else { this.errors.financiation = false; }
         // VALID TITLE
         if(!this.title) {
           this.errors.title = true;
@@ -112,6 +124,7 @@ export default {
             repository: this.repository,
             founder: this.founder,
             photo: this.previewImage,
+            financiation: this.financiation
           },
           { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
@@ -124,7 +137,7 @@ export default {
 
           console.log(response.data);
           window.location.reload();
-        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
+        }
       } catch (err) {
         console.log(err);
       }

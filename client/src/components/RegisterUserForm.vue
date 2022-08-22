@@ -27,14 +27,7 @@
             <div v-if="errors.nickName == true">
                 <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe un nombre de usuario.</p>
             </div>
-        </div>
-        <!-- <div v-if="$store.state.isAdminLoggedIn" class="mb-2">
-            <textarea class="form-control" rows="3" placeholder="Biografía" v-model="biography"></textarea>
-        </div> -->
-        <!-- INSERTAR FOTOS -->
-        <!-- <div v-if="$store.state.isAdminLoggedIn" class="mb-2">
-            <input type="text" class="form-control" placeholder="Foto de usuario" v-model="photo" @input="getImage">
-        </div> -->
+        </div> 
         <hr>
         <p>Introduce una contraseña.
             <i v-if="errors.length_pass == true"
@@ -60,15 +53,14 @@
         <div v-if="errors.equal_pass == true">
             <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
         </div>
-
+        <div v-if="errors.register == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Este usuario ya existe.</p>
+        </div>
         <div class="mb-2 mt-3 row-flex d-flex justify-content-end">
             <input type="button" class="btn btn-outline-warning btn-md" value="Registrar" @click="saveUser">
         </div>
     </form>
   </div>
-  <!-- <div v-if="$store.state.isAdminLoggedIn" class="col-md-6 m-3">
-    <div class="imagePreview__user-image" :style="{ 'background-image': `url(${previewImage})` }"></div>
-  </div> -->
 </div>
 </template>
 
@@ -101,6 +93,7 @@ export default {
           rep_pass: false,
           equal_pass: false,
           length_pass: false,
+          register: false,
         }
     };
   },
@@ -126,7 +119,7 @@ export default {
     async saveUser(e) {
       try {
         e.preventDefault();
-
+        this.errors.register = false
         // VALID EMAIL
         if(!this.email) {
           this.errors.email = true;
@@ -181,10 +174,10 @@ export default {
           this.repeat_pass = "";
           console.log(response.data);
           this.$router.push("/");
-        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
+        }
       } catch (err) {
-        window.alert(err)
         console.log(err);
+        this.errors.register = true;
       }
     },
   },

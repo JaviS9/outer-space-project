@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Donation.belongsTo(models.Subscription, {foreignKey: 'idUser', targetKey: 'idUser'})
-      Donation.belongsTo(models.Subscription, {foreignKey: 'idProject', targetKey: 'idProject'})
+      Donation.belongsTo(models.Subscription, {foreignKey: 'idSubscription', targetKey: 'numSubs'})
     }
   }
   Donation.init({
@@ -21,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER,
       autoIncrement: true,
+    },
+    idSubscription: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
     },
     date: {
       allowNull: false,

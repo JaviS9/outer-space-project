@@ -14,56 +14,62 @@
                 <p class="h5 text-danger mt-5">No hay proyectos aún</p>
             </div>
             <div 
-                class="col-md-3 pe-1 d-flex flex-column justify-content-center"
+                class="col-md-4 pe-2 pb-5 d-flex flex-column justify-content-center"
                 v-else
                 v-for="project in projects" :key="project.id"
-                :id="project.id"
             >
-                <div class="card text-white bg-black border border-2 rounded p-2">
-                    <li class="list-group">
-                        <ul class="list-group-item bg-black text-white m-0 p-2 text-center">
-                            {{ project.title }}
-                        </ul>
-                        <ul class="list-group-item bg-black text-white mx-0 my-2 py-2 ps-3 d-flex align-items-center justify-content-center">
+                <div class="card bg-black text-white border border-2 mx-4 p-2"
+                    style="height: 480px"
+                >
+                    <div class="row-flex d-flex justify-content-center align-items-center">
+                        <router-link :to="{ name: 'ProjectPage', params: {title: project.title}}"
+                            type="button" 
+                            class="d-flex justify-content-center align-items-center mt-4 rounded-circle button-image"
+                            style="width: 250px"
+                        >
                             <div class="imagePreview__user-image m-0 p-0"
                                 :style="{ 'background-image': `url(${project.photo})` }"
-                            >
-                            </div>
-                        </ul>
-                        <ul class="list-group-item bg-black text-white mx-0 mb-2 p-0 justify-content-center d-flex">
-                            <router-link :to="{ name: 'ProjectPage', params: {title: project.title}}"
-                                type="button" class="btn btn-md btn-outline-warning rounded-pill"
-                            ><i class="fa fa-eye"></i> Ver proyecto
-                            </router-link>
-                            <!--  -->
-                            <router-link to="/" type="button" class="btn btn-md btn-outline-success rounded-pill ms-2">
-                                <i class="fa fa-plus"></i> Suscribirse
-                            </router-link>
-                        </ul>
-                    </li>
+                            ></div>
+                        </router-link>
+                    </div>
+                    <div class="card-body my-3">
+                        <!-- FIN PROGRESS -->
+                        <div class="progress my-3 rounded-pill bg-black border border-light border-3" style="height: 20px;">
+                            <div class="progress-bar bg-orange rounded-pill mx-0" 
+                                role="progressbar" :style="{'width': getProgress(project.title, project.financiation)}"
+                                aria-valuenow="25" 
+                                aria-valuemin="0" 
+                                aria-valuemax="100">{{ getProgress(project.title, project.financiation) }}</div>
+                        </div>
+                        <!--  -->
+                        <h5 class="card-title fw-bold">{{ project.title }}</h5>
+                        <p class="card-text">{{ project.description }}</p>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- PAGES -->
-        <div class="row-flex d-flex my-5 align-items-center justify-content-center bg-black">
-        <button type="button"
-            class="button-page" :disabled="current <= 1"
-            v-on:click="prevPage()"
-        ><i class="fa-solid fa-caret-left"></i>
-        </button>
+        <div v-if="numPages > 1"
+            class="row-flex d-flex my-5 align-items-center justify-content-center bg-black"
+        >
+            <button type="button"
+                class="button-page" :disabled="current <= 1"
+                v-on:click="prevPage()"
+            ><i class="fa-solid fa-caret-left"></i>
+            </button>
 
-        <button v-for="(index) in numPages" :key="index" 
-            type="button"
-            class="button-page"
-            v-on:click="changePage(index)"
-        ><i class="fa-solid" :class="'fa-' + index"></i>
-        </button>
+            <button v-for="(index) in numPages" :key="index" 
+                type="button"
+                class="button-page"
+                v-on:click="changePage(index)"
+            ><i class="fa-solid" :class="'fa-' + index"></i>
+            </button>
 
-        <button type="button"
-            class="button-page" :disabled="current >= numPages"
-            v-on:click="nextPage()"
-        ><i class="fa-solid fa-caret-right"></i>
-        </button>
+            <button type="button"
+                class="button-page" :disabled="current >= numPages"
+                v-on:click="nextPage()"
+            ><i class="fa-solid fa-caret-right"></i>
+            </button>
         </div>
         <!--  -->
     </div>
@@ -81,6 +87,8 @@ export default {
             search: "",
             projects: [],
             aux_projects: [],
+            donations: [],
+            num_donations: 0,
             pageSize: 12,
             current: 1
         };
@@ -91,21 +99,20 @@ export default {
 
     computed: {
         numPages() {
-        var res = Math.floor(this.projects.length/this.pageSize);
-        // var res = Math.round(n + 0,49)
-        if(res > 10) { res = 10 }
-        console.log(res)
-        return res + 1
+            var res = Math.floor(this.projects.length/this.pageSize);
+            // var res = Math.round(n + 0,49)
+            if(res > 10) { res = 10 }
+            return res + 1
         },
         indexStart() {
-        return (this.current - 1) * this.pageSize;
+            return (this.current - 1) * this.pageSize;
         },
         indexEnd() {
-        return this.indexStart + this.pageSize;
+            return this.indexStart + this.pageSize;
         },
         paginated() {
-        return this.projects.slice(this.indexStart, this.indexEnd);
-        }
+            return this.projects.slice(this.indexStart, this.indexEnd);
+        },
     },
 
     methods: {
@@ -121,31 +128,44 @@ export default {
         nextPage () {
             this.current++
         },
-
-        filter(list, search) {
-            let filter;
-            filter = search.value.toUpperCase();
-            for (let i = 0; i < list.length; i++) {
-                if (!list[i].title.toUpperCase().indexOf(filter) > -1) {
-                    this.aux_projects.push(list[i]);
-                    list.splice(i, 1);
-                }
-            }
-        },
         
         searchProject(search) {
             this.projects = search
+        },
+
+        getProgress(title, financiation) {
+            var donation = 0
+            console.log(this.donations)
+            for(let i = 0; i < this.donations.length; i++) {
+                if(this.donations[i].title == title) {
+                    donation = this.donations[i].total
+                    break
+                }
+            }
+            if (donation != 0) { return String((donation/financiation)*100) + '%' }
+            else { return ""}
         },
 
         async getProjects() {
             try {
                 const projects = await projectApi.getProjects();
                 this.projects = projects.data.reverse();
+                this.getDonations();
             }
             catch (err) {
                 console.log(err);
             }
-        }
+        },
+
+        async getDonations() {
+            try {
+                const response = await projectApi.getAllDonations();
+                this.donations = response.data;
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
     },
 
     components: { SearchBox }

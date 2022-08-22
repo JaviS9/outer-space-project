@@ -26,6 +26,12 @@ module.exports = {
           as: 'idProject'
         }
       },
+      numSubs: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        unique: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

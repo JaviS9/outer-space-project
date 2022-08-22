@@ -22,11 +22,19 @@ export default {
     },
 
     // GET SUBS
+    async getOneSubscription (idUser, idProject) {
+      return Api().get(`user/${idUser}/find/subscription/${idProject}`);
+    },
+
     async getSubscriptions (id) {
       return Api().get(`user/find/subscriptions/${id}`);
     },
 
     // GET PART
+    async getOneParticipation (idUser, idProject) {
+      return Api().get(`user/${idUser}/find/participation/${idProject}`);
+    },
+
     async getParticipations (id) {
       return Api().get(`user/find/participations/${id}`);
     },

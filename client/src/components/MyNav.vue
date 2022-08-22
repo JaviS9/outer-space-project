@@ -107,7 +107,7 @@ export default {
           Authentication.deleteUserLogged()
           this.$router.push('/')
       } catch (error) {
-          window.alert(this.error)
+          console.log(error)
       }
     }
   }

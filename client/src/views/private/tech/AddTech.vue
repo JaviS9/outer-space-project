@@ -36,11 +36,9 @@
           <div v-if="errors.type == true">
             <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, selecciona un tipo de tecnología.</p>
           </div>
-          <!-- <div class="mb-2">
-            <input type="text" class="form-control" placeholder="URL de imagen" v-model="photo" v-on:change="getImage">
-          </div> -->
-          <!-- <input type="text" class="form-control" placeholder="Foto de usuario" v-model="photo" @input="getImage"> -->
-          <!--  -->
+          <div v-if="errors.register == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Esta tecnología ya existe.</p>
+          </div>
           <div class="mb-2 mt-3">
             <input
               type="submit"
@@ -85,7 +83,8 @@ export default {
       ],
       errors: {
         name: false,
-        type: false
+        type: false,
+        register: false
       }
     };
   },
@@ -115,7 +114,7 @@ export default {
     async saveTech(e) {
       try {
         e.preventDefault();
-
+        this.errors.register = false;
         // VALID NAME
         if(!this.name) {
           this.errors.name = true;
@@ -138,9 +137,10 @@ export default {
           this.photo = null;
           console.log(response.data);
           this.$router.push("/manager/techs");
-        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
+        }
       } catch (err) {
         console.log(err);
+        this.errors.register = true;
       }
     }
   }

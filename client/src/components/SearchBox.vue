@@ -4,7 +4,7 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col flex-column d-flex align-items-end justify-content-center">
-                    <input type="text" class="form-control" placeholder="Busca un proyecto" v-model="item_searched">
+                    <input type="text" class="form-control" placeholder="Buscar..." v-model="item_searched">
                     <div class="container-x">
                         <button id="search-x" type="button" v-on:click="cancel">
                             <i class="fa fa-xmark"></i>

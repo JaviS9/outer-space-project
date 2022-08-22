@@ -48,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         type: DataTypes.STRING
     },
+    financiation: {
+      allowNull: false,
+      type: DataTypes.FLOAT,
+      defaultValue: 0.00,
+    },
     photo: DataTypes.STRING,
     description: DataTypes.STRING,
     repository: DataTypes.STRING,

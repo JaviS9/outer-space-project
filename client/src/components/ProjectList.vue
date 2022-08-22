@@ -10,10 +10,10 @@
             >
                 <div class="card-body m-0 p-0">
                     <div class="row-flex d-flex align-items-center justify-content-center p-3">
-                        <div class="col-md-1 flex-column d-flex align-items-end justify-content-center">
-                            <div class="imagePreview__list-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
+                        <div class="col-md-3 flex-column d-flex align-items-end justify-content-center">
+                            <div class="imagePreview__list-image border border-3 rounded-circle" :style="{ 'background-image': `url(${pro.photo})` }"></div>
                         </div>
-                        <div class="col-md-8 flex-column d-flex align-items-start justify-content-center">
+                        <div class="col-md-6 flex-column d-flex align-items-start justify-content-center">
                             <p class="m-0">{{ pro.title }}</p>
                         </div>
                         <div class="col-md-3 flex-column d-flex align-items-end justify-content-center">
@@ -23,12 +23,12 @@
                                     type="button" class="btn btn-outline-warning">
                                     <i class="fa fa-eye"></i>
                                 </router-link>
-                                <router-link v-if="listName == 'subscriptions'"
-                                    :to="{ name: 'ViewSubscription', params: {nickName: user, title: pro.title}}"
+                                <router-link v-if="listName == 'subscriptions' && ($store.state.isAdminLoggedIn || $store.state.isUserLoggedIn)"
+                                    :to="{ name: 'ViewSubscription', params: { subscription: pro.numSubs }}"
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
-                                <button v-if="listName != ''"
+                                <button v-if="listName != '' && ($store.state.isAdminLoggedIn || $store.state.isUserLoggedIn)"
                                     type="button"
                                     @click="deleteProject(pro.id)"
                                     class="btn btn-outline-danger ms-2">
@@ -62,11 +62,11 @@ export default {
 
     created() {
         switch(this.$props.listName) {
-            case 'fundedProjects': this.getFundedProjects(this.$store.state.user.id);
+            case 'fundedProjects': this.getFundedProjects(this.$props.user.id);
                 break;
-            case 'subscriptions' : this.getSubscriptions(this.$store.state.user.id);
+            case 'subscriptions' : this.getSubscriptions(this.$props.user.id);
                 break;
-            case 'participations': this.getParticipations(this.$store.state.user.id);
+            case 'participations': this.getParticipations(this.$props.user.id);
                 break;
         }        
     },
@@ -79,21 +79,20 @@ export default {
                 switch(this.$props.listName) {
                     case 'fundedProjects':
                         response = await projectApi.deleteProject(idProject);
-                        this.getFundedProjects(this.$store.state.user.id);
+                        this.getFundedProjects(this.$props.user.id);
                         console.log(response.data)
                         break;
                     case 'subscriptions' : 
-                        response = await userApi.deleteSubscription(this.$store.state.user.id, idProject);
-                        this.getSubscriptions(this.$store.state.user.id);
+                        response = await userApi.deleteSubscription(this.$props.user.id, idProject);
+                        this.getSubscriptions(this.$props.user.id);
                         console.log(response.data)
                         break;
                     case 'participations': 
-                        response = await userApi.deleteParticipation(this.$store.state.user.id, idProject);
-                        this.getParticipations(this.$store.state.user.id);
+                        response = await userApi.deleteParticipation(this.$props.user.id, idProject);
+                        this.getParticipations(this.$props.user.id);
                         console.log(response.data)
                         break;
                 }
-                window.location.reload()
             } catch (err) {
                 console.log(err);
             }

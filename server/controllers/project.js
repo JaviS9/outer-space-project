@@ -17,6 +17,7 @@ module.exports = {
                 repository : req.body.repository,
                 photo : req.body.photo,
                 projectFounder : req.body.founder.id,
+                financiation: req.body.financiation,
             });
             res.status(200).send(project)
         } catch (err) {
@@ -67,6 +68,18 @@ module.exports = {
         }
     },
 
+    async findProjectId(req, res) {
+        try{
+            const project = await models.Project.findAll(
+                { where: { id: req.params.id }});
+            res.status(200).send(project)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: ProjectId not found -- ' + err
+            });
+        }
+    },
+
     async findProjectUpdates (req, res) {
         try{
             const updates = await models.Update.findAll(
@@ -110,13 +123,26 @@ module.exports = {
     async findProjectDonations (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM donation JOIN user ON user.id = donation.idUser WHERE donation.idProject = :id",
+                "SELECT * FROM donation JOIN subscription ON subscription.numSubs = donation.idSubscription WHERE subscription.idProject = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Participations not found -- ' + err
+                error: 'ERROR: Donations not found -- ' + err
+            });
+        }
+    },
+
+    async findAllDonations (__, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT project.title, sum(donation) as total FROM donation join subscription on donation.idSubscription = subscription.numSubs join project on subscription.idProject = project.id group by project.title;",
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Donations not found -- ' + err
             });
         }
     },
@@ -130,6 +156,7 @@ module.exports = {
                 repository : req.body.repository,
                 photo : req.body.photo,
                 projectFounder : req.body.founder.id,
+                financiation: req.body.financiation,
                 updatedAt: new Date(),
             }, {
                 where: { id: req.params.id }

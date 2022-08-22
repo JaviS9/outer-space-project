@@ -23,6 +23,11 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
+      financiation: {
+        allowNull: false,
+        type: Sequelize.FLOAT,
+        defaultValue: 0.00,
+      },
       photo: Sequelize.STRING,
       description: Sequelize.STRING,
       repository: Sequelize.STRING,

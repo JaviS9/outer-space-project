@@ -7,8 +7,12 @@ export default {
     },
 
     // GET
-    async getSubscriptionDonations(idUser, idProject) {
-      return Api().get(`subcription/find/donations/user/${idUser}/project/${idProject}`);
+    async getSubscription (id) {
+      return Api().get(`subscription/find/${id}`);
+    },
+
+    async getSubscriptionDonations(id) {
+      return Api().get(`subscription/find/donations/${id}`);
     },
 
     // CREATE
@@ -17,7 +21,7 @@ export default {
     },
 
     // DELETE
-    deleteDonation(id, idUser, idProject) {
-        return Api().delete(`/donation/${id}/delete/user/${idUser}/project/${idProject}`)
+    deleteDonation(idSubscription, idDonation) {
+        return Api().delete(`subscription/${idSubscription}/delete/donation/${idDonation}`)
     },
 }

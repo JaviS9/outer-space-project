@@ -25,13 +25,15 @@
             <input type="text" class="form-control" placeholder="URL del repositorio" v-model="repository">
           </div>
           <div class="mb-2">
-            <!-- <input 
-              ref="photo"
-              class="form-control"
-              type="file" accept="image/*"
-              @input="pickFile"
-            > -->
             <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="photo" @input="getImage">
+          </div>
+          <div class="col-6 d-flex align-items-center justify-content-start">
+            <p class="m-0">Financiación: </p>
+            <input type="number" min="1" step="any" class="form-control ms-2" placeholder="       _ _ , _ _" v-model="financiation">
+            <i class="fa fa-euro-sign ms-1"></i>
+          </div>
+          <div v-if="errors.financiation == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor introduzca una cifra.</p>
           </div>
           <hr>
           <div class="my-2">
@@ -72,10 +74,9 @@
             <div v-if="errors.founder == true">
               <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, selecciona un fundador.</p>
             </div>
-          </div>
-          <!--  -->
-          <div class="mb-2">
-            <input type="hidden" class="form-control">
+            <div v-if="errors.register == true">
+              <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Este proyecto ya existe.</p>
+            </div>
           </div>
           <!--  -->
           <div class="mb-2 mt-3">
@@ -110,6 +111,7 @@ export default {
       description: "",
       repository: "",
       photo: "",
+      financiation: null,
       founder: null,
       users: [],
       selected_founder: "",
@@ -122,6 +124,8 @@ export default {
       errors: {
           title: false,
           founder: false,
+          register: false,
+          financiation: false
       }
     };
   },
@@ -164,7 +168,10 @@ export default {
     async saveProject(e) {
       try {
         e.preventDefault();
-        
+        this.errors.register = false;
+        if(!this.financiation || this.financiation <= 0 || this.financiation === null) {
+          this.errors.financiation = true;
+        } else { this.errors.financiation = false; }
         // VALID TITLE
         if(!this.title) {
           this.errors.title = true;
@@ -175,13 +182,17 @@ export default {
         } else { this.errors.founder = false; }
 
         if(Object.values(this.errors).every(value => value === false)) {
-          let response = await projectApi.saveProject({
+          
+          const project = {
             title: this.title,
             description: this.description,
             repository: this.repository,
             founder: this.founder,
             photo: this.previewImage,
-          },
+            financiation: this.financiation
+          }
+          console.log("PROJECT " + project)
+          let response = await projectApi.saveProject(project,
           { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
 
@@ -193,9 +204,10 @@ export default {
 
           console.log(response.data);
           this.$router.push("/manager/projects");
-        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
+        } 
       } catch (err) {
         console.log(err);
+        this.errors.register = true;
       }
     }
   }

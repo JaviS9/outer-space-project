@@ -141,6 +141,8 @@ import userApi from '@/services/userApi';
 import adminApi from '@/services/adminApi';
 import techApi from '@/services/techApi';
 
+import swal from 'sweetalert';
+
 export default {
   name: "EditUser",
   data() {
@@ -250,7 +252,7 @@ export default {
         console.log(list);
       }
       else {
-        window.alert("ERROR: Elemento ya añadido");
+        swal("Cuidado!", "Elemento ya añadido", "error");
       }
     },
 
@@ -301,6 +303,7 @@ export default {
       }
       catch (err) {
           console.log(err);
+          swal("Ha habido algún error!", "Alguna tecnología ya ha sido añadida", "error")
       }
     },
 

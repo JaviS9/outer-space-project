@@ -20,6 +20,10 @@ html, body {
     .border-green {border: 2px solid greenyellow}
 
     .bg-grey { background-color: #999999;}
+    .bg-orange { background-color: rgb(255, 119, 0);}
+
+    .btn-green {color: black ;background-color: greenyellow ;border-color: greenyellow}
+    .btn-green:hover {color: greenyellow ;background-color: black ;border-color: black}
 
     .btn-outline-green{color: greenyellow ;border-color: greenyellow}
     .btn-outline-green:hover{color: black ;background-color: greenyellow ;border-color: greenyellow}
@@ -268,6 +272,14 @@ html, body {
             bottom: -22px;
         }
 
+    }
+
+    .button-image {
+        border: 3px solid white;
+    }
+
+    .button-image:hover {
+        border: 3px solid orange;
     }
 
     .button-section:hover {

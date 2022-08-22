@@ -50,11 +50,8 @@ module.exports = {
                 ]}
             })
             if(!user) {
-                var user = await models.Admin.findOne({
-                    where: { [Op.or] : [
-                        { email: id },
-                    ]}
-                })
+                var user = await models.Admin.findOne(
+                    { where: { email: id } })
                 if(!user) {
                     res.status(403).send({
                         error: 'Los datos de inicio de sesión son incorrectos'

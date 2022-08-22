@@ -61,28 +61,27 @@ export default {
     },
 
     props: {
-      userid: String,
-      projectid: String,
+      subscriptionid: String,
     },
 
     created() {
-      this.getSubscriptionDonations(this.$props.userid, this.$props.projectid)
+      this.getSubscriptionDonations(this.$props.subscriptionid)
     },
 
     methods: {
       formatId(id){
         var zeros = "000000";
         var num = String(id)
-        return zeros.substring(0, zeros.length - num.length -1) + num
+        return zeros.substring(0, zeros.length - num.length) + num
       },
 
       formatDate(date){
         return "Fecha: " + date.substring(0, 10).replaceAll('-', '/') + ", Hora: " +  date.substring(14, date.length - 5)
       },
 
-      async getSubscriptionDonations(idUser, idProject) {
+      async getSubscriptionDonations(idSubscription) {
         try {
-          const donations = await subscriptionApi.getSubscriptionDonations(idUser, idProject)
+          const donations = await subscriptionApi.getSubscriptionDonations(idSubscription)
           this.donations = donations.data
           let sum = 0;
           if(this.donations.length > 0) {
@@ -98,9 +97,9 @@ export default {
 
       async deleteDonation(idDonation) {
         try {
-          const response = await subscriptionApi.deleteDonation(idDonation, this.$props.userid, this.$props.projectid)
+          const response = await subscriptionApi.deleteDonation(this.$props.subscriptionid, idDonation)
           console.log(response)
-          this.getSubscriptionDonations(this.$props.userid, this.$props.projectid)
+          this.getSubscriptionDonations(this.$props.subscriptionid)
         } catch (err) {
           console.log(err)
         }

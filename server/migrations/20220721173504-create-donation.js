@@ -8,26 +8,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         autoIncrement: true,
       },
-      idUser: {
+      idSubscription: {
         allowNull: false,
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         references: {
           model: 'Subscription',
-          key: 'idUser',
-          as: 'idUser'
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
-      idProject: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        primaryKey: true,
-        references: {
-          model: 'Subscription',
-          key: 'idProject',
-          as: 'idProject'
+          key: 'numSubs',
+          as: 'idSubscription'
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE",

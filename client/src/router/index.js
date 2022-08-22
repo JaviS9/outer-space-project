@@ -153,20 +153,11 @@ const routes = [
   },
   // *** SUBSCRIPTION (PRIVATE) ***
   {
-    path: '/subscription/:nickName/:title',
+    path: '/subscription/:subscription',
     name: 'ViewSubscription',
     component: () => import('../views/private/subscription/ViewSubscription.vue'),
     beforeEnter: (to, from, next) => {
       if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn)) next({ name: 'LoginRegister' })
-      else next()
-    },
-  },
-  {
-    path: '/subscribe/:nickName/:title',
-    name: 'ToSubscribe',
-    component: () => import('../views/private/subscription/ToSubscribe.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.name !== 'LoginRegister' && !store.state.isUserLoggedIn) next({ name: 'LoginRegister' })
       else next()
     },
   },

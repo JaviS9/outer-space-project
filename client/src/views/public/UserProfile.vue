@@ -85,7 +85,7 @@
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :user="user.nickName" :listName="'fundedProjects'" />
+          <ProjectList :user="user" :listName="'fundedProjects'" />
         </div>
       </div>
     </div>
@@ -104,7 +104,7 @@
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :user="user.nickName" :listName="'subscriptions'" />
+          <ProjectList :user="user" :listName="'subscriptions'" />
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :user="user.nickName" :listName="'participations'" />
+          <ProjectList :user="user" :listName="'participations'" />
         </div>
       </div>
     </div>
@@ -131,11 +131,31 @@
 
   <!-- ADMIN SECTION -->
   <div v-if="$store.state.isAdminLoggedIn && (this.user.id === this.profile.id)"
-      id="EditProfilePanel" 
-      class="container border rounded border-3 mt-2 p-3 mb-5"
-    >
-      <p class="h5 pb-3 text-center text-primary fw-bold">Actualiza los datos de tu perfil de administrador</p>
-      <UpdateUserForm :userinfo="user"/>
+    id="EditProfilePanel" 
+    class="container border rounded border-3 mt-2 p-3 mb-5"
+  >
+    <p class="h5 pb-3 text-center text-primary fw-bold">Actualiza los datos de tu perfil de administrador</p>
+    <UpdateUserForm :userinfo="user"/>
+  </div>
+
+  <!-- PUBLIC SECTION -->
+  <div v-if="(!$store.state.isAdminLoggedIn && !$store.state.isUserLoggedIn) || (this.user.id != this.profile.id)"
+    class="container mt-3 mb-5"
+  >
+    <div class="row-flex d-flex align-items-top justify-content-center p-0 m-0">
+      <div class="col-md-4 card bg-black text-white border border-3 p-2 border-info">
+        <p class="fw-bold ms-3 mt-2 text-info">Proyectos fundados</p>
+        <ProjectList :user="user" :listName="'fundedProjects'" />
+      </div>
+      <div class="col-md-4 card bg-black text-white border border-3 border-warning p-2 ms-3">
+        <p class="fw-bold ms-3 mt-2 text-warning">Subscripciones</p>
+        <ProjectList :user="user" :listName="'subscriptions'" />
+      </div>
+      <div class="col-md-4 card bg-black text-white border border-3 border-primary p-2 ms-3">
+        <p class="fw-bold ms-3 mt-2 text-primary">Participaciones</p>
+        <ProjectList :user="user" :listName="'participations'" />
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -150,6 +170,8 @@ import projectApi from '@/services/projectApi';
 import userApi from '@/services/userApi';
 import adminApi from '@/services/adminApi';
 import ModalForm from '@/components/ModalForm.vue';
+
+import swal from 'sweetalert';
 
 export default {
     name: "MyProfile",
@@ -228,6 +250,7 @@ export default {
           window.location.reload();
         } catch (err) {
           console.log(err);
+          swal("H habido algún error!", "Ya estas suscrito a alguno de estos proyectos", "error")
         }
       },
 
@@ -248,6 +271,7 @@ export default {
           window.location.reload();
         } catch (err) {
           console.log(err);
+          swal("Ha habido algún error!", "Ya participas en alguno de estos proyectos", "error")
         }
       },
 

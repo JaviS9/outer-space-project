@@ -44,6 +44,11 @@
               <input type="text" class="form-control" placeholder="Foto de proyecto" v-model="project.photo" @input="getImage">
             </div>
           </div>
+          <div class="col-6 d-flex align-items-center justify-content-start">
+            <p class="m-0">Financiación: </p>
+            <input type="number" min="1" step="any" class="form-control ms-2" placeholder="               _ _ , _ _" v-model="project.financiation">
+            <i class="fa fa-euro-sign ms-1"></i>
+          </div>
           <hr>
           <div class="m-0 p-0">
             <div class="row-flex d-flex align-items-center justify-content-start py-3">
@@ -172,6 +177,7 @@ export default {
           repository: this.project.repository,
           founder: this.founder,
           photo: this.previewImage,
+          financiation: this.project.financiation
         },
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );

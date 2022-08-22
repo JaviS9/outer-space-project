@@ -14,12 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Subscription.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
       Subscription.belongsTo(models.Project, {foreignKey: 'idProject', targetKey: 'id'})
       Subscription.hasMany(models.Donation, {foreignKey: {
-                                              name: 'idUser',
-                                              onDelete: 'CASCADE',
-                                              onUpdate: 'CASCADE'
-                                            }});
-      Subscription.hasMany(models.Donation, {foreignKey: {
-                                              name: 'idProject',
+                                              name: 'idSubscription',
                                               onDelete: 'CASCADE',
                                               onUpdate: 'CASCADE'
                                             }});
@@ -35,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID
+    },
+    numSubs: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      unique: true,
     },
     createdAt: {
       allowNull: false,

@@ -19,6 +19,8 @@ module.exports = (app) => {
    app.get('/user/find/projects/:id', userController.findUserFundedProjects);
    app.get('/user/find/subscriptions/:id', userController.findUserSubscriptions);
    app.get('/user/find/participations/:id', userController.findUserParticipations);
+   app.get('/user/:idUser/find/subscription/:idProject', userController.findSubscription);
+   app.get('/user/:idUser/find/participation/:idProject', userController.findParticipation);
    app.get('/user/find/techs/:id', userController.findUserTechs);
    app.get('/user/find/donations/:id', userController.findUserDonations)
    app.get('/user/search/:nickName', userController.searchUser);
@@ -42,23 +44,26 @@ module.exports = (app) => {
    // *** SUBSCRIPTION // DONATION ***
    // GET
    app.get('/donation/list', donationController.listDonation);
-   app.get('/subcription/find/donations/user/:idUser/project/:idProject', donationController.findSubscriptionDonations);
+   app.get('/subscription/find/donations/:id', donationController.findSubscriptionDonations);
+   app.get('/subscription/find/:id', donationController.findSubscription);
    
    // POST
    app.post('/donation/add', donationController.addDonation);
 
    // DELETE
-   app.delete('/donation/:id/delete/user/:idUser/project/:idProject', donationController.deleteDonation);
+   app.delete('/subscription/:idSubscription/delete/donation/:idDonation', donationController.deleteDonation);
 
 
    // *** PROJECT ***
    // GET
    app.get('/project/list', projectController.listProject);
    app.get('/project/find/:title', projectController.findProject);
+   app.get('/project/find/id/:id', projectController.findProjectId);
    app.get('/project/find/updates/:id', projectController.findProjectUpdates);
    app.get('/project/find/subscriptions/:id', projectController.findProjectSubscriptions);
    app.get('/project/find/participations/:id', projectController.findProjectParticipations);
    app.get('/project/find/donations/:id', projectController.findProjectDonations)
+   app.get('/project/all/donations', projectController.findAllDonations)
    app.get('/project/search/:title', projectController.searchProject);
 
    // POST

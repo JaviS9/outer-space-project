@@ -115,7 +115,9 @@
           <div v-if="errors.equal_pass == true">
             <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
           </div>
-
+          <div v-if="errors.register == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Este usuario ya existe.</p>
+          </div>
           <div class="mb-2 mt-3">
             <input type="submit" class="btn btn-outline-success btn-md" value="Registrar" @click="saveUser">
           </div>
@@ -133,7 +135,8 @@
 <script>
 import userApi from '@/services/userApi';
 import techApi from '@/services/techApi';
-// import { Buffer } from 'buffer';
+
+import swal from 'sweetalert';
 
 export default {
   name: "AddUser",
@@ -165,6 +168,7 @@ export default {
           rep_pass: false,
           equal_pass: false,
           length_pass: false,
+          register: false,
         }
     };
   },
@@ -200,7 +204,7 @@ export default {
         console.log(list);
       }
       else {
-        window.alert("ERROR: Elemento ya añadido");
+        swal("Cuidado!", "Elemento ya añadido", "error");
       }
     },
 
@@ -242,12 +246,14 @@ export default {
       }
       catch (err) {
           console.log(err);
+          swal("Cuidado!", "Alguna de las tecnologías ya esta registrada en el perfil", "error")
       }
     },
 
     async saveUser(e) {
       try {
         e.preventDefault();
+        this.errors.register = false;
 
         // VALID EMAIL
         if(!this.email) {
@@ -258,6 +264,7 @@ export default {
             this.errors.valid_email = true;
           } else { this.errors.valid_email = false; }
         }
+        //VALID NICK
         if(!this.nickName) {
           this.errors.nickName = true;
         } else { this.errors.nickName = false; }
@@ -302,9 +309,10 @@ export default {
           this.saveTechs(response.data.id)
           console.log(response.data);
           this.$router.push("/manager/users");
-        } else { window.alert("ERROR: Hay algun campo que no es correcto") } 
+        }
       } catch (err) {
         console.log(err);
+        this.errors.register = true;
       }
     },
   },

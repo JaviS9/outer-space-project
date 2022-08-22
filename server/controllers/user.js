@@ -108,6 +108,42 @@ module.exports = {
             });
         }
     },
+
+    async findSubscription (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM subscription JOIN project ON project.id = subscription.idProject WHERE subscription.idUser = :idUser AND subscription.idProject = :idProject",
+                { replacements: {
+                    [Op.and] : [
+                        { idUser: req.params.idUser },
+                        { idProject: req.params.idProject }
+                    ]
+                }} );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Subscriptions not found -- ' + err
+            });
+        }
+    },
+
+    async findParticipation (req, res) {
+        try{
+            const [results, metadata] = await sequelize.query(
+                "SELECT * FROM participation JOIN project ON project.id = participation.idProject WHERE participation.idUser = :idUser AND participation.idProject = :idProject",
+                { replacements: {
+                    [Op.and] : [
+                        { idUser: req.params.idUser },
+                        { idProject: req.params.idProject }
+                    ]
+                }} );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: Participations not found -- ' + err
+            });
+        }
+    },
     
     async findUserSubscriptions (req, res) {
         try{
@@ -154,7 +190,7 @@ module.exports = {
     async findUserDonations (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM donation JOIN project ON project.id = donation.idProject WHERE donation.idUser = :id",
+                "SELECT * FROM donation JOIN subscription ON subscription.id = donation.idSubscription WHERE subscription.idUser = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
@@ -274,7 +310,7 @@ module.exports = {
     async searchUser (req, res) {
         try {
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM user WHERE nickName LIKE :nickName",
+                "SELECT * FROM user WHERE nickName LIKE :nickName OR name LIKE :nickName OR lastName LIKE :nickName OR email LIKE :nickName",
                 { replacements: { nickName: '%' + req.params.nickName + '%' } }
               );
             res.status(200).send(results)

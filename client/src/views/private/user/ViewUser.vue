@@ -126,7 +126,7 @@
                       type="button" class="btn btn-outline-warning">
                       <i class="fa fa-eye"></i>
                     </router-link>
-                    <router-link :to="{ name: 'ViewSubscription', params: {nickName: user.nickName, title: pro.title}}"
+                    <router-link :to="{ name: 'ViewSubscription', params: { subscription: pro.numSubs }}"
                         type="button" class="btn btn-outline-green ms-2">
                         <i class="fa-solid fa-coins"></i>
                     </router-link>
@@ -203,6 +203,8 @@ import projectApi from '@/services/projectApi';
 import ModalForm from '@/components/ModalForm.vue';
 import UserCard from '@/components/UserCard.vue';
 import CreateProjectForm from '@/components/CreateProjectForm.vue';
+
+import swal from 'sweetalert';
 
 export default {
   name: "ViewUser",
@@ -311,6 +313,7 @@ export default {
         window.location.reload();
       } catch (err) {
         console.log(err);
+        swal("Ha habido algún error!", "Ya esta suscrito a alguno de estos proyectos", "error")
       }
     },
 
@@ -332,6 +335,7 @@ export default {
         window.location.reload();
       } catch (err) {
         console.log(err);
+        swal("Ha habido algún error!", "Ya participa en alguno de estos proyectos", "error")
       }
     },
 

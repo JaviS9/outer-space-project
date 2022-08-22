@@ -6,8 +6,7 @@ module.exports = {
     async addDonation(req, res) {        
         try{
             const donation = await models.Donation.create({
-                idUser: req.body.idUser,
-                idProject: req.body.idProject,
+                idSubscription: req.body.idSubscription,
                 donation: req.body.donation
             });
             res.status(200).send(donation)
@@ -31,15 +30,22 @@ module.exports = {
     },
 
     //READ ONE
+    async findSubscription(req, res) {
+        try{
+            const subscription = await models.Subscription.findAll(
+                { where: { numSubs: req.params.id } });
+            res.status(200).send(subscription)
+        } catch (err) {
+            res.status(400).send({
+                error: 'ERROR: subscription not found -- ' + err
+            });
+        }
+    },
+
     async findSubscriptionDonations(req, res) {
         try{
             const donation = await models.Donation.findAll(
-                { where: {
-                    [Op.and] : [
-                        { idUser: req.params.idUser },
-                        { idProject: req.params.idProject }
-                    ]
-                }} );
+                { where: { idSubscription: req.params.id } });
             res.status(200).send(donation)
         } catch (err) {
             res.status(400).send({
@@ -54,9 +60,8 @@ module.exports = {
             const donation = await models.Donation.destroy(
                 { where: {
                     [Op.and] : [
-                        { id: req.params.id },
-                        { idUser: req.params.idUser },
-                        { idProject: req.params.idProject }
+                        { idSubscription: req.params.idSubscription },
+                        { id: req.params.idDonation },
                     ]
                 }} );
             res.status(200).send("SUCCESS: Donation deleted")

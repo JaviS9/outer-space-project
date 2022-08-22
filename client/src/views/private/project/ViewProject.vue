@@ -105,7 +105,7 @@
                           type="button" class="btn btn-outline-warning">
                           <i class="fa fa-eye"></i>
                         </router-link>
-                        <router-link :to="{ name: 'ViewSubscription', params: {nickName: user.nickName, title: project.title}}"
+                        <router-link :to="{ name: 'ViewSubscription', params: { subscription: user.numSubs }}"
                             type="button" class="btn btn-outline-green ms-2">
                             <i class="fa-solid fa-coins"></i>
                         </router-link>
@@ -175,8 +175,11 @@
 <script>
 import moment from "moment";
 import "moment/locale/es";
+import swal from 'sweetalert';
+
 import projectApi from "@/services/projectApi";
 import userApi from "@/services/userApi";
+
 import ModalForm from "@/components/ModalForm.vue";
 import ProjectCard from "@/components/ProjectCard.vue";
 
@@ -311,6 +314,7 @@ export default {
             }
             catch (err) {
                 console.log(err);
+                swal("Cuidado!", "Alguno de estos usuarios ya esta suscrito al proyectos", "error")
             }
         },
         
@@ -331,6 +335,7 @@ export default {
             }
             catch (err) {
                 console.log(err);
+                swal("Cuidado!", "Alguno de estos usuarios ya participa en este proyectos", "error")
             }
         },
 

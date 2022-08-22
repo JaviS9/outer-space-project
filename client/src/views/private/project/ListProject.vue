@@ -14,21 +14,21 @@
       </div>
     </div>
   </div>
-  <div class="container mt-5">
-    <div v-if="projects.length === 0"
-      class="col-md-12 d-flex flex-column align-items-center justify-content-center"
-    ><p class="h5 text-danger">No se han encontrado proyectos</p>
-    </div>
-    <div v-else v-for="project in projects" :key="project.id"
-      class="col-md-10 flex-column align-items-center justify-content-center"
-    >
-      <div class="card border border-2 bg-black align-self-center mx-3 mb-4 p-1">
-        <div class="card-body p-0 bg-black">
-          <div class="row-flex d-flex justify-content-center align-items-center">
-              <div class="col-md-3 d-flex justify-content-center p-3">
-                  <div class="imagePreview__project-image border border-3 rounded-circle" :style="{ 'background-image': `url(${project.photo})` }"></div>
+  <div class="container mt-3">
+    <div class="row d-flex justify-content-center">
+      <div v-if="projects.length === 0">
+        <p class="h5 text-danger text-center">No se han encontrado proyectos</p>
+      </div>
+      <div v-else v-for="project in projects" :key="project.id" 
+        class="col-md-12 pb-3 d-flex flex-column justify-content-center"
+      >
+        <div class="card bg-black border border-2 p-0 m-0">
+          <div class="row-flex d-flex align-items-center justify-content-center">
+
+              <div class="col-md-2 d-flex flex-column justify-content-center align-items-center p-3 m-0">
+                  <div class="imagePreview__project-image border border-3 rounded-circle m-0" :style="{ 'background-image': `url(${project.photo})` }"></div>
               </div>
-              <div class="col-md-8 d-flex flex-column justify-content-center p-2 m-0">
+              <div class="col-md-9 d-flex flex-column justify-content-center p-2 m-0">
                 <div class="card-body p-0 bg-black">
                   <li class="list-group">
                     <ul class="list-group-item text-white bg-black border border-2 border-bottom-0 mb-0">
@@ -36,12 +36,12 @@
                       <p class="mb-2">{{project.description}}</p>
                     </ul>
                     <ul class="list-group-item text-white bg-black border border-2 border-top-0 mb-0">
-                      <p class="my-1">Desde <span class="fw-bold">{{project.startDate.substring(0, 10)}}</span></p>
+                      <p class="my-1">Desde <span class="fw-bold">{{formatDate(project.startDate)}}</span></p>
                     </ul>
                   </li>
                 </div>
               </div>
-              <div class="col-md-1 d-flex flex-column justify-content-center align-items-center">
+              <div class="col-md-1 d-flex flex-column justify-content-center align-items-center p-2 m-0">
                 <router-link :to="{ name: 'ViewProject', params: {title: project.title}}"
                   type="button" class="btn btn-outline-warning mb-2">
                   <i class="fa fa-eye"></i>
@@ -141,6 +141,10 @@ export default {
 
     nextPage () {
       this.current++
+    },
+
+    formatDate(date){
+      return date.substring(0, 10).replaceAll('-', '/')
     },
 
     //LIST ALL

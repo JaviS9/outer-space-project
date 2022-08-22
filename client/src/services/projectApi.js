@@ -11,6 +11,10 @@ export default {
         return Api().get(`project/find/${title}`)
     },
 
+    getProjectId(id) {
+        return Api().get(`project/find/id/${id}`)
+    },
+
     // GET UPDATES
     async getUpdates(id) {
         return Api().get(`project/find/updates/${id}`)
@@ -29,6 +33,10 @@ export default {
     // GET DONATIONS
     async getDonations(id) {
         return Api().get(`project/find/donations/${id}`)
+    },
+
+    async getAllDonations() {
+        return Api().get('project/all/donations')
     },
 
     // CREATE
