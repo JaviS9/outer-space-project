@@ -34,7 +34,7 @@
                 <p class="me-3 my-0">Añade al fundador del proyecto: </p>
                 <p v-if="founder === null" class="text-danger">No seleccionado</p>
                 <button v-else 
-                  type="button"
+                  type="button" disabled
                   class="btn btn-success btn-md rounded-pill p-2"
                 >{{ founder.nickName }}
                 </button>
@@ -61,6 +61,7 @@
 
 <script>
 import projectApi from '@/services/projectApi';
+import swal from 'sweetalert';
 
 export default {
     name: "CreateProjectForm",
@@ -140,6 +141,7 @@ export default {
         }
       } catch (err) {
         console.log(err);
+        swal("Cuidado!", "Ya existe un proyecto con ese mismo nombre", "error")
       }
     }
   }

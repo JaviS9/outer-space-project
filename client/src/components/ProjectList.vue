@@ -28,7 +28,7 @@
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
-                                <button v-if="listName != '' && ($store.state.isAdminLoggedIn || $store.state.isUserLoggedIn)"
+                                <button v-if="listName != '' && $store.state.isUserLoggedIn && $store.state.user.id == user.id"
                                     type="button"
                                     @click="deleteProject(pro.id)"
                                     class="btn btn-outline-danger ms-2">

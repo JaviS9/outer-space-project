@@ -17,22 +17,32 @@
                 </div>              
             </div>
             <div class="col-md-3 d-flex flex-column justify-content-center align-items-center m-0 p-0">
-                <div class="card blockquote p-3 border border-2 rounded-circle bg-black text-center justify-content-center"
+                <div class="card blockquote p-3 border border-2 rounded-circle bg-black text-white d-flex align-items-center justify-content-center"
                     style="width: 220px; height: 220px;"
                 >
                     <span class="card-title mb-0">Participaciones</span>
                     <p class="number-score mt-0">{{formatNumber(num_participations)}}</p>
-                </div>              
+                </div>
             </div>
             <div class="col-md-3 d-flex flex-column justify-content-center align-items-start m-0 p-0">
-                <div class="card blockquote p-3 border-green border-3 rounded-circle bg-black text-center justify-content-center"
-                    style="width: 220px; height: 220px;"
+                <router-link type="button" v-if="subs_found != null"
+                    :to="{ name: 'ViewSubscription', params: {subscription: subs_found.numSubs}}"
+                    class="button-donation card blockquote p-3 border-green border-3 rounded-circle bg-black text-center justify-content-center"
+                    style="width: 220px; height: 220px; text-decoration: none; color: inherit;"
                 >
                     <span class="card-title mb-0 greenyellow">Donaciones</span>
                     <p class="number-score mt-0 greenyellow">
                         {{formatNumber(num_donations)}}<i class="fa fa-euro-sign"></i>
                     </p>
-
+                </router-link>
+                <div v-else
+                    class="card blockquote p-3 border-green border-3 rounded-circle bg-black text-center justify-content-center"
+                    style="width: 220px; height: 220px; text-decoration: none; color: inherit;"
+                >
+                    <span class="card-title mb-0 greenyellow">Donaciones</span>
+                    <p class="number-score mt-0 greenyellow">
+                        {{formatNumber(num_donations)}}<i class="fa fa-euro-sign"></i>
+                    </p>
                 </div>
             </div>
             <!--  -->
@@ -100,6 +110,7 @@ export default {
         num_subscriptions: Number,
         num_participations: Number,
         num_donations: Number,
+        subs_found: {},
     },
 
     created() {
@@ -113,7 +124,7 @@ export default {
         },
 
         getProgress() {
-            return String((this.num_donations/this.project.financiation)*100) + '%'
+            return String(((this.num_donations/this.project.financiation)*100).toFixed(2)) + '%'
         },
 
         formatNumber(number) {

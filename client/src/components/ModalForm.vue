@@ -95,8 +95,9 @@
                 <!--  -->
                 <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
                 <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                <button type="button"
+                <button type="submit"
                     class="btn text-black btn-sm ms-2"
+                    data-bs-dismiss="modal"
                     :class="{ 'btn-warning': title == 'suscripciones', 'btn-primary': title == 'participaciones'}"
                     v-on:click="sendList">Añadir</button>
                 </div>

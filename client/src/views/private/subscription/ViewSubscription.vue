@@ -30,7 +30,8 @@
         <!--  -->
       </div>
       <div class="row-flex d-flex align-items-center justify-content-start mt-3 mx-0">
-        <button type="button" 
+        <button v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id)|| $store.state.isAdminLoggedIn"
+          type="button" 
           class="btn btn-md btn-outline-green rounded-pill"
           data-bs-toggle="modal" data-bs-target="#AddDonationModal">
           <i class="fa-solid fa-coins"></i> Hacer donacion

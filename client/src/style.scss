@@ -22,8 +22,14 @@ html, body {
     .bg-grey { background-color: #999999;}
     .bg-orange { background-color: rgb(255, 119, 0);}
 
-    .btn-green {color: black ;background-color: greenyellow ;border-color: greenyellow}
-    .btn-green:hover {color: greenyellow ;background-color: black ;border-color: black}
+    .button-donation { 
+        border: 2px solid white;
+        p, span { color: white }
+    }
+    .button-donation:hover{ 
+        border: 2px solid greenyellow;
+        p, span{ color: greenyellow; }
+    }
 
     .btn-outline-green{color: greenyellow ;border-color: greenyellow}
     .btn-outline-green:hover{color: black ;background-color: greenyellow ;border-color: greenyellow}

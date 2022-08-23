@@ -74,9 +74,6 @@
             <div v-if="errors.founder == true">
               <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, selecciona un fundador.</p>
             </div>
-            <div v-if="errors.register == true">
-              <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Este proyecto ya existe.</p>
-            </div>
           </div>
           <!--  -->
           <div class="mb-2 mt-3">
@@ -103,6 +100,8 @@
 import projectApi from '@/services/projectApi';
 import userApi from '@/services/userApi';
 
+import swal from 'sweetalert';
+
 export default {
     name: "AddProject",
     data() {
@@ -124,7 +123,6 @@ export default {
       errors: {
           title: false,
           founder: false,
-          register: false,
           financiation: false
       }
     };
@@ -207,7 +205,7 @@ export default {
         } 
       } catch (err) {
         console.log(err);
-        this.errors.register = true;
+        swal("Cuidado!", "Ya existe un proyecto con ese mismo nombre", "error")
       }
     }
   }

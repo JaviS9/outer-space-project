@@ -314,6 +314,7 @@ export default {
         }
         catch (err) {
             console.log(err);
+            swal("Cuidado!", "Ya existe un usuario con esos datos", "error")
         }
     },
   }

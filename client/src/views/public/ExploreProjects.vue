@@ -142,7 +142,7 @@ export default {
                     break
                 }
             }
-            if (donation != 0) { return String((donation/financiation)*100) + '%' }
+            if (donation != 0) { return String(((donation/financiation)*100).toFixed(2)) + '%'}
             else { return ""}
         },
 

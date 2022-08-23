@@ -156,10 +156,10 @@ const routes = [
     path: '/subscription/:subscription',
     name: 'ViewSubscription',
     component: () => import('../views/private/subscription/ViewSubscription.vue'),
-    beforeEnter: (to, from, next) => {
-      if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn)) next({ name: 'LoginRegister' })
-      else next()
-    },
+    // beforeEnter: (to, from, next) => {
+    //   if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn)) next({ name: 'LoginRegister' })
+    //   else next()
+    // },
   },
   // *** PUBLIC ROUTES ***
   {
@@ -191,11 +191,19 @@ const routes = [
     path: '/project/:title',
     name: 'ProjectPage',
     component: () => import('../views/public/ProjectPage.vue'),
+    beforeEnter: (to, from, next) => {
+      if (to.name !== 'LoginRegister' && store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
+      else next()
+    },
   },
   {
     path: '/user/:nickName',
     name: 'UserProfile',
     component: () => import('../views/public/UserProfile.vue'),
+    beforeEnter: (to, from, next) => {
+      if (to.name !== 'LoginRegister' && store.state.isAdminLoggedIn) next({ name: 'LoginRegister' })
+      else next()
+    },
   },
   {
     path: '/:pathMatch(.*)*',

@@ -16,7 +16,8 @@
       :num_subscriptions="num_subscriptions"
       :num_participations="num_participations"
       :num_donations="num_donations"
-    />
+      :num_subs="null"
+    /> 
     <div class="row mb-3">
       <div class="col">
         <router-link to="/manager/projects" type="button" class="btn btn-outline-light">
@@ -49,7 +50,7 @@
                 </form>
                 <div class="row-flex d-flex justify-content-end align-items-center mt-2 p-2">
                   <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" v-on:click="cancel">Cancelar</button>
-                  <button type="button" class="btn btn-outline-success btn-sm ms-2" v-on:click="saveUpdate">
+                  <button type="button" class="btn btn-outline-success btn-sm ms-2" data-bs-dismiss="modal" v-on:click="saveUpdate">
                     Enviar <i class="fa-solid fa-paper-plane"></i>
                   </button>
                 </div>
@@ -310,7 +311,7 @@ export default {
                 });
                 console.log(response.data);
                 this.selected_projects = [];
-                window.location.reload();
+                this.getSubscriptions(this.project.id)
             }
             catch (err) {
                 console.log(err);
@@ -331,7 +332,7 @@ export default {
                 });
                 console.log(response.data);
                 this.selected_projects = [];
-                window.location.reload();
+                this.getParticipations(this.project.id)
             }
             catch (err) {
                 console.log(err);
@@ -350,7 +351,7 @@ export default {
                 });
                 console.log(response.data);
                 this.description = "";
-                window.location.reload();
+                this.getUpdates(this.project.id)
             }
             catch (err) {
                 console.log(err);

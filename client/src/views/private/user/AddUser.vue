@@ -115,9 +115,6 @@
           <div v-if="errors.equal_pass == true">
             <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
           </div>
-          <div v-if="errors.register == true">
-            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Este usuario ya existe.</p>
-          </div>
           <div class="mb-2 mt-3">
             <input type="submit" class="btn btn-outline-success btn-md" value="Registrar" @click="saveUser">
           </div>
@@ -168,7 +165,6 @@ export default {
           rep_pass: false,
           equal_pass: false,
           length_pass: false,
-          register: false,
         }
     };
   },
@@ -242,7 +238,6 @@ export default {
           });
           console.log(response.data);
           this.selected_techs = [];
-          window.location.reload();
       }
       catch (err) {
           console.log(err);
@@ -312,7 +307,7 @@ export default {
         }
       } catch (err) {
         console.log(err);
-        this.errors.register = true;
+        swal("Cuidado!", "Ya existe un usuario con esos datos", "error")
       }
     },
   },

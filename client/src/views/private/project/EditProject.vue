@@ -105,6 +105,8 @@
 import projectApi from '@/services/projectApi';
 import userApi from '@/services/userApi';
 
+import swal from 'sweetalert';
+
 export default {
   name: "EditProject",
   data() {
@@ -185,6 +187,7 @@ export default {
         this.$router.push("/manager/projects");
       } catch (err) {
         console.log(err);
+        swal("Cuidado!", "Ya existe un proyecto con ese mismo nombre", "error")
       }
     },
   }

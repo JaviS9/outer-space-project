@@ -25,9 +25,7 @@ export default {
   created() {
     const user = Authentication.getUserLogged()
     if(user) {
-      console.log(user)
       const userParsed =  Authentication.decodeJwt(user)
-      console.log(userParsed)
       if(userParsed.admin) {
         this.$store.dispatch('setAdmin', userParsed.user)
         this.$store.dispatch('setToken', user)

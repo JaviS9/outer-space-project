@@ -310,7 +310,7 @@ export default {
         );
         console.log(response.data)
         this.selected_projects = [];
-        window.location.reload();
+        this.getSubscriptions(this.user.id)
       } catch (err) {
         console.log(err);
         swal("Ha habido algún error!", "Ya esta suscrito a alguno de estos proyectos", "error")
@@ -332,7 +332,7 @@ export default {
 
         console.log(response.data)
         this.selected_projects = [];
-        window.location.reload();
+        this.getParticipations(this.user.id)
       } catch (err) {
         console.log(err);
         swal("Ha habido algún error!", "Ya participa en alguno de estos proyectos", "error")
