@@ -51,7 +51,7 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <CreateProjectForm :user="user" />
+                          <CreateProjectForm :user="user"  @signal="getMyProjects"/>
                         </div>
                       </div>
                     </div>
@@ -59,34 +59,8 @@
                 </div>
               </div>
             </ul>
-            <ul v-if="projectsFunded.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
-              <p class="text-danger text-center">No hay proyectos fundados</p>
-            </ul>
-            <ul v-else v-for="pro in projectsFunded" :key="pro"
-              class="list-group-item text-white border-light border bg-black mb-2 p-3">
-              <div class="row-flex d-flex justify-content-center align-items-center p-0">
-                <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
-                </div>
-                <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
-                  <span>{{pro.title}}</span>
-                </div>
-                <div class="col-sm-2 flex-column d-flex justify-content-center align-items-end">
-                  <div class="row-flex d-flex justify-content-center align-items-center">
-                    <router-link :to="{ name: 'ViewProject', params: {title: pro.title}}"
-                      type="button" class="btn btn-outline-warning">
-                      <i class="fa fa-eye"></i>
-                    </router-link>
-                    <button
-                      @click="deleteFundedProject(pro.id)"
-                      class="btn btn-outline-danger ms-2">
-                      <i class="fa fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </ul>
           </li>
+          <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
         </div>
       </div>
       <div class="col-md-4 mx-1 d-flex flex-column card bg-black">
@@ -108,38 +82,8 @@
                 </div>
               </div>
             </ul>
-            <ul v-if="subscriptions.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
-              <p class="text-danger text-center">No hay suscripciones</p>
-            </ul>
-            <ul v-else v-for="pro in subscriptions" :key="pro"
-              class="list-group-item text-white border-light border bg-black mb-2 p-3">
-              <div class="row-flex d-flex justify-content-center align-items-center p-0">
-                <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
-                </div>
-                <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
-                  <span>{{pro.title}}</span>
-                </div>
-                <div class="col-sm-2 flex-column d-flex justify-content-center align-items-end">
-                  <div class="row-flex d-flex justify-content-center align-items-center">
-                    <router-link :to="{ name: 'ViewProject', params: {title: pro.title} }"
-                      type="button" class="btn btn-outline-warning">
-                      <i class="fa fa-eye"></i>
-                    </router-link>
-                    <router-link :to="{ name: 'ViewSubscription', params: { subscription: pro.numSubs }}"
-                        type="button" class="btn btn-outline-green ms-2">
-                        <i class="fa-solid fa-coins"></i>
-                    </router-link>
-                    <button
-                      @click="deleteSubscription(pro.id)"
-                      class="btn btn-outline-danger ms-2">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </ul>
           </li>
+          <ProjectList :key="componentsubscriptions" :user="user" :listName="'subscriptions'" />
         </div>
       </div>
       <div class="col-md-4 mx-1 d-flex flex-column card bg-black">
@@ -161,34 +105,8 @@
                 </div>
               </div>
             </ul>
-            <ul v-if="participations.length === 0" class="list-group-item text-white border-light border bg-black mb-2">
-              <p class="text-danger text-center">No hay participaciones</p>
-            </ul>
-            <ul v-else v-for="pro in participations" :key="pro"
-              class="list-group-item text-white border-light border bg-black mb-2 p-3">
-              <div class="row-flex d-flex justify-content-center align-items-center p-0">
-                <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                  <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${pro.photo})` }"></div>
-                </div>
-                <div class="col-sm-7 flex-column d-flex justify-content-center align-items-start">
-                  <span>{{pro.title}}</span>
-                </div>
-                <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
-                  <div class="row-flex d-flex justify-content-center align-items-center">
-                    <router-link :to="{ name: 'ViewProject', params: {title: pro.title}}"
-                      type="button" class="btn btn-outline-warning">
-                      <i class="fa fa-eye"></i>
-                    </router-link>
-                    <button 
-                      @click="deleteParticipation(pro.id)"
-                      class="btn btn-outline-danger ms-2">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </ul>
           </li>
+          <ProjectList :key="componentparticipations" :user="user" :listName="'participations'" />
         </div>
       </div>
     </div>
@@ -203,8 +121,10 @@ import projectApi from '@/services/projectApi';
 import ModalForm from '@/components/ModalForm.vue';
 import UserCard from '@/components/UserCard.vue';
 import CreateProjectForm from '@/components/CreateProjectForm.vue';
+import ProjectList from '@/components/ProjectList.vue';
 
 import swal from 'sweetalert';
+import { ref } from 'vue';
 
 export default {
   name: "ViewUser",
@@ -227,11 +147,40 @@ export default {
     this.getProjects();
   },
 
+  setup() {
+    const componentfundedProjects = ref(0);
+    const componentsubscriptions = ref(0);
+    const componentparticipations = ref(0);
+
+    const rerenderfundedProjects = () => {
+      componentfundedProjects.value += 1;
+    };
+
+    const rerendersubscriptions = () => {
+      componentsubscriptions.value += 1;
+    };
+
+    const rerenderparticipations = () => {
+      componentparticipations.value += 1;
+    };
+
+    return {
+      componentfundedProjects,
+      componentsubscriptions,
+      componentparticipations,
+
+      rerenderfundedProjects,
+      rerendersubscriptions,
+      rerenderparticipations,
+    }
+  },
+
   components: {
     ModalForm,
     UserCard,
-    CreateProjectForm
-},
+    CreateProjectForm,
+    ProjectList
+  },
 
   methods: {
     //FIND ONE
@@ -241,9 +190,6 @@ export default {
         this.user = response.data[0];
         this.previewImage = this.user.photo
         this.getTechs(this.user.id)
-        this.getSubscriptions(this.user.id);
-        this.getFundedProjects(this.user.id);
-        this.getParticipations(this.user.id);
       } catch (err) {
         console.log(err);
       }
@@ -267,33 +213,9 @@ export default {
       }
     },
 
-    async getFundedProjects (id) {
-      try {
-        const response = await userApi.getFundedProjects(id);
-        this.projectsFunded = response.data;
-        console.log("PROJECTS FUNDED: " + response.data)
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getSubscriptions (id) {
-      try {
-        const response = await userApi.getSubscriptions(id);
-        this.subscriptions = response.data;
-        console.log("SUBSCRIPTIONS: " + response.data)
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async getParticipations (id) {
-      try {
-        const response = await userApi.getParticipations(id);
-        this.participations = response.data;
-        console.log("PARTICIPATIONS: " + response.data)
-      } catch (err) {
-        console.log(err);
+    getMyProjects(data) {
+      if (data != 0) {
+        this.rerenderfundedProjects()
       }
     },
 
@@ -310,7 +232,7 @@ export default {
         );
         console.log(response.data)
         this.selected_projects = [];
-        this.getSubscriptions(this.user.id)
+        this.rerendersubscriptions()
       } catch (err) {
         console.log(err);
         swal("Ha habido algún error!", "Ya esta suscrito a alguno de estos proyectos", "error")
@@ -332,22 +254,10 @@ export default {
 
         console.log(response.data)
         this.selected_projects = [];
-        this.getParticipations(this.user.id)
+        this.rerenderparticipations()
       } catch (err) {
         console.log(err);
         swal("Ha habido algún error!", "Ya participa en alguno de estos proyectos", "error")
-      }
-    },
-
-    async deleteFundedProject(idProject) {
-      try {
-        const response = await projectApi.deleteProject(idProject);
-        console.log(response.data)
-        this.getFundedProjects(this.user.id)
-        this.getSubscriptions(this.user.id)
-        this.getParticipations(this.user.id);
-      } catch (err) {
-        console.log(err);
       }
     },
 

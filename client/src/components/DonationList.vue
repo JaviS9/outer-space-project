@@ -17,24 +17,24 @@
                 </p>
             </div>
             <!--  -->
-           <div class="flex-column d-flex justify-content-center"
-              :class="{'col-md-2 align-items-start': $store.state.isAdminLoggedIn, 'col-md-3 align-items-end': !$store.state.isAdminLoggedIn}"
-           >
+           <div class="flex-column d-flex align-items-center justify-content-center"
+              :class="{'col-md-2': $store.state.isAdminLoggedIn, 'col-md-3': !$store.state.isAdminLoggedIn}"
+            >
               <div class="row-flex d-flex justify-content-center align-items-center p-2">
                 <p class="m-0">Donación: <span class="fw-bold">{{ don.donation }}</span> <i class="fa fa-euro-sign"></i></p>
               </div>
             </div>
             <!--  -->
-            <div class="flex-column d-flex justify-content-center"
-              :class="{'col-md-2 align-items-start': $store.state.isAdminLoggedIn, 'col-md-3 align-items-end': !$store.state.isAdminLoggedIn}"
+            <div class="flex-column d-flex align-items-center justify-content-center"
+              :class="{'col-md-2': $store.state.isAdminLoggedIn, 'col-md-3': !$store.state.isAdminLoggedIn}"
             >
                 {{formatName(don.cardName)}}
             </div>
-            <div class="col-md-2 flex-column d-flex align-items-start justify-content-center">
+            <div class="col-md-2 flex-column d-flex align-items-center justify-content-center">
                 {{formatNumber(don.cardNumber)}}
             </div>
             <!--  -->
-            <div class="col-md-2 flex-column d-flex align-items-start justify-content-center">
+            <div class="col-md-2 flex-column d-flex align-items-end justify-content-center">
                 <p class="m-0">{{formatDate(don.date)}}</p>
             </div>
             <!--  -->
@@ -92,7 +92,7 @@ export default {
 
       formatNumber(number) {
         var dec = CryptoJS.AES.decrypt(number, "SecretPassphrase").toString(CryptoJS.enc.Utf8)
-        return "**** **** **** " + dec.substring(15, 19)
+        return "**** **** **** " + dec.substring(dec.length - 4, dec.length)
       },
 
       formatDate(date){

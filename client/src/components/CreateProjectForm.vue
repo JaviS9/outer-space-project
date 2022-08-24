@@ -45,6 +45,7 @@
               type="button"
               class="btn btn-outline-success btn-md"
               value="Crear proyecto"
+              data-bs-dismiss="modal" 
               v-on:click="saveProject"
             >
           </div>
@@ -137,7 +138,7 @@ export default {
           this.photo = null,
 
           console.log(response.data);
-          window.location.reload();
+          this.$emit("signal", 1)
         }
       } catch (err) {
         console.log(err);

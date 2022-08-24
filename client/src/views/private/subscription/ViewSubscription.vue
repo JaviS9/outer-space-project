@@ -30,7 +30,7 @@
         <!--  -->
       </div>
       <div class="row-flex d-flex align-items-center justify-content-start mt-3 mx-0">
-        <button v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id)|| $store.state.isAdminLoggedIn"
+        <button v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id)"
           type="button" 
           class="btn btn-md btn-outline-green rounded-pill"
           data-bs-toggle="modal" data-bs-target="#AddDonationModal">
@@ -49,7 +49,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <AddDonationForm :subscriptionid="subs.numSubs" />
+                <AddDonationForm :subscriptionid="subs.numSubs" @subs="getSubs"/>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
     <div class="container mt-3">
       <div class="row">
         <div class="col-12">
-          <DonationList :subscriptionid="subs.numSubs" />
+          <DonationList :subscriptionid="subs.numSubs" :key="componentKey" />
         </div>
       </div>
     </div>
@@ -74,6 +74,8 @@ import subscriptionApi from '@/services/subscriptionApi';
 import DonationList from '@/components/DonationList.vue';
 import AddDonationForm from '@/components/AddDonationForm.vue';
 
+import { ref } from 'vue';
+
 export default {
     name: "SubscriptionInfo",
     data() {
@@ -84,8 +86,22 @@ export default {
         };
     },
 
+    setup() {
+    const componentKey = ref(0);
+
+      const forceRerender = () => {
+        componentKey.value += 1;
+        console.log(componentKey.value)
+      };
+
+      return {
+        componentKey,
+        forceRerender
+      }
+    },
+
     created() {
-        this.getSubs()
+        this.getSubs(this.$route.params.subscription)
     },
 
     methods: {
@@ -96,10 +112,11 @@ export default {
           return zeros.substring(0, zeros.length - num.length) + num
         },
 
-        async getSubs() {
+        async getSubs(subs) {
           try {
-              const response = await subscriptionApi.getSubscription(this.$route.params.subscription);
+              const response = await subscriptionApi.getSubscription(subs);
               this.subs = response.data[0];
+              this.forceRerender()
               this.getUser(this.subs.idUser);
               this.getProject(this.subs.idProject);
           }

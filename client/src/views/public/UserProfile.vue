@@ -10,7 +10,7 @@
   <div class="container border-bottom border-2 mt-3">
     <!-- USER INFO -->
     <div class="row m-0 pt-3">
-      <UserCard :user="user"/>
+      <UserCard :user="user" :key="componentuser"/>
     </div>
     <!-- BUTTONS -->
     <div v-if="$store.state.isUserLoggedIn && (this.user.id === this.profile.id)"
@@ -51,7 +51,7 @@
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
       <p class="h5 ms-3 mb-5 fw-bold">Actualiza los datos de tu perfil</p>
-      <UpdateUserForm :userinfo="user"/>
+      <UpdateUserForm :userinfo="user" @updatedUser="getProfile"/>
     </div>
     <!-- MY FUNDED PROJECTS -->
     <div v-if="button_state.fundedProject"
@@ -78,14 +78,14 @@
               </button>
             </div>
             <div class="modal-body">
-              <CreateProjectForm :user="profile" />
+              <CreateProjectForm :user="profile" @signal="getMyProjects"/>
             </div>
           </div>
         </div>
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :user="user" :listName="'fundedProjects'" />
+          <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
         </div>
       </div>
     </div>
@@ -104,7 +104,7 @@
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :user="user" :listName="'subscriptions'" />
+          <ProjectList :key="componentsubscriptions" :user="user" :listName="'subscriptions'" />
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@
       </div>
       <div class="row-flex d-flex align-items-center justify-content-center">
         <div class="col-10">
-          <ProjectList :user="user" :listName="'participations'" />
+          <ProjectList :key="componentparticipations" :user="user" :listName="'participations'" />
         </div>
       </div>
     </div>
@@ -145,15 +145,15 @@
     <div class="row-flex d-flex align-items-top justify-content-center p-0 m-0">
       <div class="col-md-4 card bg-black text-white border border-3 p-2 border-info">
         <p class="fw-bold ms-3 mt-2 text-info">Proyectos fundados</p>
-        <ProjectList :user="user" :listName="'fundedProjects'" />
+        <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
       </div>
       <div class="col-md-4 card bg-black text-white border border-3 border-warning p-2 ms-3">
         <p class="fw-bold ms-3 mt-2 text-warning">Subscripciones</p>
-        <ProjectList :user="user" :listName="'subscriptions'" />
+        <ProjectList :key="componentsubscriptions" :user="user" :listName="'subscriptions'" />
       </div>
       <div class="col-md-4 card bg-black text-white border border-3 border-primary p-2 ms-3">
         <p class="fw-bold ms-3 mt-2 text-primary">Participaciones</p>
-        <ProjectList :user="user" :listName="'participations'" />
+        <ProjectList :key="componentparticipations" :user="user" :listName="'participations'" />
       </div>
     </div>
   </div>
@@ -165,12 +165,13 @@ import UserCard from '@/components/UserCard.vue';
 import UpdateUserForm from '@/components/UpdateUserForm.vue';
 import ProjectList from '@/components/ProjectList.vue';
 import CreateProjectForm from '@/components/CreateProjectForm.vue';
+import ModalForm from '@/components/ModalForm.vue';
 
 import projectApi from '@/services/projectApi';
 import userApi from '@/services/userApi';
 import adminApi from '@/services/adminApi';
-import ModalForm from '@/components/ModalForm.vue';
 
+import { ref } from 'vue';
 import swal from 'sweetalert';
 
 export default {
@@ -188,6 +189,42 @@ export default {
             }
         };
     },
+
+    setup() {
+      const componentfundedProjects = ref(0);
+      const componentsubscriptions = ref(0);
+      const componentparticipations = ref(0);
+      const componentuser = ref(0);
+
+      const rerenderfundedProjects = () => {
+        componentfundedProjects.value += 1;
+      };
+
+      const rerendersubscriptions = () => {
+        componentsubscriptions.value += 1;
+      };
+
+      const rerenderparticipations = () => {
+        componentparticipations.value += 1;
+      };
+
+      const rerenderuser = () => {
+        componentuser.value += 1;
+      };
+
+      return {
+        componentfundedProjects,
+        componentsubscriptions,
+        componentparticipations,
+        componentuser,
+
+        rerenderfundedProjects,
+        rerendersubscriptions,
+        rerenderparticipations,
+        rerenderuser
+      }
+    },
+
     created() {
         if (this.$store.state.isUserLoggedIn) {
           this.profile = this.$store.state.user;
@@ -204,6 +241,17 @@ export default {
     components: { UserCard, UpdateUserForm, ProjectList, CreateProjectForm, ModalForm },
 
     methods: {
+
+      getProfile(data) {
+        this.user = data
+        this.rerenderuser()
+      },
+
+      getMyProjects(data) {
+        if (data != 0) {
+          this.rerenderfundedProjects()
+        }
+      },
 
       async getUser(nickName) {
         try {
@@ -247,7 +295,7 @@ export default {
             headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
           console.log(response.data)
-          window.location.reload();
+          this.rerendersubscriptions()
         } catch (err) {
           console.log(err);
           swal("H habido algún error!", "Ya estas suscrito a alguno de estos proyectos", "error")
@@ -268,7 +316,7 @@ export default {
           );
 
           console.log(response.data)
-          window.location.reload();
+          this.rerenderparticipations()
         } catch (err) {
           console.log(err);
           swal("Ha habido algún error!", "Ya participas en alguno de estos proyectos", "error")

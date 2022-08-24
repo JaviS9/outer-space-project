@@ -1,17 +1,17 @@
 <template>
-    <div class="row p-3 mt-3">
-        <div class="col">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-0 m-0">
             <div v-if="projects.length === 0">
                 <p class="text-danger text-center h5 p-3">No hay proyectos</p>
             </div>
             <div v-else
                 v-for="pro in projects" :key="pro.id"
-                class="card bg-black text-white border border-2 mx-0 mb-3 p-0"
+                class="card bg-black text-white border border-1 mx-0 mb-2 p-0"
             >
                 <div class="card-body m-0 p-0">
                     <div class="row-flex d-flex align-items-center justify-content-center p-3">
                         <div class="col-md-3 flex-column d-flex align-items-end justify-content-center">
-                            <div class="imagePreview__list-image border border-3 rounded-circle" :style="{ 'background-image': `url(${pro.photo})` }"></div>
+                            <div class="imagePreview__mini-image border border-3 rounded-circle" :style="{ 'background-image': `url(${pro.photo})` }"></div>
                         </div>
                         <div class="col-md-6 flex-column d-flex align-items-start justify-content-center">
                             <p class="m-0">{{ pro.title }}</p>
@@ -19,16 +19,16 @@
                         <div class="col-md-3 flex-column d-flex align-items-end justify-content-center">
                             <div class="row-flex d-flex justify-content-center align-items-center">
                                 <router-link v-if="listName != ''"
-                                    :to="{ name: 'ProjectPage', params: {title: pro.title}}"
+                                    :to=" $store.state.isAdminLoggedIn ? `/manager/projects/view/${pro.title}` : `/project/${pro.title}`"
                                     type="button" class="btn btn-outline-warning">
                                     <i class="fa fa-eye"></i>
                                 </router-link>
-                                <router-link v-if="listName == 'subscriptions' && ($store.state.isAdminLoggedIn || $store.state.isUserLoggedIn)"
+                                <router-link v-if="listName == 'subscriptions' && (($store.state.isUserLoggedIn && $store.state.user.id == user.id) ||  $store.state.isAdminLoggedIn)"
                                     :to="{ name: 'ViewSubscription', params: { subscription: pro.numSubs }}"
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
-                                <button v-if="listName != '' && $store.state.isUserLoggedIn && $store.state.user.id == user.id"
+                                <button v-if="listName != '' && (($store.state.isUserLoggedIn && $store.state.user.id == user.id) ||  $store.state.isAdminLoggedIn)"
                                     type="button"
                                     @click="deleteProject(pro.id)"
                                     class="btn btn-outline-danger ms-2">
@@ -56,7 +56,7 @@ export default {
     },
 
     props: {
-        user: String,
+        user: Object,
         listName: String,
     },
 

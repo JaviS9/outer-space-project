@@ -133,7 +133,7 @@ export default {
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
         console.log(response.data);
-        this.$emit('updatedProject', updatedData)
+        this.$emit('updatedProject', this.title)
       } catch (err) {
         console.log(err);
         swal("Cuidado!", "Ya existe un proyecto con ese mismo nombre", "error")

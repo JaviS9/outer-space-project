@@ -38,6 +38,7 @@
                 <button type="button" 
                     class="btn btn-md btn-outline-green ms-2" 
                     v-on:click="saveDonation"
+                    data-bs-dismiss="modal" 
                 ><i class="fa-solid fa-circle-dollar-to-slot"></i> Donar
                 </button>
             </div>
@@ -80,6 +81,7 @@ export default {
                         donation: this.donationinfo.donation
                     })
                     console.log(donation)
+                    this.$emit("subs", this.$props.subscriptionid)
                 } else {  this.error = "Por favor, rellena todos los campos" }
             } catch (err) {
                 console.log(err)

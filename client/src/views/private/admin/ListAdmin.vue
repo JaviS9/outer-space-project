@@ -22,7 +22,7 @@
       </div>
       <div 
       class="col-md-4 p-4 d-flex flex-column align-items-center justify-content-center"
-      v-for="admin in admins" :key="admin.id"
+      v-for="admin in paginated" :key="admin.id"
       >
         <div class="card mx-4 border-light bg-black" style="width: 350px;">
           <div class="card-body p-0 text-center">

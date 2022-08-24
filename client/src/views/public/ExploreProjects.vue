@@ -14,11 +14,11 @@
                 <p class="h5 text-danger mt-5">No hay proyectos aún</p>
             </div>
             <div 
-                class="col-md-4 pe-2 pb-5 d-flex flex-column justify-content-center"
+                class="col-md-4 m-0 p-0 d-flex flex-column justify-content-center"
                 v-else
                 v-for="project in projects" :key="project.id"
             >
-                <div class="card bg-black text-white border border-2 mx-4 p-2"
+                <div class="card bg-black text-white border border-2 m-2 p-3"
                     style="height: 480px"
                 >
                     <div class="row-flex d-flex justify-content-center align-items-center">
@@ -36,6 +36,7 @@
                         <!-- FIN PROGRESS -->
                         <div class="progress my-3 rounded-pill bg-black border border-light border-3" style="height: 20px;">
                             <div class="progress-bar bg-orange rounded-pill mx-0" 
+                                :class="{ 'bg-orange': getProgress(project.title, project.financiation) != '100%', 'bg-success': getProgress(project.title, project.financiation) == '100%' }"
                                 role="progressbar" :style="{'width': getProgress(project.title, project.financiation)}"
                                 aria-valuenow="25" 
                                 aria-valuemin="0" 
@@ -142,7 +143,14 @@ export default {
                     break
                 }
             }
-            if (donation != 0) { return String(((donation/financiation)*100).toFixed(2)) + '%'}
+            if (donation != 0) { 
+                var res = ((donation/financiation)*100)
+                 if (res < 100) { 
+                    return String(res.toFixed(0)) + '%'
+                 } else if (res >= 100) {
+                    return '100%'
+                 }
+            }
             else { return ""}
         },
 

@@ -123,7 +123,7 @@
           </div>
           <div class="mb-2 mt-3">
             <!-- BUTTON -->
-            <input type="submit" class="btn btn-outline-primary btn-md" value="Actualizar" @click="updateUser">
+            <input type="submit" class="btn btn-outline-primary btn-md" value="Actualizar" data-bs-dismiss="modal"  @click="updateUser">
           </div>
         </form>
       </div>
@@ -231,7 +231,7 @@ export default {
           }
           console.log(response)
           if (this.changes > 0) { this.saveUserTech(this.user.id) }
-          window.location.reload()
+          this.$emit("updatedUser", updatedUser)
         }
       } catch (err) {
         console.log(err);

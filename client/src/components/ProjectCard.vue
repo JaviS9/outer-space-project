@@ -49,12 +49,16 @@
         </div>
         <!-- FIN PROGRESS -->
         <div class="progress my-3 rounded-pill bg-black border border-light border-3" style="height: 30px;">
-            <div class="progress-bar bg-orange rounded-pill" 
+            <div class="progress-bar rounded-pill"
+                :class="{ 'bg-orange': !succeed, 'bg-success': succeed }"
                 role="progressbar" :style="{'width': getProgress()}"
                 aria-valuenow="25" 
                 aria-valuemin="0" 
                 aria-valuemax="100">{{ getProgress() }}</div>
         </div>
+        <p v-if="succeed" class="my-2 fw-bold text-success text-center p-2">
+            <span> ¡El proyecto se ha financiado por completo! </span>
+        </p>
         <!--  -->
         <div class="row-flex d-flex align-items-center justify-content-end m-0 p-0">
             <div class="col-md-12 flex-column justify-content-center align-items-center m-0 p-0">
@@ -101,6 +105,7 @@ export default {
     data() {
         return {
             project: null,
+            succeed: false,
         }
     },
 
@@ -124,7 +129,9 @@ export default {
         },
 
         getProgress() {
-            return String(((this.num_donations/this.project.financiation)*100).toFixed(2)) + '%'
+            var res = ((this.num_donations/this.project.financiation)*100)
+            if (res >= 100) { this.succeed = true, res = 100}
+            return String(res.toFixed(0)) + '%'
         },
 
         formatNumber(number) {

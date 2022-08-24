@@ -19,8 +19,8 @@
       <div v-if="projects.length === 0">
         <p class="h5 text-danger text-center">No se han encontrado proyectos</p>
       </div>
-      <div v-else v-for="project in projects" :key="project.id" 
-        class="col-md-12 pb-3 d-flex flex-column justify-content-center"
+      <div v-else v-for="project in paginated" :key="project.id"
+        class="col-md-10 pb-3 d-flex flex-column justify-content-center"
       >
         <div class="card bg-black border border-2 p-0 m-0">
           <div class="row-flex d-flex align-items-center justify-content-center">
@@ -109,10 +109,8 @@ export default {
   computed: {
     numPages() {
       var res = Math.floor(this.projects.length/this.pageSize);
-      // var res = Math.round(n + 0,49)
-      if(res > 10) { res = 10 }
       console.log(res)
-      return res + 1
+      return res + 1 
     },
     indexStart() {
       return (this.current - 1) * this.pageSize;

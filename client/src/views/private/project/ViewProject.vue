@@ -87,39 +87,7 @@
           </div>
           <div class="row-flex d-flex p-3">
             <div class="card-body p-0 bg-black">
-              <li class="list-group">
-                <ul v-if="subscriptions.length === 0" class="text-white border border-2 rounded bg-black mb-2 p-3">
-                  <p class="text-danger text-center m-0 p-0">No hay suscripciones</p>
-                </ul>
-                <ul v-else v-for="user in subscriptions" :key="user.id"
-                  class="text-white border border-2 rounded bg-black mb-2 p-3">
-                  <div class="row-flex d-flex justify-content-center align-items-center p-0">
-                    <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                      <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
-                    </div>
-                    <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
-                      <span>{{user.nickName}}</span>
-                    </div>
-                    <div class="col-sm-2 flex-column d-flex justify-content-center align-items-end">
-                      <div class="row-flex d-flex justify-content-center align-items-center">
-                        <router-link :to="{ name: 'ViewUser', params: {nickName: user.nickName} }"
-                          type="button" class="btn btn-outline-warning">
-                          <i class="fa fa-eye"></i>
-                        </router-link>
-                        <router-link :to="{ name: 'ViewSubscription', params: { subscription: user.numSubs }}"
-                            type="button" class="btn btn-outline-green ms-2">
-                            <i class="fa-solid fa-coins"></i>
-                        </router-link>
-                        <button
-                          @click="deleteSubscription(user.id)"
-                          class="btn btn-outline-danger ms-2">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </ul>
-              </li>
+              <UserList :key="componentsubscriptions" :project="project" :listName="'subscriptions'" />
             </div>
           </div>
         </div>
@@ -135,35 +103,7 @@
           </div>
           <div class="row-flex d-flex p-3">
             <div class="card-body p-0 bg-black">
-              <li class="list-group">
-                <ul v-if="participations.length === 0" class="text-white border border-2 rounded bg-black mb-2 p-3">
-                  <p class="text-danger text-center m-0 p-0">No hay participaciones</p>
-                </ul>
-                <ul v-else v-for="user in participations" :key="user.id"
-                  class="text-white border border-2 rounded bg-black mb-2 p-3">
-                  <div class="row-flex d-flex justify-content-center align-items-center p-0">
-                    <div class="col-sm-2 flex-column d-flex justify-content-center align-items-start">
-                      <div class="imagePreview__mini-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
-                    </div>
-                    <div class="col-sm-8 flex-column d-flex justify-content-center align-items-start">
-                      <span>{{user.nickName}}</span>
-                    </div>
-                    <div class="col-sm-2 flex-column d-flex justify-content-center align-items-end">
-                      <div class="row-flex d-flex justify-content-center align-items-center">
-                        <router-link :to="{ name: 'ViewUser', params: {nickName: user.nickName} }"
-                          type="button" class="btn btn-outline-warning">
-                          <i class="fa fa-eye"></i>
-                        </router-link>
-                        <button
-                          @click="deleteParticipation(user.id)"
-                          class="btn btn-outline-danger ms-2">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </ul>
-              </li>
+              <UserList :key="componentparticipations" :project="project" :listName="'participations'" />
             </div>
           </div>
         </div>
@@ -177,12 +117,14 @@
 import moment from "moment";
 import "moment/locale/es";
 import swal from 'sweetalert';
+import { ref } from 'vue';
 
 import projectApi from "@/services/projectApi";
 import userApi from "@/services/userApi";
 
 import ModalForm from "@/components/ModalForm.vue";
 import ProjectCard from "@/components/ProjectCard.vue";
+import UserList from "@/components/UserList.vue";
 
 export default {
     name: "ViewProject",
@@ -208,7 +150,28 @@ export default {
         this.getUsers();
     },
 
-    components: { ModalForm, ProjectCard },
+    setup() {
+      const componentsubscriptions = ref(0);
+      const componentparticipations = ref(0);
+
+      const rerendersubscriptions = () => {
+        componentsubscriptions.value += 1;
+      };
+
+      const rerenderparticipations = () => {
+        componentparticipations.value += 1;
+      };
+
+      return {
+        componentsubscriptions,
+        componentparticipations,
+
+        rerendersubscriptions,
+        rerenderparticipations,
+      }
+    },
+
+    components: { ModalForm, ProjectCard, UserList },
 
     methods: {
         //FIND ONE
@@ -218,9 +181,7 @@ export default {
                 this.project = response.data[0];
                 this.previewImage = this.project.photo;
                 this.getFounder();
-                this.getSubscriptions(this.project.id);
                 this.getUpdates(this.project.id);
-                this.getParticipations(this.project.id);
                 this.getDonations(this.project.id);
             }
             catch (err) {
@@ -246,28 +207,6 @@ export default {
             catch (err) {
                 console.log(err);
             }
-        },
-
-        async getSubscriptions(id) {
-          try {
-            const response = await projectApi.getSubscriptions(id);
-            this.subscriptions = response.data;
-            this.num_subscriptions = this.subscriptions.length
-          }
-          catch (err) {
-            console.log(err);
-          }
-        },
-
-        async getParticipations(id) {
-          try {
-            const response = await projectApi.getParticipations(id);
-            this.participations = response.data;
-            this.num_participations = this.participations.length
-          }
-          catch (err) {
-            console.log(err);
-          }
         },
 
         async getDonations(id) {
@@ -311,7 +250,7 @@ export default {
                 });
                 console.log(response.data);
                 this.selected_projects = [];
-                this.getSubscriptions(this.project.id)
+                this.rerendersubscriptions()
             }
             catch (err) {
                 console.log(err);
@@ -332,7 +271,7 @@ export default {
                 });
                 console.log(response.data);
                 this.selected_projects = [];
-                this.getParticipations(this.project.id)
+                this.rerenderparticipations()
             }
             catch (err) {
                 console.log(err);

@@ -15,6 +15,7 @@
             :num_participations="num_participations"
             :num_donations="num_donations"
             :subs_found="subs_found"
+            :key="componentKey"
           /> 
         </div>
       </div>
@@ -56,7 +57,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <UpdateProjectForm :founder="founder" :projectinfo="project" @updatedProject="getData" />
+                <UpdateProjectForm :founder="founder" :projectinfo="project" @updatedProject="getProject" />
               </div>
             </div>
           </div>
@@ -144,7 +145,7 @@
                           type="button" class="btn btn-outline-warning">
                           <i class="fa fa-eye"></i>
                         </router-link>
-                        <router-link
+                        <router-link v-if="$store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn"
                             :to="{ name: 'ViewSubscription', params: { subscription: user.numSubs }}"
                             type="button" class="btn btn-outline-green ms-2">
                             <i class="fa-solid fa-coins"></i>
@@ -161,7 +162,7 @@
               </li>
             </div>
           </div>
-          <div class="row border-primary border border-2 rounded px-0 pt-2 mb-3">
+          <!-- <div class="row border-primary border border-2 rounded px-0 pt-2 mb-3">
             <p class="text-primary fw-bold">Participaciones</p>
             <div class="col flex-column d-flex p-2 justify-content-center">
               <li class="list-group">
@@ -194,7 +195,7 @@
                 </ul>
               </li>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -209,9 +210,10 @@ import userApi from '@/services/userApi';
 import projectApi from '@/services/projectApi';
 
 import ProjectCard from '@/components/ProjectCard.vue';
+import UpdateProjectForm from "@/components/UpdateProjectForm.vue";
 
 import swal from 'sweetalert';
-import UpdateProjectForm from "@/components/UpdateProjectForm.vue";
+import { ref } from 'vue';
 
 export default {
   name: 'ProjectPage',
@@ -231,6 +233,19 @@ export default {
     }
   },
 
+  setup() {
+    const componentKey = ref(0);
+
+    const forceRerender = () => {
+      componentKey.value += 1;
+    };
+
+    return {
+      componentKey,
+      forceRerender
+    }
+  },
+
   created() {
     this.getProject(this.$route.params.title);
     this.getUsers();
@@ -244,16 +259,12 @@ export default {
       return moment(date).fromNow();
     },
 
-    getData(data) {
-      this.project = data
-      this.$router.push(`/project/${this.project.title}`)
-    },
-
     //FIND ONE
     async getProject(title) {
         try {
             const response = await projectApi.getProject(title);
             this.project = response.data[0];
+            this.forceRerender()
             this.getFounder();
             this.getSubscriptions(this.project.id);
             this.getUpdates(this.project.id);
@@ -355,77 +366,88 @@ export default {
     },
 
     async saveUpdate(e) {
-        try {
-            e.preventDefault();
-            const response = await projectApi.saveUpdate({
-                idProject: this.project.id,
-                description: this.description
-            }, {
-                headers: { "Content-Type": "application/json; charset=UTF-8" }
-            });
-            console.log(response.data);
-            this.description = "";
-            this.getUpdates(this.project.id)
-        }
-        catch (err) {
-            console.log(err);
-        }
+      try {
+          e.preventDefault();
+          const response = await projectApi.saveUpdate({
+              idProject: this.project.id,
+              description: this.description
+          }, {
+              headers: { "Content-Type": "application/json; charset=UTF-8" }
+          });
+          console.log(response.data);
+          this.description = "";
+          this.getUpdates(this.project.id)
+      }
+      catch (err) {
+          console.log(err);
+      }
     },
     
     async deleteUpdate(date) {
-        try {
-            const response = await projectApi.deleteUpdate(this.project.id, date);
-            console.log(response.data);
-            this.getUpdates(this.project.id);
-        }
-        catch (err) {
-            console.log(err);
-        }
+      try {
+          const response = await projectApi.deleteUpdate(this.project.id, date);
+          console.log(response.data);
+          this.getUpdates(this.project.id);
+      }
+      catch (err) {
+          console.log(err);
+      }
     },
 
     async saveSubscription (idProject) {
-        try {
-            if(this.$store.state.isUserLoggedIn) {
-                var subscriptions = []
-                subscriptions[0] = {idUser: this.$store.state.user.id, idProject: idProject}
+      try {
+          if(this.$store.state.isUserLoggedIn) {
+              var subscriptions = []
+              subscriptions[0] = {idUser: this.$store.state.user.id, idProject: idProject}
 
-                let response = await userApi.saveSubscription({
-                    subscriptions: subscriptions,
-                }, {
-                    headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-                );
-                console.log(response.data)
-                swal("Bien hecho!", "Te has suscrito a este proyecto con exito", "success")
-                this.getSubscriptions(this.project.id);
-            } else {
-                this.$router.push('/start')
-            }
-        } catch (err) {
-            console.log(err);
-            swal("Ya estas suscrito a este proyecto")
-        }
+              let response = await userApi.saveSubscription({
+                  subscriptions: subscriptions,
+              }, {
+                  headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+              );
+              console.log(response.data)
+              swal("Bien hecho!", "Te has suscrito a este proyecto con exito", "success")
+              this.getSubscriptions(this.project.id);
+          } else {
+              this.$router.push('/start')
+          }
+      } catch (err) {
+          console.log(err);
+          swal("Ya estas suscrito a este proyecto")
+      }
     },
-     async saveParticipation (idProject) {
-        try {
-            if(this.$store.state.isUserLoggedIn) {
-                var participations = []
-                participations[0] = {idUser: this.$store.state.user.id, idProject: idProject}
 
-                let response = await userApi.saveParticipation({
-                    participations: participations,
-                }, {
-                    headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-                );
-                console.log(response.data)
-                swal("Bien hecho!", "Ahora participas en este proyecto", "success")
-                this.getParticipations(this.project.id);
-            } else {
-                this.$router.push('/start')
-            }
-        } catch (err) {
-            console.log(err);
-            swal("Ya participas a este proyecto")
-        }
+    async deleteSubscription(idUser) {
+      try {
+          const response = await userApi.deleteSubscription(idUser, this.project.id);
+          this.getSubscriptions(this.project.id);
+          console.log(response.data)
+      } catch (err) {
+          console.log(err);
+      }
+    },
+
+    async saveParticipation (idProject) {
+      try {
+          if(this.$store.state.isUserLoggedIn) {
+              var participations = []
+              participations[0] = {idUser: this.$store.state.user.id, idProject: idProject}
+
+              let response = await userApi.saveParticipation({
+                  participations: participations,
+              }, {
+                  headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+              );
+              console.log(response.data)
+              swal("Bien hecho!", "Ahora participas en este proyecto", "success")
+              this.getParticipations(this.project.id);
+          } else {
+              this.$router.push('/start')
+          }
+      } catch (err) {
+          console.log(err);
+          swal("Ya participas a este proyecto")
+      }
     },
 
   }
