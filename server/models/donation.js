@@ -26,6 +26,18 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
+    cardName: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    cardNumber: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    cardExpirationDate: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     date: {
       allowNull: false,
       type: DataTypes.DATE,

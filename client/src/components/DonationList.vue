@@ -16,18 +16,28 @@
                   #{{formatId(don.id)}}
                 </p>
             </div>
-            <div class="flex-column d-flex justify-content-center"
-              :class="{'col-md-4 align-items-start': $store.state.isAdminLoggedIn, 'col-md-5 align-items-center': !$store.state.isAdminLoggedIn}"
-            >
+            <!--  -->
+           <div class="flex-column d-flex justify-content-center"
+              :class="{'col-md-2 align-items-start': $store.state.isAdminLoggedIn, 'col-md-3 align-items-end': !$store.state.isAdminLoggedIn}"
+           >
               <div class="row-flex d-flex justify-content-center align-items-center p-2">
                 <p class="m-0">Donación: <span class="fw-bold">{{ don.donation }}</span> <i class="fa fa-euro-sign"></i></p>
               </div>
             </div>
-            <div class="flex-column d-flex justify-content-center p-2"
-              :class="{'col-md-4 align-items-start': $store.state.isAdminLoggedIn, 'col-md-5 align-items-end': !$store.state.isAdminLoggedIn}"
+            <!--  -->
+            <div class="flex-column d-flex justify-content-center"
+              :class="{'col-md-2 align-items-start': $store.state.isAdminLoggedIn, 'col-md-3 align-items-end': !$store.state.isAdminLoggedIn}"
             >
+                {{formatName(don.cardName)}}
+            </div>
+            <div class="col-md-2 flex-column d-flex align-items-start justify-content-center">
+                {{formatNumber(don.cardNumber)}}
+            </div>
+            <!--  -->
+            <div class="col-md-2 flex-column d-flex align-items-start justify-content-center">
                 <p class="m-0">{{formatDate(don.date)}}</p>
             </div>
+            <!--  -->
             <div v-if="$store.state.isAdminLoggedIn"
               class="col-md-2 flex-column d-flex align-items-end justify-content-center">
               <button type="button" v-on:click="deleteDonation(don.id)"
@@ -41,7 +51,7 @@
       </div>
     </div>
     <div class="row-flex d-flex align-items-center justify-content-start">
-      <div class="col-5 border border-2 rounded-pill py-3 px-4">
+      <div class="col-4 border border-2 rounded-pill py-3 px-4">
         <p class="m-0 p-0">TOTAL de donaciones: <span class="fw-bold greenyellow">{{num_donations}} <i class="fa fa-euro-sign"></i></span></p>
       </div>
     </div>
@@ -50,6 +60,7 @@
 
 <script>
 import subscriptionApi from '@/services/subscriptionApi';
+import CryptoJS from 'crypto-js';
 
 export default {
     name:'DonationList',
@@ -75,6 +86,15 @@ export default {
         return zeros.substring(0, zeros.length - num.length) + num
       },
 
+      formatName(name) {
+        return CryptoJS.AES.decrypt(name, "SecretPassphrase").toString(CryptoJS.enc.Utf8)
+      },
+
+      formatNumber(number) {
+        var dec = CryptoJS.AES.decrypt(number, "SecretPassphrase").toString(CryptoJS.enc.Utf8)
+        return "**** **** **** " + dec.substring(15, 19)
+      },
+
       formatDate(date){
         return "Fecha: " + date.substring(0, 10).replaceAll('-', '/') + ", Hora: " +  date.substring(14, date.length - 5)
       },
@@ -83,6 +103,7 @@ export default {
         try {
           const donations = await subscriptionApi.getSubscriptionDonations(idSubscription)
           this.donations = donations.data
+          console.log(this.donations)
           let sum = 0;
           if(this.donations.length > 0) {
             this.donations.forEach(key => {

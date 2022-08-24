@@ -1,5 +1,6 @@
 const models = require('../models');
 const { Op } = require("sequelize");
+var CryptoJS = require("crypto-js");
 
 module.exports = {
     //CREATE
@@ -7,6 +8,9 @@ module.exports = {
         try{
             const donation = await models.Donation.create({
                 idSubscription: req.body.idSubscription,
+                cardName: CryptoJS.AES.encrypt(req.body.cardName, 'SecretPassphrase').toString(),
+                cardNumber: CryptoJS.AES.encrypt(req.body.cardNumber, 'SecretPassphrase').toString(),
+                cardExpirationDate: CryptoJS.AES.encrypt(req.body.cardExpirationDate, 'SecretPassphrase').toString(),
                 donation: req.body.donation
             });
             res.status(200).send(donation)

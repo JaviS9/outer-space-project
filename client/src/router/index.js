@@ -156,10 +156,6 @@ const routes = [
     path: '/subscription/:subscription',
     name: 'ViewSubscription',
     component: () => import('../views/private/subscription/ViewSubscription.vue'),
-    // beforeEnter: (to, from, next) => {
-    //   if (to.name !== 'LoginRegister' && (!store.state.isUserLoggedIn && !store.state.isAdminLoggedIn)) next({ name: 'LoginRegister' })
-    //   else next()
-    // },
   },
   // *** PUBLIC ROUTES ***
   {

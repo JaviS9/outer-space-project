@@ -49,6 +49,10 @@ html, body {
         min-height: 100%;
     }
 
+    .scrollable {
+        overflow-y: scroll;
+    }
+
     main {
         min-height: 100vh;
         margin-bottom: -100px;

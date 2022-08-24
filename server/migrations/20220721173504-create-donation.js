@@ -20,6 +20,18 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
+      cardName: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      cardNumber: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      cardExpirationDate: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       date: {
         allowNull: false,
         type: Sequelize.DATE,

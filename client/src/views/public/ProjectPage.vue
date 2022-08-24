@@ -56,7 +56,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <UpdateProjectForm :founder="founder" :projectinfo="project" @title="getProject" />
+                <UpdateProjectForm :founder="founder" :projectinfo="project" @updatedProject="getData" />
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@
                           type="button" class="btn btn-outline-warning">
                           <i class="fa fa-eye"></i>
                         </router-link>
-                        <router-link 
+                        <router-link
                             :to="{ name: 'ViewSubscription', params: { subscription: user.numSubs }}"
                             type="button" class="btn btn-outline-green ms-2">
                             <i class="fa-solid fa-coins"></i>
@@ -242,6 +242,11 @@ export default {
 
     formatDate(date) {
       return moment(date).fromNow();
+    },
+
+    getData(data) {
+      this.project = data
+      this.$router.push(`/project/${this.project.title}`)
     },
 
     //FIND ONE

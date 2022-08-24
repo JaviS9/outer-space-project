@@ -120,18 +120,20 @@ export default {
       try {
         e.preventDefault();
 
-        let response = await projectApi.updateProject(this.id, {
+        const updatedData = {
           title: this.title,
           description: this.description,
           repository: this.repository,
           photo: this.photo,
           founder : this.$props.founder,
           financiation: this.financiation
-        },
+        }
+
+        let response = await projectApi.updateProject(this.id, updatedData,
         { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
         );
         console.log(response.data);
-        this.$emit('title', this.title)
+        this.$emit('updatedProject', updatedData)
       } catch (err) {
         console.log(err);
         swal("Cuidado!", "Ya existe un proyecto con ese mismo nombre", "error")
