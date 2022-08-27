@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="transparent text-white px-0 pt-2 pb-4 mb-3">
-              <div class="card bg-black border border-2 rounded-pill p-3 m-0">
+              <div class="card bg-black p-3 m-0">
                 <p class="m-0">{{ update.description }}</p>
               </div>
             </div>

@@ -20,17 +20,17 @@
                         </div>
                         <div class="col-md-3 flex-column d-flex align-items-end justify-content-center">
                             <div class="row-flex d-flex justify-content-center align-items-center">
-                                <router-link v-if="listName != ''"
+                                <router-link
                                     :to=" $store.state.isAdminLoggedIn ? `/manager/users/profile/${user.nickName}` : `/user/${user.nickName}`"
                                     type="button" class="btn btn-outline-warning">
                                     <i class="fa fa-eye"></i>
                                 </router-link>
-                                <router-link v-if="listName == 'subscriptions' && ($store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn)"
+                                <router-link v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn)"
                                     :to="{ name: 'ViewSubscription', params: { subscription: user.numSubs }}"
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
-                                <button v-if="listName != '' && ($store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn)"
+                                <button v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn)"
                                     type="button"
                                     @click="deleteUser(user.id)"
                                     class="btn btn-outline-danger ms-2">
@@ -59,35 +59,20 @@ export default {
 
     props: {
         project: Object,
-        listName: String,
     },
 
     created() {
-        switch(this.$props.listName) {
-            case 'subscriptions' : this.getSubscriptions(this.$props.project.id);
-                break;
-            case 'friends': this.getFriends(this.$props.project.id);
-                break;
-        }        
+        this.getSubscriptions(this.$props.project.id)        
     },
 
     methods: {
 
         async deleteUser(idUser) {
             try {
-                var response
-                switch(this.$props.listName) {
-                    case 'subscriptions' : 
-                        response = await userApi.deleteSubscription(idUser, this.$props.project.id);
-                        this.getSubscriptions(this.$props.project.id);
-                        console.log(response.data)
-                        break;
-                    case 'friends': 
-                        response = await userApi.deleteFriend(idUser, this.$props.project.id);
-                        this.getFriends(this.$props.project.id);
-                        console.log(response.data)
-                        break;
-                }
+                const response = await userApi.deleteSubscription(idUser, this.$props.project.id);
+                this.$emit('subs_found', null)
+                this.getSubscriptions(this.$props.project.id);
+                console.log(response.data)
             } catch (err) {
                 console.log(err);
             }
@@ -98,15 +83,6 @@ export default {
                 const response = await projectApi.getSubscriptions(id);
                 this.users = response.data;
                 this.$emit('num_subscriptions', this.users.length)
-            } catch (err) {
-                console.log(err);
-            }
-        },
-
-        async getFriends (id) {
-            try {
-                const response = await projectApi.getFriends(id);
-                this.users = response.data;
             } catch (err) {
                 console.log(err);
             }

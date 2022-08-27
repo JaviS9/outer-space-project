@@ -22,10 +22,10 @@
         <button type="button" 
             class="btn btn-md btn-success rounded-pill border border-2 col-md-10"
             v-on:click="saveSubscription(project.id)"
-            :disabled="$store.state.isUserLoggedIn && subs_found != null"
+            :disabled="subs_found != null"
         >
-            <p v-if="!subs_found" class="m-0"><i class="fa fa-plus text-white"></i>Suscribirse</p>
-            <p v-else class="m-0"><i class="fa fa-check text-white"></i>Suscrito</p>
+            <p v-if="subs_found != null" class="m-0"><i class="fa fa-check text-white"></i>Suscrito</p>
+            <p v-else class="m-0"><i class="fa fa-plus text-white"></i>Suscribirse</p>
         </button>
         <button v-if="$store.state.isUserLoggedIn && $store.state.user.id == founder.id"
           type="button" 
@@ -120,8 +120,9 @@
             <div class="col p-0 m-0">
               <UserList 
                 :key="componentsubscriptions" 
-                :project="project" 
-                :listName="'subscriptions'" 
+                :project="project"
+                @num_subscriptions="getNumSubscriptions"
+                @subs_found="getSubs"
               />
             </div>
           </div>
@@ -164,10 +165,15 @@ export default {
 
   setup() {
     const componentsubscriptions = ref(0);
+    const componentmodal = ref(0)
     const componentproject = ref(0)
 
     const rerendersubscriptions = () => {
       componentsubscriptions.value += 1;
+    };
+
+    const rerendermodal = () => {
+      componentmodal.value += 1;
     };
 
     const rerenderproject = () => {
@@ -176,15 +182,18 @@ export default {
 
     return {
       componentsubscriptions,
+      componentmodal,
       componentproject,
 
       rerendersubscriptions,
+      rerendermodal,
       rerenderproject
     }
   },
 
   created() {
     this.getProject(this.$route.params.title);
+    if(this.$store.state.isUserLoggedIn){this.getOneSubscription(this.project.id)}
     this.getUsers();
   },
 
@@ -196,13 +205,23 @@ export default {
       return moment(date).fromNow();
     },
 
+    getNumSubscriptions(num_subscriptions) {
+      this.num_subscriptions = num_subscriptions
+      this.rerenderproject()
+      if(this.$store.state.isUserLoggedIn){this.getOneSubscription(this.project.id)}
+    },
+
+    getSubs(data) {
+      this.subs_found = data
+    },
+
     //FIND ONE
     async getProject(title) {
         try {
             const response = await projectApi.getProject(title);
             this.project = response.data[0];
             this.getFounder();
-            this.getSubscriptions(this.project.id)
+            if(this.$store.state.isUserLoggedIn){this.getOneSubscription(this.project.id)}
             this.getUpdates(this.project.id);
             this.getDonations(this.project.id);
         }
@@ -215,6 +234,7 @@ export default {
         try {
           const response = await userApi.getUsers();
           this.users = response.data.reverse();
+          this.rerendermodal()
         }
         catch (err) {
           console.log(err);
@@ -242,20 +262,13 @@ export default {
       }
     },
 
-    async getSubscriptions(id) {
+    async getOneSubscription(id) {
       try {
-        const response = await projectApi.getSubscriptions(id);
-        this.subscriptions = response.data;
-        this.num_subscriptions = this.subscriptions.length
-        if(this.$store.state.isUserLoggedIn) {
-          for (let i = 0; i < this.subscriptions.length; i++) {
-            console.log(this.subscriptions[i].idUser + " == " + this.$store.state.user.id)
-            if(this.subscriptions[i].idUser == this.$store.state.user.id) {
-              this.subs_found = this.subscriptions[i]
-              break;
-            }
-          }
+        const response = await userApi.getOneSubscription(this.$store.state.user.id, id);
+        if (response.data.length > 0) {
+          this.subs_found = response.data[0];
         }
+        console.log(this.subs_found)
         this.rerenderproject()
       }
       catch (err) {
@@ -323,8 +336,9 @@ export default {
                   headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
               );
               console.log(response.data)
+              if(this.$store.state.isUserLoggedIn){this.getOneSubscription(this.project.id)}
+              this.rerendersubscriptions()
               swal("Bien hecho!", "Te has suscrito a este proyecto con exito", "success")
-              this.getSubscriptions(this.project.id);
           } else {
               this.$router.push('/start')
           }

@@ -64,12 +64,13 @@
         <span class="fw-bold h5 text-info me-2">Mis proyectos</span>
         <CreateProjectForm :user="profile" @signal="getMyProjects"/>
       </p>
-      <div class="row-flex d-flex align-items-top justify-content-start">
+      <div class="row-flex d-flex align-items-top justify-content-center">
         <div class="col-8">
           <ProjectList 
             :key="componentfundedProjects" 
             :user="user" 
-            :listName="'fundedProjects'" 
+            :listName="'fundedProjects'"
+            @signal="getMyProjects"
           />
         </div>
       </div>
@@ -87,15 +88,17 @@
           :type="'project'" 
           :list="projects" 
           @selected_items="saveSubscription"
+          :key="componentmodal"
         />
       </div>
-      <div class="row-flex d-flex align-items-top justify-content-start">
+      <div class="row-flex d-flex align-items-top justify-content-center">
         <div class="col-8">
           <ProjectList
             :key="componentsubscriptions" 
             :user="user" 
             :listName="'subscriptions'"
             @num_subscriptions="getNumSubscriptions"
+            @signal="getMyProjects"
           />
         </div>
       </div>
@@ -166,6 +169,7 @@ export default {
     setup() {
       const componentfundedProjects = ref(0);
       const componentsubscriptions = ref(0);
+      const componentmodal = ref(0)
       const componentuser = ref(0);
 
       const rerenderfundedProjects = () => {
@@ -176,6 +180,10 @@ export default {
         componentsubscriptions.value += 1;
       };
 
+      const rerendermodal = () => {
+        componentmodal.value += 1;
+      };
+
       const rerenderuser = () => {
         componentuser.value += 1;
       };
@@ -183,10 +191,12 @@ export default {
       return {
         componentfundedProjects,
         componentsubscriptions,
+        componentmodal,
         componentuser,
 
         rerenderfundedProjects,
         rerendersubscriptions,
+        rerendermodal,
         rerenderuser
       }
     },
@@ -216,6 +226,7 @@ export default {
 
       getMyProjects(data) {
         if (data != 0) {
+          this.getProjects()
           this.rerenderfundedProjects()
         }
       },
@@ -246,6 +257,7 @@ export default {
         try {
           const projects = await projectApi.getProjects();
           this.projects = projects.data.reverse();
+          this.rerendermodal()
         } catch (err) {
           console.log(err);
         }
@@ -297,6 +309,8 @@ export default {
             headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
           console.log(response.data)
+          document.getElementById('close').click(); 
+          swal("Bien hecho!", "Te has suscrito con exito", "success")
           this.getSubscriptions()
           this.rerendersubscriptions()
         } catch (err) {

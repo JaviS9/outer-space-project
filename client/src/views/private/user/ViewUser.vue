@@ -43,7 +43,12 @@
               </div>
             </ul>
           </li>
-          <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
+          <ProjectList 
+            :key="componentfundedProjects" 
+            :user="user" 
+            :listName="'fundedProjects'"
+            @signal="getMyProjects"
+          />
         </div>
       </div>
       <div class="col-md-6 mx-1 d-flex flex-column card bg-black">
@@ -58,8 +63,12 @@
                   <span class="fw-bold ms-2">Suscripciones</span>
                 </div>
                 <div class="col-sm-3 flex-column d-flex justify-content-center align-items-end">
-                  <ModalForm :id="'ModalSubscription'"
-                    :title="'suscripciones'" :type="'project'" :list="projects" 
+                  <ModalForm 
+                    :id="'ModalSubscription'"
+                    :title="'suscripciones'" 
+                    :type="'project'" 
+                    :list="projects"
+                    :key="componentmodal"
                     @selected_items="saveSubscription"
                   />
                 </div>
@@ -115,6 +124,7 @@ export default {
   setup() {
     const componentfundedProjects = ref(0);
     const componentsubscriptions = ref(0);
+    const componentmodal = ref(0)
     const componentuser = ref(0);
 
     const rerenderfundedProjects = () => {
@@ -125,6 +135,10 @@ export default {
       componentsubscriptions.value += 1;
     };
 
+    const rerendermodal = () => {
+      componentmodal.value += 1;
+    };
+
     const rerenderuser = () => {
       componentuser.value += 1;
     };
@@ -132,10 +146,12 @@ export default {
     return {
       componentfundedProjects,
       componentsubscriptions,
+      componentmodal,
       componentuser,
 
       rerenderfundedProjects,
       rerendersubscriptions,
+      rerendermodal,
       rerenderuser,
     }
   },
@@ -173,6 +189,7 @@ export default {
       try {
         const projects = await projectApi.getProjects();
         this.projects = projects.data.reverse();
+        this.rerendermodal()
       } catch (err) {
         console.log(err);
       }
@@ -180,12 +197,14 @@ export default {
 
     getMyProjects(data) {
       if (data != 0) {
+        this.getProjects()
         this.rerenderfundedProjects()
       }
     },
 
     getNumSubscriptions(num_subscriptions) {
       this.num_subscriptions = num_subscriptions
+      this.getProjects()
       this.rerenderuser()
     },
 
@@ -220,7 +239,7 @@ export default {
         );
         console.log(response.data)
         this.selected_projects = []
-        document.getElementById('close').click();   
+        document.getElementById('close').click();
         this.rerendersubscriptions()
       } catch (err) {
         console.log(err);

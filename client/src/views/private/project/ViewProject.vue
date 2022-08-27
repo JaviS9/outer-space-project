@@ -80,8 +80,11 @@
         <div class="card bg-black border border-3 border-warning rounded p-1">
           <div class="row-flex d-flex p-3">
             <span class="fw-bold ms-2 mb-0 text-warning">Suscripciones</span>
-            <ModalForm :id="'ModalSubscription'"
-              :title="'suscripciones'" :type="'user'" :list="users" 
+            <ModalForm 
+              :id="'ModalSubscription'"
+              :title="'suscripciones'" 
+              :type="'user'" 
+              :list="users" 
               @selected_items="saveSubscription"
             />
           </div>
@@ -91,7 +94,6 @@
                 <UserList 
                   :key="componentsubscriptions" 
                   :project="project" 
-                  :listName="'subscriptions'" 
                   @num_subscriptions="getNumSubscriptions"
                 />
               </div>

@@ -78,13 +78,14 @@ export default {
                 var response
                 switch(this.$props.listName) {
                     case 'fundedProjects':
-                        response = await projectApi.deleteProject(idProject);
-                        this.getFundedProjects(this.$props.user.id);
+                        response = await projectApi.deleteProject(idProject)
+                        this.$emit('signal', 1)
+                        this.getFundedProjects(this.$props.user.id)
                         console.log(response.data)
                         break;
                     case 'subscriptions' : 
-                        response = await userApi.deleteSubscription(this.$props.user.id, idProject);
-                        this.getSubscriptions(this.$props.user.id);
+                        response = await userApi.deleteSubscription(this.$props.user.id, idProject)
+                        this.getSubscriptions(this.$props.user.id)
                         console.log(response.data)
                         break;
                 }
@@ -96,7 +97,7 @@ export default {
         async getFundedProjects (id) {
             try {
                 const response = await userApi.getFundedProjects(id);
-                this.projects = response.data;
+                this.projects = response.data
             } catch (err) {
                 console.log(err);
             }
@@ -105,7 +106,7 @@ export default {
         async getSubscriptions (id) {
             try {
                 const response = await userApi.getSubscriptions(id);
-                this.projects = response.data;
+                this.projects = response.data
                 this.$emit('num_subscriptions', this.projects.length)
             } catch (err) {
                 console.log(err);

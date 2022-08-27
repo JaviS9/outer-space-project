@@ -102,12 +102,8 @@ module.exports = {
         try{
             const [results, metadata] = await sequelize.query(
                 "SELECT * FROM subscription JOIN project ON project.id = subscription.idProject WHERE subscription.idUser = :idUser AND subscription.idProject = :idProject",
-                { replacements: {
-                    [Op.and] : [
-                        { idUser: req.params.idUser },
-                        { idProject: req.params.idProject }
-                    ]
-                }} );
+                { replacements: { idUser: req.params.idUser, idProject: req.params.idProject }
+                } );
             res.status(200).send(results)
         } catch (err) {
             res.status(400).send({
