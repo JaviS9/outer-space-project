@@ -3,14 +3,22 @@
   <div class="container my-2">
     <div class="row">
       <div class="col">
-        <p class="h3 fw-bold">Mi perfil</p>
+        <p v-if="$store.state.isUserLoggedIn && (this.user.id === this.profile.id)"
+          class="h3 fw-bold">Mi perfil
+        </p>
+        <p v-else class="h3 fw-bold">Perfil de {{ user.nickName }}</p>
       </div>
     </div>
   </div>
-  <div class="container border-bottom border-2 mt-3">
+  <div class="container border-bottom border-3 mt-3">
     <!-- USER INFO -->
-    <div class="row m-0 pt-3">
-      <UserCard :user="user" :key="componentuser"/>
+    <div class="row m-0 py-3">
+      <UserCard 
+      :key="componentuser"
+      :user="user"
+      :num_subscriptions="num_subscriptions"
+      :num_donations="num_donations"
+    />
     </div>
     <!-- BUTTONS -->
     <div v-if="$store.state.isUserLoggedIn && (this.user.id === this.profile.id)"
@@ -34,12 +42,6 @@
         v-on:click="openClose('Subscriptions')"
       >Suscripciones
       </button>
-      <button type="button"
-        class="rounded-top ms-2 button-section fw-bold" 
-        :class="{'selected': button_state.participation, 'notselected': !button_state.participation}"
-        v-on:click="openClose('Participations')"
-      >Participaciones
-      </button>
     </div>
   </div>
 
@@ -58,34 +60,17 @@
       id="ProjectsPanel"
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
-      <p class="h5 ms-3 fw-bold text-info">Mis proyectos
-        <button type="button" 
-          class="btn btn-sm btn-success text-white border border-2 rounded-pill"
-          data-bs-toggle="modal" data-bs-target="#MyProjectsModal">
-          <i class="fa fa-plus"></i>
-        </button>
+      <p class="ms-3 mb-3 d-flex">
+        <span class="fw-bold h5 text-info me-2">Mis proyectos</span>
+        <CreateProjectForm :user="profile" @signal="getMyProjects"/>
       </p>
-      <!-- MODAL -->
-      <div class="modal fade modal-lg" 
-        id="MyProjectsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content bg-black border border-2 text-white p-3">
-            <div class="modal-header">
-              <h5 class="modal-title fw-bold" id="staticBackdropLabel">Crea un nuevo proyecto</h5>
-              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
-                <i class="fa fa-xmark"></i>
-              </button>
-            </div>
-            <div class="modal-body">
-              <CreateProjectForm :user="profile" @signal="getMyProjects"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row-flex d-flex align-items-center justify-content-center">
-        <div class="col-10">
-          <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
+      <div class="row-flex d-flex align-items-top justify-content-start">
+        <div class="col-8">
+          <ProjectList 
+            :key="componentfundedProjects" 
+            :user="user" 
+            :listName="'fundedProjects'" 
+          />
         </div>
       </div>
     </div>
@@ -94,48 +79,27 @@
       id="SuscriptionsPanel"
       class="container border rounded border-3 mt-2 p-3 mb-5"
     >
-      <div class="row-flex d-flex align-items-center justify-content-start">
+      <div class="row-flex d-flex align-items-center justify-content-start mb-3">
         <p class="h5 ms-3 me-2 fw-bold text-warning">Mis suscripciones</p>
         <ModalForm 
           :id="'ModalSubscription'"
-          :title="'suscripciones'" :type="'project'" :list="projects" 
+          :title="'suscripciones'" 
+          :type="'project'" 
+          :list="projects" 
           @selected_items="saveSubscription"
         />
       </div>
-      <div class="row-flex d-flex align-items-center justify-content-center">
-        <div class="col-10">
-          <ProjectList :key="componentsubscriptions" :user="user" :listName="'subscriptions'" />
+      <div class="row-flex d-flex align-items-top justify-content-start">
+        <div class="col-8">
+          <ProjectList
+            :key="componentsubscriptions" 
+            :user="user" 
+            :listName="'subscriptions'"
+            @num_subscriptions="getNumSubscriptions"
+          />
         </div>
       </div>
     </div>
-    <!-- PART -->
-    <div v-if="button_state.participation"
-      id="ParticipationsPanel"
-      class="container border rounded border-3 mt-2 p-3 mb-5"
-    >
-      <div class="row-flex d-flex align-items-center justify-content-start">
-        <p class="h5 ms-3 me-2 fw-bold text-primary">Mis participaciones</p>
-        <ModalForm 
-          :id="'ModalParticipation'"
-          :title="'participaciones'" :type="'project'" :list="projects"
-          @selected_items="saveParticipation"
-        />
-      </div>
-      <div class="row-flex d-flex align-items-center justify-content-center">
-        <div class="col-10">
-          <ProjectList :key="componentparticipations" :user="user" :listName="'participations'" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADMIN SECTION -->
-  <div v-if="$store.state.isAdminLoggedIn && (this.user.id === this.profile.id)"
-    id="EditProfilePanel" 
-    class="container border rounded border-3 mt-2 p-3 mb-5"
-  >
-    <p class="h5 pb-3 text-center text-primary fw-bold">Actualiza los datos de tu perfil de administrador</p>
-    <UpdateUserForm :userinfo="user"/>
   </div>
 
   <!-- PUBLIC SECTION -->
@@ -143,17 +107,22 @@
     class="container mt-3 mb-5"
   >
     <div class="row-flex d-flex align-items-top justify-content-center p-0 m-0">
-      <div class="col-md-4 card bg-black text-white border border-3 p-2 border-info">
+      <div class="col-md-6 card bg-black text-white border border-3 p-2 border-info">
         <p class="fw-bold ms-3 mt-2 text-info">Proyectos fundados</p>
-        <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
+        <div class="col px-5">
+          <ProjectList :key="componentfundedProjects" :user="user" :listName="'fundedProjects'" />
+        </div>
       </div>
-      <div class="col-md-4 card bg-black text-white border border-3 border-warning p-2 ms-3">
+      <div class="col-md-6 card bg-black text-white border border-3 border-warning p-2 ms-3">
         <p class="fw-bold ms-3 mt-2 text-warning">Subscripciones</p>
-        <ProjectList :key="componentsubscriptions" :user="user" :listName="'subscriptions'" />
-      </div>
-      <div class="col-md-4 card bg-black text-white border border-3 border-primary p-2 ms-3">
-        <p class="fw-bold ms-3 mt-2 text-primary">Participaciones</p>
-        <ProjectList :key="componentparticipations" :user="user" :listName="'participations'" />
+        <div class="col px-5">
+          <ProjectList 
+            :key="componentsubscriptions"
+            :user="user" 
+            :listName="'subscriptions'" 
+            @num_subscriptions="getNumSubscriptions"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -181,6 +150,10 @@ export default {
             profile: null,
             user: null,
             projects: [],
+            donations: [],
+            subscriptions: [],
+            num_subscriptions: 0,
+            num_donations: 0,
             button_state: {
               editProfile: false,
               fundedProject: false,
@@ -193,7 +166,6 @@ export default {
     setup() {
       const componentfundedProjects = ref(0);
       const componentsubscriptions = ref(0);
-      const componentparticipations = ref(0);
       const componentuser = ref(0);
 
       const rerenderfundedProjects = () => {
@@ -204,10 +176,6 @@ export default {
         componentsubscriptions.value += 1;
       };
 
-      const rerenderparticipations = () => {
-        componentparticipations.value += 1;
-      };
-
       const rerenderuser = () => {
         componentuser.value += 1;
       };
@@ -215,12 +183,10 @@ export default {
       return {
         componentfundedProjects,
         componentsubscriptions,
-        componentparticipations,
         componentuser,
 
         rerenderfundedProjects,
         rerendersubscriptions,
-        rerenderparticipations,
         rerenderuser
       }
     },
@@ -229,13 +195,14 @@ export default {
         if (this.$store.state.isUserLoggedIn) {
           this.profile = this.$store.state.user;
           this.getUser(this.$route.params.nickName)
+          this.getProjects();
         } else if (this.$store.state.isAdminLoggedIn) {
           this.profile = this.$store.state.admin;
           this.getAdmin(this.$route.params.nickName)
+          this.getProjects();
         } else { 
           this.getUser(this.$route.params.nickName) 
         }
-        this.getProjects();
     },
 
     components: { UserCard, UpdateUserForm, ProjectList, CreateProjectForm, ModalForm },
@@ -255,9 +222,10 @@ export default {
 
       async getUser(nickName) {
         try {
-          console.log(nickName)
           const user = await userApi.getUser(nickName)
           this.user = user.data[0]
+          this.getDonations(this.user.id)
+          this.getSubscriptions(this.user.id)
           console.log(this.user)
         } catch (err) {
           console.log(err)
@@ -283,6 +251,40 @@ export default {
         }
       },
 
+      getNumSubscriptions(num_subscriptions) {
+        this.num_subscriptions = num_subscriptions
+        this.rerenderuser()
+      },
+
+      async getSubscriptions (id) {
+        try {
+            const response = await userApi.getSubscriptions(id);
+            this.num_subscriptions = response.data.length
+            this.rerenderuser()
+        } catch (err) {
+            console.log(err);
+        }
+      },
+
+      async getDonations(id) {
+        try {
+          const response = await userApi.getDonations(id);
+          this.donations = response.data;
+
+          let sum = 0;
+          if(this.donations.length > 0) {
+            this.donations.forEach(key => {
+                sum += key.donation;
+            });
+          }
+          this.num_donations = sum
+          this.rerenderuser()
+        }
+        catch (err) {
+          console.log(err);
+        }
+      },
+
       async saveSubscription (selected_items) {
         try {
           var subscriptions = []
@@ -295,51 +297,11 @@ export default {
             headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
           );
           console.log(response.data)
+          this.getSubscriptions()
           this.rerendersubscriptions()
         } catch (err) {
           console.log(err);
-          swal("H habido algún error!", "Ya estas suscrito a alguno de estos proyectos", "error")
-        }
-      },
-
-      async saveParticipation (selected_items) {
-        try {
-          var participations = []
-          for(let i = 0; i < selected_items.length; i++){
-            participations[i] = {idUser: this.profile.id, idProject: selected_items[i].id}
-          }
-
-          let response = await userApi.saveParticipation({
-            participations: participations,
-          }, {
-            headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-          );
-
-          console.log(response.data)
-          this.rerenderparticipations()
-        } catch (err) {
-          console.log(err);
-          swal("Ha habido algún error!", "Ya participas en alguno de estos proyectos", "error")
-        }
-      },
-
-      async deleteSubscription(idProject) {
-        try {
-          const response = await userApi.deleteSubscription(this.profile.id, idProject);
-          console.log(response.data)
-          this.getSubscriptions(this.profile.id)
-        } catch (err) {
-          console.log(err);
-        }
-      },
-
-      async deleteParticipation(idProject) {
-        try {
-          const response = await userApi.deleteParticipation(this.profile.id, idProject);
-          console.log(response.data)
-          this.getParticipations(this.profile.id);
-        } catch (err) {
-          console.log(err);
+          swal("Ha habido algún error!", "Ya estas suscrito a alguno de estos proyectos", "error")
         }
       },
 
@@ -363,12 +325,6 @@ export default {
               Object.keys(this.button_state).forEach(key => {this.button_state[key] = false;});
               this.button_state.subscription = true
             } else {this.button_state.subscription = false}
-            break;
-          case 'Participations':
-            if (!this.button_state.participation) {
-              Object.keys(this.button_state).forEach(key => {this.button_state[key] = false;});
-              this.button_state.participation = true
-            } else {this.button_state.participation = false}
             break;
         }
       },

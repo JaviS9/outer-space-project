@@ -226,5 +226,19 @@ module.exports = {
                 error: 'ERROR: Project not found -- ' + err
             });
         }
+    },
+
+    async searchUpdate (req, res) {
+        try {
+            const [results, metadata] = await sequelize.query(
+                "SELECT project.title, project.photo, user.nickName, `update`.description, `update`.update_date FROM `update` JOIN project ON project.id = `update`.idProject JOIN user ON project.projectFounder = user.id WHERE project.title LIKE :update OR user.nickName LIKE :update OR `update`.description LIKE :update;",
+                { replacements: { update: '%' + req.params.update + '%' } }
+              );
+            res.status(200).send(results)
+        } catch (err) {
+            res.status(404).send({
+                error: 'ERROR: Project not found -- ' + err
+            });
+        }
     }
 }

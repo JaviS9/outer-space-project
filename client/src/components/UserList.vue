@@ -1,6 +1,8 @@
 <template>
     <div class="row p-0 m-0">
-        <div class="col-12 p-0 m-0">
+        <div class="col p-2 m-0" style="height: 350px"
+            :class="{ 'scrollable border border-2 rounded': users.length > 0}"
+        >
             <div v-if="users.length === 0">
                 <p class="text-danger text-center h5 p-3">No hay usuarios</p>
             </div>
@@ -23,12 +25,12 @@
                                     type="button" class="btn btn-outline-warning">
                                     <i class="fa fa-eye"></i>
                                 </router-link>
-                                <router-link v-if="listName == 'subscriptions' && ($store.state.isUserLoggedIn && $store.state.user.id == project.founder ||  $store.state.isAdminLoggedIn)"
+                                <router-link v-if="listName == 'subscriptions' && ($store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn)"
                                     :to="{ name: 'ViewSubscription', params: { subscription: user.numSubs }}"
                                     type="button" class="btn btn-outline-green ms-2">
                                     <i class="fa-solid fa-coins"></i>
                                 </router-link>
-                                <button v-if="listName != '' && ($store.state.isUserLoggedIn && $store.state.user.id == project.founder ||  $store.state.isAdminLoggedIn)"
+                                <button v-if="listName != '' && ($store.state.isUserLoggedIn && $store.state.user.id == user.id ||  $store.state.isAdminLoggedIn)"
                                     type="button"
                                     @click="deleteUser(user.id)"
                                     class="btn btn-outline-danger ms-2">
@@ -64,7 +66,7 @@ export default {
         switch(this.$props.listName) {
             case 'subscriptions' : this.getSubscriptions(this.$props.project.id);
                 break;
-            case 'participations': this.getParticipations(this.$props.project.id);
+            case 'friends': this.getFriends(this.$props.project.id);
                 break;
         }        
     },
@@ -80,9 +82,9 @@ export default {
                         this.getSubscriptions(this.$props.project.id);
                         console.log(response.data)
                         break;
-                    case 'participations': 
-                        response = await userApi.deleteParticipation(idUser, this.$props.project.id);
-                        this.getParticipations(this.$props.project.id);
+                    case 'friends': 
+                        response = await userApi.deleteFriend(idUser, this.$props.project.id);
+                        this.getFriends(this.$props.project.id);
                         console.log(response.data)
                         break;
                 }
@@ -95,14 +97,15 @@ export default {
             try {
                 const response = await projectApi.getSubscriptions(id);
                 this.users = response.data;
+                this.$emit('num_subscriptions', this.users.length)
             } catch (err) {
                 console.log(err);
             }
         },
 
-        async getParticipations (id) {
+        async getFriends (id) {
             try {
-                const response = await projectApi.getParticipations(id);
+                const response = await projectApi.getFriends(id);
                 this.users = response.data;
             } catch (err) {
                 console.log(err);

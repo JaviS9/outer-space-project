@@ -30,15 +30,6 @@ export default {
       return Api().get(`user/find/subscriptions/${id}`);
     },
 
-    // GET PART
-    async getOneParticipation (idUser, idProject) {
-      return Api().get(`user/${idUser}/find/participation/${idProject}`);
-    },
-
-    async getParticipations (id) {
-      return Api().get(`user/find/participations/${id}`);
-    },
-
     async getTechs (id) {
       return Api().get(`user/find/techs/${id}`);
     },
@@ -57,11 +48,6 @@ export default {
       return await Api().post("user/add/subscription", subscriptions);
     },
 
-    // CREATE PART
-    async saveParticipation (participations) {
-      return await Api().post("user/add/participation", participations)
-    },
-
     // CREATE TECHS
     async saveTechs (techs) {
       return await Api().post("user/add/tech", techs)
@@ -70,11 +56,6 @@ export default {
     // DELETE SUBS
     async deleteSubscription(idUser, idProject) {
       return await Api().delete(`user/${idUser}/delete/subscription/${idProject}`);
-    },
-
-    // DELETE PART
-    async deleteParticipation(idUser, idProject) {
-      return await Api().delete(`user/${idUser}/delete/participation/${idProject}`);
     },
 
     // DELETE TECH

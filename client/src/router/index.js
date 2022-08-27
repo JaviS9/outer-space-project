@@ -97,7 +97,7 @@ const routes = [
     },
   },
   {
-    path: '/manager/admins/profile/:id',
+    path: '/manager/admins/profile/:email',
     name: 'ViewAdmin',
     component: () => import('../views/private/admin/ViewAdmin.vue'),
     beforeEnter: (to, from, next) => {

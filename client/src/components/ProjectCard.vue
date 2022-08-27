@@ -2,13 +2,13 @@
 <div class="row-flex d-flex align-items-center justify-content-center">
     <div class="col-10">
         <div class="row-flex d-flex align-items-center justify-content-center m-0 p-0">
-            <div class="col-md-3 d-flex flex-column justify-content-center align-items-bottom m-0 pe-5">
+            <div class="col-md-4 d-flex flex-column justify-content-center align-items-end m-0 pe-5">
                 <div class="imagePreview__project-page m-0 p-0 border border-4"
                     :style="{ 'background-image': `url(${project.photo})` }"
                 ></div>
             </div>
             <!--  -->
-            <div class="col-md-3 d-flex flex-column justify-content-center align-items-end m-0 p-0">
+            <div class="col-md-4 d-flex flex-column justify-content-center align-items-center m-0 p-0">
                 <div class="card blockquote p-3 border border-2 rounded-circle bg-black text-center justify-content-center"
                     style="width: 220px; height: 220px;"
                 >
@@ -16,15 +16,7 @@
                     <p class="number-score mt-0">{{formatNumber(num_subscriptions)}}</p>
                 </div>              
             </div>
-            <div class="col-md-3 d-flex flex-column justify-content-center align-items-center m-0 p-0">
-                <div class="card blockquote p-3 border border-2 rounded-circle bg-black text-white d-flex align-items-center justify-content-center"
-                    style="width: 220px; height: 220px;"
-                >
-                    <span class="card-title mb-0">Participaciones</span>
-                    <p class="number-score mt-0">{{formatNumber(num_participations)}}</p>
-                </div>
-            </div>
-            <div class="col-md-3 d-flex flex-column justify-content-center align-items-start m-0 p-0">
+            <div class="col-md-4 d-flex flex-column justify-content-center align-items-start m-0 p-0">
                 <router-link type="button" v-if="subs_found != null"
                     :to="{ name: 'ViewSubscription', params: {subscription: subs_found.numSubs}}"
                     class="button-donation card blockquote p-3 border-green border-3 rounded-circle bg-black text-center justify-content-center"
@@ -60,7 +52,7 @@
             <span> ¡El proyecto se ha financiado por completo! </span>
         </p>
         <!--  -->
-        <div class="row-flex d-flex align-items-center justify-content-end m-0 p-0">
+        <div class="row-flex d-flex align-items-center justify-content-center m-0 p-0">
             <div class="col-md-12 flex-column justify-content-center align-items-center m-0 p-0">
                 <div class="card p-0 bg-black">
                     <li class="list-group" v-if="project === null">
@@ -110,12 +102,11 @@ export default {
     },
 
     props: {
-        projectinfo: {},
-        founder: String,
+        projectinfo: Object,
+        founder: Object,
         num_subscriptions: Number,
-        num_participations: Number,
         num_donations: Number,
-        subs_found: {},
+        subs_found: Object,
     },
 
     created() {
@@ -125,7 +116,7 @@ export default {
     methods: {
 
         formatDate(date){
-            return date.substring(0, 10).replaceAll('-', '/')
+            return date.substring(0, 10).replaceAll('-', '/').split("/").reverse().join("/")
         },
 
         getProgress() {

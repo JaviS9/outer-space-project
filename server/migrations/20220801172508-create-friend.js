@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Participation', {
-      idUser: {
+    await queryInterface.createTable('Friend', {
+      idUser1: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
@@ -11,20 +11,27 @@ module.exports = {
         references: {
           model: 'User',
           key: 'id',
-          as: 'idProject'
+          as: 'idUser1'
         }
       },
-      idProject: {
+      idUser2: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
         references: {
-          model: 'Project',
+          model: 'User',
           key: 'id',
-          as: 'idProject'
+          as: 'idUser2'
         }
+      },
+      request: {
+        allowNull:false,
+        type: Sequelize.STRING,
+      },
+      accepted: {
+        type: Sequelize.BOOLEAN,
       },
       startDate: {
         allowNull: false,
@@ -35,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Participation');
+    await queryInterface.dropTable('Friend');
   }
 };

@@ -17,15 +17,6 @@ module.exports = (sequelize, DataTypes) => {
                                       onUpdate: 'CASCADE'
                                     }});
       Project.belongsToMany(models.User, {
-        through: 'Participation',
-        as: 'participants',
-        foreignKey: {
-          name: 'idProject',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE'
-        }
-      })
-      Project.belongsToMany(models.User, {
         through: 'Subscription',
         as: 'usersSubscribed',
         foreignKey: {

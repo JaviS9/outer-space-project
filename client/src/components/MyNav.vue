@@ -57,15 +57,11 @@
               </button>
               <ul v-if="$store.state.isUserLoggedIn || $store.state.isAdminLoggedIn"
                 class="dropdown-menu dropdown-menu-end bg-black text-white border border-2">
-                <li>
-                  <router-link v-if="$store.state.isUserLoggedIn"
-                    type="button" :to="{ name: 'UserProfile', params: {nickName: $store.state.user.nickName } }"
-                    class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
-                    aria-current="page">Mi perfil
-                  </router-link>
-                  <router-link v-if="$store.state.isAdminLoggedIn"
-                    type="button" :to="{ name: 'UserProfile', params: {nickName: $store.state.admin.email } }"
-                    class="nav-link active p-2 flex-column d-flex align-items-center justify-content-center"
+                <li class="nav-link active pt-2 flex-column d-flex align-items-center justify-content-center">
+                  <router-link
+                    type="button" 
+                    :to=" $store.state.isAdminLoggedIn ? `/manager/admins/profile/${$store.state.admin.email}` : `/user/${$store.state.user.nickName}`"
+                    class="nav-link active btn btn-sm border rounded-pill p-2"
                     aria-current="page">Mi perfil
                   </router-link>
                 </li>

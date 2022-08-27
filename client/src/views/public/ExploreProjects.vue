@@ -3,23 +3,24 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col">
-                <p class="h3 fw-bold">Explora los proyectos más populares</p>
+                <p class="h3 fw-bold mb-2">Explora los proyectos más populares</p>
+                <p>Explora a través del espacio y descubre nuevos proyectos que liderarán el futuro.</p>
                 <SearchBox :table="'Project'" @search="searchProject" />
             </div>
         </div>
     </div>
-    <div class="container mt-3 pt-3">
+    <div class="container mt-0 pt-0">
         <div class="row p-2">
             <div class="col-md-12 d-flex flex-column align-items-center justify-content-center" v-if="projects.length === 0">
                 <p class="h5 text-danger mt-5">No hay proyectos aún</p>
             </div>
             <div 
-                class="col-md-4 m-0 p-0 d-flex flex-column justify-content-center"
+                class="col-md-4 m-0 p-3 d-flex flex-column justify-content-center"
                 v-else
                 v-for="project in projects" :key="project.id"
             >
-                <div class="card bg-black text-white border border-2 m-2 p-3"
-                    style="height: 480px"
+                <div class="card bg-black text-white border border-3 m-2 p-3"
+                    style="height: 500px"
                 >
                     <div class="row-flex d-flex justify-content-center align-items-center">
                         <router-link :to="{ name: 'ProjectPage', params: {title: project.title}}"
@@ -40,11 +41,13 @@
                                 role="progressbar" :style="{'width': getProgress(project.title, project.financiation)}"
                                 aria-valuenow="25" 
                                 aria-valuemin="0" 
-                                aria-valuemax="100">{{ getProgress(project.title, project.financiation) }}</div>
+                                aria-valuemax="100">
+                            </div>
                         </div>
                         <!--  -->
                         <h5 class="card-title fw-bold">{{ project.title }}</h5>
-                        <p class="card-text">{{ project.description }}</p>
+                        <p class="card-text long-text">{{ project.description }}</p>
+                        <p class="card-text border border-3 rounded-pill p-2 bg-black text-center">Desde {{ formatDate(project.startDate) }}</p>
                     </div>
                 </div>
             </div>
@@ -72,6 +75,7 @@
             ><i class="fa-solid fa-caret-right"></i>
             </button>
         </div>
+        <div v-else style="width: 100%; height: 60px"></div>
         <!--  -->
     </div>
   </div>
@@ -131,7 +135,8 @@ export default {
         },
         
         searchProject(search) {
-            this.projects = search
+            if(search != -1) { this.projects = search }
+            else { this.getProjects() }            
         },
 
         getProgress(title, financiation) {
@@ -152,6 +157,10 @@ export default {
                  }
             }
             else { return ""}
+        },
+
+        formatDate(date){
+            return date.substring(0, 10).replaceAll('-', '/').split("/").reverse().join("/")
         },
 
         async getProjects() {

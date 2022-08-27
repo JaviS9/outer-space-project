@@ -213,7 +213,7 @@ export default {
         }
         
         if(Object.values(this.errors).every(value => value === false)) {
-          if (this.password != '') { this.user.password = this.pass }
+          if (this.pass != '') { this.user.password = this.pass }
           const response = await userApi.updateUser(this.user.id, {
             email: this.user.email,
             photo: this.user.photo,

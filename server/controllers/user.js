@@ -38,17 +38,6 @@ module.exports = {
         }
     },
 
-    async addParticipation(req, res) {        
-        try{
-            const participations = await models.Participation.bulkCreate(req.body.participations);
-            res.status(200).send(participations)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: Este usuario ya participa en el proyecto'
-            });
-        }
-    },
-
     async addTech(req, res) {        
         try{
             const techs = await models.UserTech.bulkCreate(req.body.techs);
@@ -126,24 +115,6 @@ module.exports = {
             });
         }
     },
-
-    async findParticipation (req, res) {
-        try{
-            const [results, metadata] = await sequelize.query(
-                "SELECT * FROM participation JOIN project ON project.id = participation.idProject WHERE participation.idUser = :idUser AND participation.idProject = :idProject",
-                { replacements: {
-                    [Op.and] : [
-                        { idUser: req.params.idUser },
-                        { idProject: req.params.idProject }
-                    ]
-                }} );
-            res.status(200).send(results)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: Participations not found -- ' + err
-            });
-        }
-    },
     
     async findUserSubscriptions (req, res) {
         try{
@@ -159,20 +130,6 @@ module.exports = {
         }
     },
 
-    async findUserParticipations (req, res) {
-        try{
-            const [results, metadata] = await sequelize.query(
-                "SELECT * FROM participation JOIN project ON project.id = participation.idProject WHERE participation.idUser = :id",
-                { replacements: { id: req.params.id } }
-              );
-            res.status(200).send(results)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: Participations not found -- ' + err
-            });
-        }
-    },
-
     async findUserTechs (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
@@ -182,7 +139,7 @@ module.exports = {
             res.status(200).send(results)
         } catch (err) {
             res.status(400).send({
-                error: 'ERROR: Participations not found -- ' + err
+                error: 'ERROR: Friends not found -- ' + err
             });
         }
     },
@@ -190,7 +147,7 @@ module.exports = {
     async findUserDonations (req, res) {
         try{
             const [results, metadata] = await sequelize.query(
-                "SELECT * FROM donation JOIN subscription ON subscription.id = donation.idSubscription WHERE subscription.idUser = :id",
+                "SELECT * FROM donation JOIN subscription ON subscription.numSubs = donation.idSubscription WHERE subscription.idUser = :id",
                 { replacements: { id: req.params.id } }
               );
             res.status(200).send(results)
@@ -268,23 +225,6 @@ module.exports = {
         } catch (err) {
             res.status(400).send({
                 error: 'ERROR: Subscription not deleted -- ' + err
-            });
-        }
-    },
-
-    async deleteParticipation (req, res) {
-        try {
-            const participation = await models.Participation.destroy(
-                { where: {
-                    [Op.and] : [
-                        { idUser: req.params.idUser },
-                        { idProject: req.params.idProject }
-                    ]
-                }} );
-            res.status(200).send("SUCCESS: Participation deleted")
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: Participation not deleted -- ' + err
             });
         }
     },

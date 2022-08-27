@@ -1,9 +1,9 @@
 <template>
 <form>
-    <div class="row mt-3">
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col flex-column d-flex align-items-end justify-content-center">
+    <div class="row m-0">
+        <div class="col-md-6 m-0 p-0">
+            <div class="row m-0 p-0">
+                <div class="col-10 flex-column d-flex align-items-end justify-content-center m-0 p-0">
                     <input type="text" class="form-control" placeholder="Buscar..." v-model="item_searched">
                     <div class="container-x">
                         <button id="search-x" type="button" v-on:click="cancel">
@@ -11,7 +11,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-2">
                     <input type="button" class="btn btn-outline-light" value="Buscar" v-on:click="search">
                 </div>
             </div>
@@ -52,12 +52,14 @@ export default {
                             break
                         case 'Tech': result = await techApi.searchTech(this.item_searched)
                             break
+                        case 'Update': result = await projectApi.searchUpdate(this.item_searched)
+                            break
                     }
                     if (result) {
                         console.log(result.data)
                         this.$emit('search', result.data)
                     }
-                } else { window.location.reload(); }
+                } else { this.$emit('search', -1) }
             } catch (err) {
                 console.log(err)
             }

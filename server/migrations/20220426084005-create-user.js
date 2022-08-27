@@ -27,11 +27,6 @@ module.exports = {
       biography: {
         type: Sequelize.STRING
       },
-      user_status: {
-        allowNull: false,
-        defaultValue: true,
-        type: Sequelize.BOOLEAN
-      },
       password: {
         allowNull: false,
         type: Sequelize.STRING

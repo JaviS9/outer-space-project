@@ -34,15 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       }});
-      User.belongsToMany(models.Project, {
-        through: 'Participation',
-        as: 'participation',
-        foreignKey: {
-          name: 'idUser',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE'
-        }
-      });
       User.belongsToMany(models.Tech, {
         through: 'UserTech',
         as: 'techs',
@@ -57,6 +48,24 @@ module.exports = (sequelize, DataTypes) => {
         as: 'projectsSubscribed',
         foreignKey: {
           name: 'idUser',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
+      });
+      User.belongsToMany(models.User, {
+        through: 'Friend',
+        as: 'friend1',
+        foreignKey: {
+          name: 'idUser1',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
+      });
+      User.belongsToMany(models.User, {
+        through: 'Friend',
+        as: 'friend2',
+        foreignKey: {
+          name: 'idUser2',
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE'
         }
@@ -83,11 +92,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     biography: DataTypes.STRING,
-    user_status: {
-        allowNull: false,
-        defaultValue: true,
-        type: DataTypes.BOOLEAN
-    },
     password: {
       allowNull: false,
       type: DataTypes.STRING

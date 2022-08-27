@@ -18,9 +18,7 @@ module.exports = (app) => {
    app.get('/user/find/id/:id', userController.findUserId);
    app.get('/user/find/projects/:id', userController.findUserFundedProjects);
    app.get('/user/find/subscriptions/:id', userController.findUserSubscriptions);
-   app.get('/user/find/participations/:id', userController.findUserParticipations);
    app.get('/user/:idUser/find/subscription/:idProject', userController.findSubscription);
-   app.get('/user/:idUser/find/participation/:idProject', userController.findParticipation);
    app.get('/user/find/techs/:id', userController.findUserTechs);
    app.get('/user/find/donations/:id', userController.findUserDonations)
    app.get('/user/search/:nickName', userController.searchUser);
@@ -28,7 +26,6 @@ module.exports = (app) => {
    // POST
    app.post('/user/add', userController.addUser);
    app.post('/user/add/subscription', userController.addSubscription);
-   app.post('/user/add/participation', userController.addParticipation);
    app.post('/user/add/tech', userController.addTech);
 
    // PUT
@@ -38,7 +35,6 @@ module.exports = (app) => {
    // DELETE
    app.delete('/user/delete/:id', userController.deleteUser);
    app.delete('/user/:idUser/delete/subscription/:idProject', userController.deleteSubscription);
-   app.delete('/user/:idUser/delete/participation/:idProject', userController.deleteParticipation);
    app.delete('/user/:idUser/delete/tech/:idTech', userController.deleteTech);
 
    // *** SUBSCRIPTION // DONATION ***
@@ -59,12 +55,11 @@ module.exports = (app) => {
    app.get('/project/list', projectController.listProject);
    app.get('/project/find/:title', projectController.findProject);
    app.get('/project/find/id/:id', projectController.findProjectId);
-   app.get('/project/find/updates/:id', projectController.findProjectUpdates);
    app.get('/project/find/subscriptions/:id', projectController.findProjectSubscriptions);
-   app.get('/project/find/participations/:id', projectController.findProjectParticipations);
    app.get('/project/find/donations/:id', projectController.findProjectDonations)
    app.get('/project/all/donations', projectController.findAllDonations)
    app.get('/project/search/:title', projectController.searchProject);
+   
 
    // POST
    app.post('/project/add', projectController.addProject);
@@ -79,7 +74,9 @@ module.exports = (app) => {
 
    // *** UPDATES ***
    // GET ALL UPDATES WITH PROJECT INFO
+   app.get('/project/find/updates/:id', projectController.findProjectUpdates);
    app.get('/project/update/list', projectController.listUpdate);
+   app.get('/update/search/:update', projectController.searchUpdate);
 
    // *** ADMIN ***
    // GET

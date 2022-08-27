@@ -30,30 +30,11 @@
         <!--  -->
       </div>
       <div class="row-flex d-flex align-items-center justify-content-start mt-3 mx-0">
-        <button v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id)"
-          type="button" 
-          class="btn btn-md btn-outline-green rounded-pill"
-          data-bs-toggle="modal" data-bs-target="#AddDonationModal">
-          <i class="fa-solid fa-coins"></i> Hacer donacion
-        </button>
-        <!-- MODAL -->
-        <div class="modal fade" 
-          id="AddDonationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
-          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content bg-black border border-2 text-white p-3">
-              <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="staticBackdropLabel">Haz una donación</h5>
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
-                  <i class="fa fa-xmark"></i>
-                </button>
-              </div>
-              <div class="modal-body">
-                <AddDonationForm :subscriptionid="subs.numSubs" @subs="getSubs"/>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AddDonationForm  
+          v-if="($store.state.isUserLoggedIn && $store.state.user.id == user.id)" 
+          :subscriptionid="subs.numSubs"
+          @subs="getSubs"
+        />
       </div>
     </div>
     <div class="container mt-3">
@@ -104,6 +85,8 @@ export default {
         this.getSubs(this.$route.params.subscription)
     },
 
+    components: { DonationList, AddDonationForm },
+
     methods: {
 
         formatId(id){
@@ -144,8 +127,6 @@ export default {
             }
         },
     },
-    
-    components: { DonationList, AddDonationForm }
 }
 </script>
 

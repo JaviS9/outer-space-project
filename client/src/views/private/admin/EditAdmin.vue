@@ -37,12 +37,24 @@
             </div>
           </div>
           <hr>
-          <p>Cambiar contraseña.</p>
+          <p>Cambiar contraseña.
+            <i v-if="errors.length_pass == true"
+              class="fa-solid fa-info m-0 border border-2 px-2 py-1 rounded-circle bg-danger"
+              data-bs-toggle="tooltip bs-tooltip-right" data-bs-placement="right"
+              title="La contraseña debe tener almenos 6 caracteres.">
+            </i>
+          </p>
           <div class="mb-2">
-              <input name="password" autocomplete="on" type="password" class="form-control" placeholder="Nueva contraseña" v-model="admin.password">
+              <input autocomplete="off" type="password" class="form-control" placeholder="Nueva contraseña" v-model="pass">
           </div>
           <div class="mb-2">
-              <input name="repeat_password" autocomplete="on" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+              <input autocomplete="off" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+          </div>
+          <div v-if="errors.rep_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe de nuevo la contraseña.</p>
+          </div>
+          <div v-if="errors.equal_pass == true">
+            <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Las contraseñas introducidas no son iguales.</p>
           </div>
           <div class="mb-2 mt-3">
             <!-- BUTTON -->
@@ -63,7 +75,13 @@ export default {
   data() {
     return {
       admin: {},
+      pass: "",
       repeat_pass: "",
+      errors: {
+        rep_pass: false,
+        equal_pass: false,
+        length_pass: false,
+      },
     }
   },
 
@@ -77,7 +95,6 @@ export default {
       try {
         const response = await adminApi.getAdminId(this.$route.params.id);
         this.admin = response.data[0];
-        this.repeat_pass = this.admin.password
       } catch (err) {
         console.log(err);
       }
@@ -86,17 +103,35 @@ export default {
     async updateAdmin(e) {
       try {
         e.preventDefault();
+
+        // VALID PASSWORD
+        if(this.pass) {
+          if(this.pass.length <= 5) {
+            this.errors.length_pass = true;
+          } else { this.errors.length_pass = false;}
+          if(!this.repeat_pass) {
+            this.errors.rep_pass = true;
+          } else {
+            this.errors.rep_pass = false;
+            if(this.pass != this.repeat_pass) {
+              this.errors.equal_pass = true;
+            } else { this.errors.equal_pass = false; }
+          }
+        }
         
-        let response = await adminApi.updateAdmin(this.admin.id, {
-          email: this.admin.email,
-          name: this.admin.name,
-          lastName: this.admin.lastName,
-          password: this.pass,
-        },
-        { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
-        );
-        console.log(response.data);
-        this.$router.push("/manager/admins");
+        if(Object.values(this.errors).every(value => value === false)) {
+          if (this.pass != '') { this.admin.password = this.pass }
+          let response = await adminApi.updateAdmin(this.admin.id, {
+            email: this.admin.email,
+            name: this.admin.name,
+            lastName: this.admin.lastName,
+            password: this.admin.pass,
+          },
+          { headers: { 'Content-Type': 'application/json; charset=UTF-8' }}
+          );
+          console.log(response.data);
+          this.$router.push("/manager/admins");
+        }
       } catch (err) {
         console.log(err);
       }

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Participation extends Model {
+  class Friend extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,20 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Participation.belongsTo(models.User, {foreignKey: 'idUser', targetKey: 'id'})
-      Participation.belongsTo(models.Project, {foreignKey: 'idProject', targetKey: 'id'})
+      Friend.belongsTo(models.User, {foreignKey: 'idUser1', targetKey: 'id'})
+      Friend.belongsTo(models.User, {foreignKey: 'idUser2', targetKey: 'id'})
     }
   }
-  Participation.init({
-    idUser: {
+  Friend.init({
+    idUser1: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID
     },
-    idProject: {
+    idUser2: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID
+    },
+    request: {
+      allowNull:false,
+      type: DataTypes.STRING,
+    },
+    accepted: {
+      type: DataTypes.BOOLEAN,
     },
     startDate: {
       allowNull: false,
@@ -34,11 +41,11 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'Participation',
+    modelName: 'Friend',
     timestamps: false,
     freezeTableName: true,
     tableName: 'PArticipation',
     classMethods: {}
   });
-  return Participation;
+  return Friend;
 };

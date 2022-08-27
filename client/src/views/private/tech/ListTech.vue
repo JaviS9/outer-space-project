@@ -24,18 +24,18 @@
       <div class="col-md-6"
         v-for="(tech, index) in paginated" :key="index"
       >
-        <div class="col card border-light bg-black align-self-center mb-4 p-1">
+        <div class="col card border border-2 rounded bg-black align-self-center mb-4 p-1">
           <div class="card-body p-0 bg-black">
             <div class="row-flex d-flex justify-content-center align-items-center">
               <div class="col-md-4 flex-column d-flex justify-content-center align-items-center">
-                  <div class="imagePreview__tech-logo m-2" :style="{ 'background-image': `url(${tech.photo})` }"></div>
+                  <div class="imagePreview__tech-logo m-2 border border-3 rounded-circle" :style="{ 'background-image': `url(${tech.photo})` }"></div>
               </div>
               <div class="col-md-6 d-flex flex-column justify-content-center align-items-top p-1">
                 <li class="list-group justify-content-top align-items-top m-0">
                   <ul class="list-group-item bg-black border border-bottom-0 text-center text-white pt-3 pb-1 px-2 m-0">
                     <span class="h5 fw-bold m-0 p-0">{{tech.name}}</span>
                   </ul>
-                  <ul class="list-group-item bg-black border text-center border-top-0 text-white pb-3 pt-0 px-2 m-0">
+                  <ul class="list-group-item bg-black border border-2 text-center border-top-0 text-white pb-3 pt-0 px-2 m-0">
                     <p class="p-0 m-0">Tipo de tecnología: <span class="fw-bold">{{tech.type}}</span></p>                        
                   </ul>
                 </li>
@@ -163,10 +163,10 @@ export default {
       }
     },
     
-    searchTech (search) {
-      this.techs = search
-    }
-
+    searchTech(search) {
+      if(search != -1) { this.techs = search }
+      else { this.getTechs() }            
+    },
   }
 }
 </script>

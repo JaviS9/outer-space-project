@@ -24,12 +24,12 @@
       class="col-md-4 p-4 d-flex flex-column align-items-center justify-content-center"
       v-for="admin in paginated" :key="admin.id"
       >
-        <div class="card mx-4 border-light bg-black" style="width: 350px;">
+        <div class="card mx-4 border border-2 bg-black" style="width: 350px;">
           <div class="card-body p-0 text-center">
             <ul class="list-group">
               <li class="list-group-item bg-black">
                 <!--  -->
-                <img class="user-image" src="../../../../public/img/admin-1.png" alt="admin-1">
+                <img class="user-image border border-3 rounded-circle" src="../../../../public/img/admin-1.png" alt="admin-1">
              </li>
               <li v-if="admin.name === '' && admin.lastName === '' " class="list-group-item bg-black text-white">
                 <br>
@@ -37,10 +37,10 @@
               <li v-else class="list-group-item bg-black text-white">
                   <p>{{ admin.name }} {{ admin.lastName }}</p>
               </li>
-              <li class="list-group-item bg-black border-top">
+              <li class="list-group-item bg-black border-top border-2">
                 <div class="row my-3">
                   <div class="col-sm-4">
-                    <router-link :to="{ name: 'ViewAdmin', params: {id: admin.id}}"
+                    <router-link :to="{ name: 'ViewAdmin', params: {email: admin.email}}"
                       type="button"
                       class="btn btn-outline-warning"
                     >
@@ -175,8 +175,9 @@ export default {
     },
 
     searchAdmin(search) {
-      this.admins = search
-    }
+      if(search != -1) { this.admins = search }
+      else { this.getAdmins() }            
+    },
   },
 };
 </script>

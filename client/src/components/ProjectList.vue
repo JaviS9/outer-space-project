@@ -1,6 +1,8 @@
 <template>
     <div class="row p-0 m-0">
-        <div class="col-12 p-0 m-0">
+        <div class="col p-2 m-0" style="height: 350px"
+            :class="{ 'scrollable border border-2 rounded': projects.length > 0}"
+        >
             <div v-if="projects.length === 0">
                 <p class="text-danger text-center h5 p-3">No hay proyectos</p>
             </div>
@@ -66,8 +68,6 @@ export default {
                 break;
             case 'subscriptions' : this.getSubscriptions(this.$props.user.id);
                 break;
-            case 'participations': this.getParticipations(this.$props.user.id);
-                break;
         }        
     },
 
@@ -85,11 +85,6 @@ export default {
                     case 'subscriptions' : 
                         response = await userApi.deleteSubscription(this.$props.user.id, idProject);
                         this.getSubscriptions(this.$props.user.id);
-                        console.log(response.data)
-                        break;
-                    case 'participations': 
-                        response = await userApi.deleteParticipation(this.$props.user.id, idProject);
-                        this.getParticipations(this.$props.user.id);
                         console.log(response.data)
                         break;
                 }
@@ -111,15 +106,7 @@ export default {
             try {
                 const response = await userApi.getSubscriptions(id);
                 this.projects = response.data;
-            } catch (err) {
-                console.log(err);
-            }
-        },
-
-        async getParticipations (id) {
-            try {
-                const response = await userApi.getParticipations(id);
-                this.projects = response.data;
+                this.$emit('num_subscriptions', this.projects.length)
             } catch (err) {
                 console.log(err);
             }

@@ -1,6 +1,8 @@
 <template>
   <div class="row p-3 mt-3">
-    <div class="col-12 border-bottom border-top border-2 pt-3 mb-3">
+    <div class="col border-bottom border-top border-2 pt-3 mb-3 scrollable"
+      style="height: 500px"
+    >
       <div v-if="donations.length === 0">
         <p class="text-danger text-center h5 p-3">No hay donaciones</p>
       </div>
@@ -96,7 +98,7 @@ export default {
       },
 
       formatDate(date){
-        return "Fecha: " + date.substring(0, 10).replaceAll('-', '/') + ", Hora: " +  date.substring(14, date.length - 5)
+        return "Fecha: " + date.substring(0, 10).replaceAll('-', '/').split("/").reverse().join("/") + ", Hora: " +  date.substring(11, 16)
       },
 
       async getSubscriptionDonations(idSubscription) {

@@ -36,13 +36,13 @@
             </i>
           </p>
           <div class="mb-2">
-            <input name="password" autocomplete="on" type="password" class="form-control" placeholder="Contraseña" v-model="pass">
+            <input name="password" autocomplete="off" type="password" class="form-control" placeholder="Contraseña" v-model="pass">
           </div>
           <div v-if="errors.pass == true">
             <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe una contraseña.</p>
           </div>
           <div class="mb-2">
-            <input name="repeat_password" autocomplete="on" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
+            <input name="repeat_password" autocomplete="off" type="password" class="form-control" placeholder="Repite la contraseña" v-model="repeat_pass">
           </div>
           <div v-if="errors.rep_pass == true">
             <p class="text-danger"><i class="fa-solid fa-circle-exclamation mt-2 me-2"></i>Por favor, escribe de nuevo la contraseña.</p>

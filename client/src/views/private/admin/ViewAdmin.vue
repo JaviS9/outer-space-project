@@ -3,7 +3,10 @@
   <div class="container my-2">
     <div class="row">
       <div class="col">
-        <p class="h3 fw-bold">Perfil de administrador</p>
+        <p v-if="$store.state.isAdminLoggedIn && (admin.id === $store.state.admin.id)"
+          class="h3 fw-bold">Mi perfil
+        </p>
+        <p v-else class="h3 fw-bold">Perfil de administrador</p>
       </div>
     </div>
   </div>
@@ -44,11 +47,20 @@
       </div>
     </div>
   </div>
+  <!-- ADMIN SECTION -->
+  <div v-if="$store.state.isAdminLoggedIn && (admin.id === $store.state.admin.id)"
+    id="EditProfilePanel" 
+    class="container border rounded border-3 mt-2 p-3 mb-5"
+  >
+    <p class="h5 pb-3 text-center text-primary fw-bold">Actualiza los datos de tu perfil de administrador</p>
+    <UpdateUserForm :userinfo="admin" @updatedUser="getProfile"/>
+  </div>
 </div>
 </template>
 
 <script>
 import adminApi from '@/services/adminApi';
+import UpdateUserForm from '@/components/UpdateUserForm.vue';
 
 export default {
     name: "ViewAdmin",
@@ -58,13 +70,16 @@ export default {
         };
     },
     created() {
-        this.getProfile();
+        this.getProfile(this.$route.params);
     },
+
+    components: { UpdateUserForm },
+
     methods: {
         //FIND ONE
-        async getProfile() {
+        async getProfile(admin) {
             try {
-                const response = await adminApi.getAdminId(this.$route.params.id);
+                const response = await adminApi.getAdmin(admin.email);
                 this.admin = response.data[0];
             }
             catch (err) {

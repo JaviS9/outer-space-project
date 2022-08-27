@@ -25,11 +25,6 @@ export default {
         return Api().get(`project/find/subscriptions/${id}`)
     },
 
-    // GET PART
-    async getParticipations(id) {
-        return Api().get(`project/find/participations/${id}`)
-    },
-
     // GET DONATIONS
     async getDonations(id) {
         return Api().get(`project/find/donations/${id}`)
@@ -72,5 +67,9 @@ export default {
     // SEARCH
     searchProject(title) {
         return Api().get(`project/search/${title}`)
+    },
+
+    searchUpdate(update) {
+        return Api().get(`update/search/${update}`)
     },
 }

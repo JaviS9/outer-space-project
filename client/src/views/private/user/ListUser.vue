@@ -25,7 +25,7 @@
         v-else
         v-for="(user, index) in paginated" :key="index"
       >
-        <div class="card mx-4 border-light bg-black" style="width: 350px;">
+        <div class="card mx-4 border border-2 bg-black" style="width: 350px;">
           <div class="card-body p-0 text-center">
             <div v-if="user === null">
               <p class="text-center text-danger">No hay datos del usuario</p>
@@ -33,7 +33,7 @@
             <ul v-else class="list-group">
               <li class="list-group-item bg-black">
                 <!--  -->
-                <div class="imagePreview__user-image" :style="{ 'background-image': `url(${user.photo})` }"></div>
+                <div class="imagePreview__user-image border border-3 rounded-circle" :style="{ 'background-image': `url(${user.photo})` }"></div>
              </li>
               <li class="list-group-item bg-black text-white mb-0">
                 <span class="fw-bold">{{ user.nickName }}</span>
@@ -187,8 +187,9 @@ export default {
     },
 
     searchUser(search) {
-      this.users = search
-    }
+      if(search != -1) { this.users = search }
+      else { this.getUsers() }        
+    },
   },
 };
 </script>
