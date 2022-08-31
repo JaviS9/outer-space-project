@@ -1,5 +1,5 @@
 # OUTER SPACE PROJECT
-![Captura de pantalla (56)](https://user-images.githubusercontent.com/32191951/187670086-80cf3afe-bddd-4f66-8626-3372869829bb.png)
+![carrousel-1](https://user-images.githubusercontent.com/32191951/187671002-d9a3013a-0f43-43da-ba15-cc4c4e66bf88.png)
 
 - ES
 Se trata de una plataforma de crowdfunding orientada a la financiación de proyectos de software.
@@ -15,7 +15,8 @@ To install all dependencies
 npm install
 ```
 
-### Compilation. If you want to compile the app in localhost you must open two terminals and execute the two parts (client and server) separately.
+### Compilation
+If you want to compile the app in localhost you must open two terminals and execute the two parts (client and server) separately.
 To compile and execute the client
 ```
 npm run serve
