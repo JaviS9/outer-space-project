@@ -52,24 +52,6 @@ module.exports = (sequelize, DataTypes) => {
           onUpdate: 'CASCADE'
         }
       });
-      User.belongsToMany(models.User, {
-        through: 'Friend',
-        as: 'friend1',
-        foreignKey: {
-          name: 'idUser1',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE'
-        }
-      });
-      User.belongsToMany(models.User, {
-        through: 'Friend',
-        as: 'friend2',
-        foreignKey: {
-          name: 'idUser2',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE'
-        }
-      });
     }
   }
   User.init({

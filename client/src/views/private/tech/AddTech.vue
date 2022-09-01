@@ -73,7 +73,8 @@ export default {
         'lenguaje',
         'framework',
         'librería',
-        'API'
+        'API',
+        'ORM',
       ],
       photos: [
         "https://cdn-icons-png.flaticon.com/512/1005/1005141.png",

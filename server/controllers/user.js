@@ -178,23 +178,6 @@ module.exports = {
         }
     },
 
-    //UPDATE STATUS
-    async updateUserStatus (req, res) {
-        try {
-            const user = await models.User.update({
-                user_status: req.body.status,
-                updatedAt: new Date(),
-            }, {
-                where: { id: req.params.id }
-            });
-            res.status(200).send(user)
-        } catch (err) {
-            res.status(400).send({
-                error: 'ERROR: User status not updated -- ' + err
-            });
-        }
-    },
-
     // DELETE
     async deleteUser (req, res) {
         try {

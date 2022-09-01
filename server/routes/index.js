@@ -3,7 +3,7 @@ const projectController = require('../controllers/project');
 const adminController = require('../controllers/admin');
 const techController = require('../controllers/tech')
 const authenticationController = require('../controllers/authentication')
-const donationController = require('../controllers/donation')
+const subscriptionController = require('../controllers/subscription')
 const app = require('../app');
 
 module.exports = (app) => {
@@ -30,24 +30,26 @@ module.exports = (app) => {
 
    // PUT
    app.put('/user/update/:id', userController.updateUser);
-   app.put('/user/update/status/:id', userController.updateUserStatus);
 
    // DELETE
    app.delete('/user/delete/:id', userController.deleteUser);
    app.delete('/user/:idUser/delete/subscription/:idProject', userController.deleteSubscription);
    app.delete('/user/:idUser/delete/tech/:idTech', userController.deleteTech);
 
-   // *** SUBSCRIPTION // DONATION ***
+   // *** SUBSCRIPTION ***
    // GET
-   app.get('/donation/list', donationController.listDonation);
-   app.get('/subscription/find/donations/:id', donationController.findSubscriptionDonations);
-   app.get('/subscription/find/:id', donationController.findSubscription);
-   
+   app.get('/subscription/find/:id', subscriptionController.findSubscription);
+   app.get('/subscription/find/donations/:id', subscriptionController.findSubscriptionDonations);
+
+   // *** DONATION ***
+   // GET 
+   app.get('/donation/list', subscriptionController.listDonation);
+
    // POST
-   app.post('/donation/add', donationController.addDonation);
+   app.post('/donation/add', subscriptionController.addDonation);
 
    // DELETE
-   app.delete('/subscription/:idSubscription/delete/donation/:idDonation', donationController.deleteDonation);
+   app.delete('/subscription/:idSubscription/delete/donation/:idDonation', subscriptionController.deleteDonation);
 
 
    // *** PROJECT ***
