@@ -22,7 +22,7 @@
             <div 
               class="col-md-4 m-0 p-0 d-flex flex-column justify-content-center"
               v-else
-              v-for="project in projects" :key="project.id"
+              v-for="project in paginated" :key="project.id"
             >
               <div class="card bg-black text-white border border-2 m-2 p-0" style="width: 360px; height;: 500px">
                 <div class="row-flex d-flex justify-content-center align-items-center p-3 m-0">

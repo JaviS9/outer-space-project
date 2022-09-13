@@ -17,7 +17,7 @@
             <div 
                 class="col-md-4 m-0 p-3 d-flex flex-column justify-content-center"
                 v-else
-                v-for="project in projects" :key="project.id"
+                v-for="project in paginated" :key="project.id"
             >
                 <div class="card bg-black text-white border border-3 m-2 p-3"
                     style="height: 500px"
@@ -94,7 +94,7 @@ export default {
             aux_projects: [],
             donations: [],
             num_donations: 0,
-            pageSize: 12,
+            pageSize:12,
             current: 1
         };
     },

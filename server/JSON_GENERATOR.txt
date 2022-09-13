@@ -2,28 +2,83 @@
 [
   '{{repeat(1, 50)}}',
   {
-    id: '{{index()}}',
-    name: '{{firstName()}}',
-    lastName: '{{surname()}}',
-    email: '{{email()}}',
-    nickName: function (tags, index) { return this.name + this.id; },
-    password: function (tags, index) { return this.nickName; },
-    idCompany: '{{integer(1, 20)}}',
-    status: true
-  }
-]
-//2da VERSION
-[
-  '{{repeat(1, 80)}}',
-  {
     id: '{{objectId()}}',
-    photo: null,
+    number: '{{integer(50, 99)}}',
+    photo: '{{random("https://cdn-icons-png.flaticon.com/512/6695/6695211.png","https://cdn-icons-png.flaticon.com/512/6695/6695160.png","https://cdn-icons-png.flaticon.com/512/6695/6695137.png")}}',
     name: '{{firstName()}}',
     lastName: '{{surname()}}',
-    nickName: function (tags, index) { return this.name + this.lastName; },
+    nickName: function (tags, index) { return this.name + this.number; },
     email: '{{email()}}',
-    password: function (tags, index) { return this.name; },
+    biography: '{{lorem(2, "sentences")}}',
+    password: function (tags, index) { return 'tfg2022'; }
   }
 ]
 
-//COMPANY
+//PROJECTS
+[
+  '{{repeat(1, 50)}}',
+  {
+    id: '{{objectId()}}',
+    projectFounder: '',
+    title: '{{company()}}',
+    financiation: '{{floating(1, 9999, 2)}}',
+    photo: '{{random("https://cdn-icons-png.flaticon.com/512/2949/2949010.png","https://cdn-icons-png.flaticon.com/512/2949/2949009.png","https://cdn-icons-png.flaticon.com/512/1374/1374275.png")}}',
+    description: '{{lorem(2, "sentences")}}',
+    repository:  function (tags, index) { return 'www.' + this.title + '.com'; },
+    startDate: '',
+    endDate: null
+  }
+]
+
+//TECHS
+[
+  '{{repeat(1, 50)}}',
+  {
+    id: '{{index(1)}}',
+    name: '{{surname()}}',
+    type: '{{random("lenguaje", "framework", "librería", "API")}}',
+    photo: function (tags, index) { 
+      if(this.type == "lenguaje") { return "https://cdn-icons-png.flaticon.com/512/1005/1005141.png"; }
+      if(this.type == "framework") { return "https://cdn-icons-png.flaticon.com/512/745/745437.png"; }
+      if(this.type == "librería") { return "https://pngfreepic.com/wp-content/uploads/2021/04/book-icon-png-freepic-15.png"; }
+      if(this.type == "API") { return "https://cdn-icons-png.flaticon.com/512/603/603197.png"; }
+    }
+  }
+]
+
+//ADMINS
+[
+  '{{repeat(1, 10)}}',
+  {
+    id: '{{objectId()}}',
+    number: '{{index(1)}}',
+    name: '{{firstName()}}',
+    lastName: '{{surname()}}',
+    email: function (tags, index) { return 'admin' + this.number + '@osp-company.com'; },
+    password: function (tags, index) { return 'tfg2022'; }
+  }
+]
+
+//DONATION
+[
+  '{{repeat(1, 30)}}',
+  {
+    id: '{{index(1)}}',
+    idSubscription: '{{integer(1, 20)}}',
+    cardName: '{{firstName()}} {{surname()}}',
+    cardNumber: '{{integer(11111111111111111111, 9999999999999999)}}',
+    cardExpirationDate: '',
+    date: '{{date(new Date(2020, 0, 1), new Date(), "YYYY-MM-dd hh:mm:ss")}}',
+    donation: '{{floating(1, 9999, 2)}}'
+  }
+]
+
+//UPDATES
+[
+  '{{repeat(1, 20)}}',
+  {
+    idProject: '',
+    update_date: '{{date(new Date(2014, 0, 1), new Date(), "YYYY-MM-dd hh:mm:ss")}}',
+    description: '{{lorem(2, "sentences")}}'
+  }
+]
